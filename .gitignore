@@ -1,3 +1,7 @@
 loan_predictor_App/
-Loan.csv
-LoanDATABASE
+
+#Ignore data files to the git repository
+data/
+*.csv
+*.LoanDATABASE
+
