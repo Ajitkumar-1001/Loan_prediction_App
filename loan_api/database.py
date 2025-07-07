@@ -1,10 +1,10 @@
 import sqlite3
-from dotenv import loan_dotenv()
+from dotenv import loan_dotenv
 from pathlib import Path
 import os 
 
 
-var = loan_dotenv()
+var = loan_dotenv
 
 database_path = os.getenv("DATABASE_PATH")
 
