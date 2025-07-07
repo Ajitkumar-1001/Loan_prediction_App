@@ -5,3 +5,6 @@ data/
 *.csv
 *.LoanDATABASE
 
+.env
+
+
