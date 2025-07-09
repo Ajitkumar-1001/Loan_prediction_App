@@ -20,6 +20,6 @@ def get_all_applicants():
     except Exception as e : 
         raise HTTPException(status_code = 500 , details = str(e))
     
-    
+
 
 
