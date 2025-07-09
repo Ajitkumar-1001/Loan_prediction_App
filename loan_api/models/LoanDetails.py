@@ -1,7 +1,7 @@
 from pydantic import BaseModel 
 from typing import Optional 
 
-class LoanDetails: 
+class LoanDetails(BaseModel): 
     LoanID : Optional[int] = None 
     ApplicantID : Optional[int] = None 
     LoanAmount : int 
