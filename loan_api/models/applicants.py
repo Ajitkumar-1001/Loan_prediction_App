@@ -2,7 +2,7 @@ from pydantic import BaseModel
 from datetime import date 
 from typing import Optional
 
-class Applicant(BaseModel):
+class Applicants(BaseModel):
 
     ApplicantID : Optional[int] = None
     ApplicationDate : date
