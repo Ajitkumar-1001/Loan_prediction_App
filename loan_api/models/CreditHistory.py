@@ -7,7 +7,7 @@ class CreditHistory(BaseModel):
     CreditScore : Optional[int] = None
     PaymentHistory : Optional[int] = None
     NumberofOpenCreditLines : Optional[int] = None
-    NumberofCreditInquiries : Optional[int] = None
+    NumberOfCreditInquiries : Optional[int] = None
     CreditCardUtilizationRate : Optional[float] = None
     BankruptcyHistory : Optional[int] = None
     PreviousLoanDefaults : Optional[int] = None
