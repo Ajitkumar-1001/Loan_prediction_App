@@ -1,8 +1,9 @@
-numpy 
+numpy == 1.24.4
 pandas
-sqlite3
+# sqlite3
 scikit-learn
 matplotlib
 seaborn
 scipy
 pydantic 
+ydata-profiling

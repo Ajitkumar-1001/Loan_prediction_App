@@ -1,4 +1,6 @@
 loan_predictor_App/
+Loan_env/
+Loan_App/ 
 
 #Ignore data files to the git repository
 data/
