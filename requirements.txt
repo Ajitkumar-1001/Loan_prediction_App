@@ -9,3 +9,6 @@ scipy
 pydantic 
 ydata-profiling
 ipywodgets
+
+mlflow 
+dagshub
