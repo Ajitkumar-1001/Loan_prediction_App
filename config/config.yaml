@@ -4,3 +4,9 @@ dagshub:
       repo_owner : "ajitkumarsenthil5"
       repo_name : "Loan_Approval_logs"
       use_mlflow : true 
+
+feature_selection:
+            threshold : 0.85
+            variance_threshold : 0.0
+            top_k : 10 
+            
