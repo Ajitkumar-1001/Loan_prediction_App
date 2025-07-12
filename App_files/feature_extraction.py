@@ -5,7 +5,8 @@ from pathlib import Path
 from sklearn.feature_selection import VarianceThreshold
 from sklearn.ensemble import RandomForestClassifier
 
-yaml_path = Path(__file__).resolve().parent.parent / "config.yaml"
+yaml_path = Path(__file__).resolve().parent.parent / "config" / "config.yaml"
+
 
 if yaml_path.exists():
     try: 

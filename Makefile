@@ -3,7 +3,7 @@ BRANCH_1 = ak
 BRANCH_2 = api 
 BRANCH_3 = ak_ml 
 
-MSG_3 = "Debugged and updated the Dimension Reduction package"
+MSG_3 = "Debugged and fixed the Feature Extraction package"
 git-push1: 
 			git add	. 
 			git commit -m ${MSG_1}
