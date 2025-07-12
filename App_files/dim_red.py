@@ -26,7 +26,7 @@ except Exception as e:
 
 uri = Conf.get("dagshub",{}).get("mlflow_uri")
 
-mlflow.set_uri(uri)
+mlflow.set_tracking_uri(uri)
 
 
 
@@ -45,7 +45,7 @@ def Apply_pca(X, n_components=None):
     return pca_model, X_pca
 
 
-def PCA_pipeline(X, experiment_name, n_components=None):
+def PCA_pipeline(X, n_components=None):
 
     load_dotenv() 
 
@@ -59,7 +59,7 @@ def PCA_pipeline(X, experiment_name, n_components=None):
     os.environ["MLFLOW_TRACKING_PASSWORD"] = key
 
 
-    mlflow.set_experiment(experiment_name)
+    # mlflow.set_experiment(experiment_name)
 
     with mlflow.start_run(run_name="PCA dim run"):
         pca_model, X_pca = Apply_pca(X, n_components=n_components)

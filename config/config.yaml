@@ -4,7 +4,8 @@ dagshub:
       repo_owner : "ajitkumarsenthil5"
       repo_name : "Loan_Approval_logs"
       use_mlflow : true 
-      mlflow_uri : "https://dagshub.com/ajitkumarsenthil5/Loan_Approval_logs"
+      mlflow_uri: "https://dagshub.com/ajitkumarsenthil5/Loan_Approval_logs.mlflow"
+
 
 mlflow: 
       set_experiment : "Loan_Approval_ML"
