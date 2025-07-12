@@ -16,7 +16,7 @@ git-push2:
 
 git-push3: 
 			git add	. 
-			git commit -m "Updated ML files"
+			git commit -m "fixed errors in the package files"
 			git push origin ak_ml 
 
 
