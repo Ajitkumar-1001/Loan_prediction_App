@@ -20,13 +20,13 @@ git-push3:
 			git push origin ak_ml 
 
 
-git_change_api: 
+git_change2: 
 			git checkout ${BRANCH_2}
 
-git_change_ak: 
+git_change1: 
 			git checkout ${BRANCH_1}
 
-git_change_ak_ml:
+git_change3:
 			git checkout ${BRANCH_3}
 
 
@@ -44,6 +44,6 @@ venv12:
 venv11: 
 	python3.11 -m venv Loan_APP
 	source Loan_APP/bin/activate 
-	
+
 
 
