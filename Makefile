@@ -3,7 +3,7 @@ BRANCH_1 = ak
 BRANCH_2 = api 
 BRANCH_3 = ak_ml 
 
-MSG_2 = "Updated dimension Reduction package"
+MSG_2 = "added visulizations and updated Dimension Reduction package"
 git-push1: 
 			git add	. 
 			git commit -m ${MSG_1}
