@@ -39,8 +39,11 @@ upgrade :
 
 venv12: 
 	python3.12 -m venv Loan_App
+	source Loan_App/bin/activate 
 
 venv11: 
 	python3.11 -m venv Loan_APP
+	source Loan_APP/bin/activate 
+	
 
 
