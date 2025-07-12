@@ -23,6 +23,20 @@ try:
 except Exception as e: 
     raise ValueError(f"Failed to load config.yaml: {e}")
 
+dagshub_user = Conf.get("dagshub", {}).get("repo_owner")
+dagshub_repo = Conf.get("dagshub", {}).get("repo_name")
+
+dagshub_cfg = Conf.get("dagshub", {})
+mlflow_cfg = Conf.get("mlflow", {})
+
+use_dagshub = dagshub_cfg.get("use_mlflow", False)
+mlflow_uri = dagshub_cfg.get("mlflow_uri")
+
+if use_dagshub and mlflow_uri:
+    mlflow.set_tracking_uri(mlflow_uri)
+else:
+    mlflow.set_tracking_uri("mlruns")
+
 mlflow_experiment_name = Conf.get("mlflow", {}).get("set_experiment_2")
 
 if mlflow_experiment_name is None:
