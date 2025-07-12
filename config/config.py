@@ -23,6 +23,13 @@ Repo_CONFIG = load_yaml()
 
 DAGSHUB_TOKEN = os.getenv("DAGSHUB_ACCESS_KEY")
 
+use_mlflow = Repo_CONFIG.get("dagshub",{}).get("use_mlflow")
+mlflow_url = Repo_CONFIG.get("dagshub",{}).get("mlflow_uri")
+
+set_experiment = Repo_CONFIG.get("mlflow",{}).get("set_experiment")
+
+
+
 if __name__ == "__main__":
     print("DAGSHUB TOKEN:", DAGSHUB_TOKEN[:4] + "......" if DAGSHUB_TOKEN else "Not Found")
     print("Repo Owner:", Repo_CONFIG.get("dagshub", {}).get("repo_owner"))
