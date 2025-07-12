@@ -3,7 +3,7 @@ BRANCH_1 = ak
 BRANCH_2 = api 
 BRANCH_3 = ak_ml 
 
-
+MSG_2 = "Updated dimension Reduction package"
 git-push1: 
 			git add	. 
 			git commit -m ${MSG_1}
@@ -16,8 +16,8 @@ git-push2:
 
 git-push3: 
 			git add	. 
-			git commit -m "fixed errors in the package files"
-			git push origin ak_ml 
+			git commit -m ${MSG_2}
+			git push origin ${BRANCH_3}
 
 
 git_change2: 
