@@ -1,7 +1,7 @@
 import numpy as np 
 import pandas as pd 
 import yaml 
-from Pathlib import Path 
+from pathlib import Path 
 from sklearn.feature_selection import VarianceThreshold
 from sklearn.ensemble import RandomForestClassifier
 
@@ -23,13 +23,13 @@ top_k = CONF.get("feature_selection",{}).get("top_k")
 
 
 def correlation_Feature_selection(df,threshold):
-    numeric_features = df.select_dtypes(include=["int64,float64"]).columns.to_list()
+    numeric_features = df.select_dtypes(include=["int64","float64"]).columns.to_list()
     if "LoanApproved" in numeric_features:
         numeric_features.remove("LoanApproved")
 
 
 
-    correlation = df["numeric_features"].corr().abs()
+    correlation = df[numeric_features].corr().abs()
     Upper_Triangle = correlation.where(np.triu(np.ones(correlation.shape),k=1).astype(bool))
 
     drop_Columns = [c for c in Upper_Triangle.columns if any(Upper_Triangle[c] > threshold)]
@@ -38,7 +38,7 @@ def correlation_Feature_selection(df,threshold):
 
 
 def variance_Feature_selection(df,variance_threshold):
-    numeric_features = df.select_dtypes(include=["int64,float64"]).columns.to_list()
+    numeric_features = df.select_dtypes(include=["int64","float64"]).columns.to_list()
     if "LoanApproved" in numeric_features:
         numeric_features.remove("LoanApproved")
 
@@ -47,7 +47,7 @@ def variance_Feature_selection(df,variance_threshold):
 
     selected = [f for f,k in zip(numeric_features,vr.get_support()) if k ]
 
-    removed  = list[set(numeric_features) - set(selected)]
+    removed  = list(set(numeric_features) - set(selected))
 
     return vr, removed
 
