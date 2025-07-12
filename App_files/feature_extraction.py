@@ -19,7 +19,8 @@ threshold = CONF.get("feature_selection",{}).get("threshold")
 variance_threshold = CONF.get("feature_selection",{}).get("variance_threshold")
 top_k = CONF.get("feature_selection",{}).get("top_k")
 
-
+if None in [threshold, variance_threshold, top_k]:
+    raise ValueError("Missing one or more feature selection parameters in the config file.")
 
 
 def correlation_Feature_selection(df,threshold):
