@@ -13,7 +13,7 @@ def preprocessing_pipeline(df):
 
     log_transformer = FunctionTransformer(np.log1p , validate=True) 
 
-    numerical_Features = df.select_dtypes(include=["int64","float64"]).colummns.to_list() 
+    numerical_Features = df.select_dtypes(include=["int64","float64"]).columns.to_list() 
     if "LoanApproved" in numerical_Features:
         numerical_Features.remove("LoanApproved")
 
