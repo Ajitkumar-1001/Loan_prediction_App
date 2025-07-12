@@ -13,14 +13,14 @@ from visualizations.pca_plots import pca_scree_plot
 
 yaml_path = Path(__file__).resolve().parent.parent / "config.yaml"
 
-if yaml_path.exists(): 
-    try:
-        with open(yaml_path,'r') as f:
-            Conf = yaml.safe_load(f)
-    
-    except Exception as e: 
-        raise ValueError(str(e))
-    
+if not yaml_path.exists():
+    raise FileNotFoundError(f"Config file not found at: {yaml_path}")
+
+try:
+    with open(yaml_path, 'r') as f:
+        Conf = yaml.safe_load(f)
+except Exception as e: 
+    raise ValueError(f"Failed to load config.yaml: {e}")
 
 mlflow_experiment_name = Conf.get("mlflow", {}).get("set_experiment_2")
 
