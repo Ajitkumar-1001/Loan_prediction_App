@@ -21,40 +21,45 @@ if yaml_path.exists():
     except Exception as e: 
         raise ValueError(str(e))
     
-set_experiment = Conf.get("mlflow",{}).get("set_experiment_2")
+
+mlflow_experiment_name = Conf.get("mlflow", {}).get("set_experiment_2")
+
+if mlflow_experiment_name is None:
+    raise ValueError("Missing 'set_experiment_2' under 'mlflow' in config.yaml")
 
 
-def Apply_pca(X,n_components = None):
-    assert n_components is not None 
-    assert n_components > 1 
 
+def Apply_pca(X, n_components=None):
+    assert n_components is not None and n_components > 1, "n_components must be > 1"
+    
     scaler = StandardScaler() 
     scaled_input = scaler.fit_transform(X)
 
-    Pca_model  = PCA(n_components=n_components)
-    X_Pca = Pca_model.fit_transform(scaled_input)
+    pca_model = PCA(n_components=n_components)
+    X_pca = pca_model.fit_transform(scaled_input)
 
-    return Pca_model, X_Pca
+    return pca_model, X_pca
 
-def PCA_pipeline(X, set_experiment, n_components=None):
 
-    mlflow.set_experiment(set_experiment)
+def PCA_pipeline(X, experiment_name, n_components=None):
+    mlflow.set_experiment(experiment_name)
 
-    with mlflow.start_run(run_name = "PCA dim run"):
-        Pca_model,X_Pca = Apply_pca(X=X,n_components = n_components)
+    with mlflow.start_run(run_name="PCA dim run"):
+        pca_model, X_pca = Apply_pca(X, n_components=n_components)
 
-        explained_Variance = Pca_model.explained_variance_ratio_
-        for i, var in enumerate(explained_Variance):
-            mlflow.log_metric(f"Explained_variance_PCA_{i+1}",var)
+        # Log explained variance
+        explained_variance = pca_model.explained_variance_ratio_
+        for i, var in enumerate(explained_variance):
+            mlflow.log_metric(f"Explained_variance_PCA_{i+1}", var)
 
-        mlflow.log_param("Number of Components",Pca_model.n_components_)
+        mlflow.log_param("Number of Components", pca_model.n_components_)
 
-        scree_plot = pca_scree_plot(Pca_model)
-        
-        if os.path.exists(scree_plot):
-            mlflow.log_artifact(scree_plot)
+        # Generate and log scree plot
+        scree_plot_path = pca_scree_plot(pca_model)
 
-        return X_Pca,Pca_model
+        if scree_plot_path and os.path.exists(scree_plot_path):
+            mlflow.log_artifact(scree_plot_path)
 
+        return X_pca, pca_model
         
 
