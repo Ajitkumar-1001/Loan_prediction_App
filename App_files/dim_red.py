@@ -8,6 +8,7 @@ from config import config
 import yaml 
 import mlflow 
 from visualizations.pca_plots import pca_scree_plot
+from dotenv import load_dotenv
 
 
 
@@ -23,29 +24,17 @@ try:
 except Exception as e: 
     raise ValueError(f"Failed to load config.yaml: {e}")
 
-dagshub_user = Conf.get("dagshub", {}).get("repo_owner")
-dagshub_repo = Conf.get("dagshub", {}).get("repo_name")
+uri = Conf.get("dagshub",{}).get("mlflow_uri")
 
-dagshub_cfg = Conf.get("dagshub", {})
-mlflow_cfg = Conf.get("mlflow", {})
-
-use_dagshub = dagshub_cfg.get("use_mlflow", False)
-mlflow_uri = dagshub_cfg.get("mlflow_uri")
-
-if use_dagshub and mlflow_uri:
-    mlflow.set_tracking_uri(mlflow_uri)
-else:
-    mlflow.set_tracking_uri("mlruns")
-
-mlflow_experiment_name = Conf.get("mlflow", {}).get("set_experiment_2")
-
-if mlflow_experiment_name is None:
-    raise ValueError("Missing 'set_experiment_2' under 'mlflow' in config.yaml")
+mlflow.set_uri(uri)
 
 
 
 def Apply_pca(X, n_components=None):
     assert n_components is not None and n_components > 1, "n_components must be > 1"
+
+    if hasattr(X, "toarray"):
+        X = X.toarray()
     
     scaler = StandardScaler() 
     scaled_input = scaler.fit_transform(X)
@@ -57,6 +46,19 @@ def Apply_pca(X, n_components=None):
 
 
 def PCA_pipeline(X, experiment_name, n_components=None):
+
+    load_dotenv() 
+
+    username = Conf.get("dagshub", {}).get("repo_owner")
+    key = os.getenv("DAGSHUB_ACCESS_KEY")
+
+    if not key:
+        raise ValueError("DAGSHUB_ACCESS_KEY not found. Make sure it's defined in your .env file.")
+
+    os.environ["MLFLOW_TRACKING_USERNAME"] = username
+    os.environ["MLFLOW_TRACKING_PASSWORD"] = key
+
+
     mlflow.set_experiment(experiment_name)
 
     with mlflow.start_run(run_name="PCA dim run"):
