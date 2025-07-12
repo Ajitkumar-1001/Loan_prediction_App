@@ -11,7 +11,8 @@ from visualizations.pca_plots import pca_scree_plot
 
 
 
-yaml_path = Path(__file__).resolve().parent.parent / "config.yaml"
+yaml_path = Path(__file__).resolve().parent.parent / "config" / "config.yaml"
+
 
 if not yaml_path.exists():
     raise FileNotFoundError(f"Config file not found at: {yaml_path}")
