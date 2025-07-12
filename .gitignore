@@ -8,5 +8,5 @@ data/
 *.LoanDATABASE
 
 .env
-
+Notebook/mlruns/
 
