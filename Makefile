@@ -29,3 +29,10 @@ git_change_ak:
 git_change_ak_ml:
 			git checkout ${BRANCH_3}
 
+
+package: 
+	pip install -r requirements.txt
+
+upgrade :
+	pip install --upgrade pip 
+	
