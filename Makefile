@@ -3,7 +3,7 @@ BRANCH_1 = ak
 BRANCH_2 = api 
 BRANCH_3 = ak_ml 
 
-MSG_3 = "Debugged and fixed the dimension reduction PCA package"
+MSG_3 = "Package added for PCA extracted Features"
 
 git-push1: 
 			git add	. 
