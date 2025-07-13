@@ -16,15 +16,15 @@ if yaml_path.exists():
         raise ImportError(str(e))
     
 
-threshold = CONF.get("feature_selection",{}).get("threshold")
-variance_threshold = CONF.get("feature_selection",{}).get("variance_threshold")
-top_k = CONF.get("feature_selection",{}).get("top_k")
+threshold = CONF.get("feature_selection",{}).get("threshold",0.85)
+variance_threshold = CONF.get("feature_selection",{}).get("variance_threshold",0.0)
+top_k = CONF.get("feature_selection",{}).get("top_k",10)
 
 if None in [threshold, variance_threshold, top_k]:
     raise ValueError("Missing one or more feature selection parameters in the config file.")
 
 
-def correlation_Feature_selection(df,threshold):
+def correlation_Feature_selection(df,threshold=threshold):
     numeric_features = df.select_dtypes(include=["int64","float64"]).columns.to_list()
     if "LoanApproved" in numeric_features:
         numeric_features.remove("LoanApproved")
@@ -39,22 +39,22 @@ def correlation_Feature_selection(df,threshold):
     return [features for features in numeric_features if features not in drop_Columns], drop_Columns
 
 
-def variance_Feature_selection(df,variance_threshold):
+def variance_Feature_selection(df,variance_threshold = variance_threshold):
     numeric_features = df.select_dtypes(include=["int64","float64"]).columns.to_list()
     if "LoanApproved" in numeric_features:
         numeric_features.remove("LoanApproved")
 
-    vr = VarianceThreshold(variance_threshold)
+    vr = VarianceThreshold(threshold=variance_threshold )
     vr.fit(df[numeric_features])
 
     selected = [f for f,k in zip(numeric_features,vr.get_support()) if k ]
 
     removed  = list(set(numeric_features) - set(selected))
 
-    return vr, removed
+    return selected, removed
 
 
-def importance_feature_selection(X,y,top_k):    
+def importance_feature_selection(X,y,top_k=top_k):    
     rf = RandomForestClassifier(random_state = 42)
     rf.fit(X,y)
 
