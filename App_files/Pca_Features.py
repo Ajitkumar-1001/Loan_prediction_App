@@ -1,7 +1,7 @@
 import os 
 import pandas as pd 
 import numpy as np 
-from sklearn.decomposition import PCA 
+from sklearn.decomposition import TruncatedSVD
 from sklearn.preprocessing import StandardScaler 
 import yaml 
 from dotenv import load_dotenv 
@@ -16,13 +16,16 @@ if yaml_path.exists():
     except Exception as e:
         raise ValueError(str(e))
     
-n_components = Conf.get("Pca_feature_parameters",{}).get("n_components")
+n_Components = Conf.get("Pca_feature_parameters",{}).get("n_components")
 
 
 
-def Pca_Extracted_features(X,n_components):
+def Pca_Extracted_features(X):
 
-    assert n_components is not None & n_components < 1
+    n_components = n_Components
+
+    assert n_components is not None and (isinstance(n_components, float) or isinstance(n_components, int))
+
 
     if hasattr(X,"toarray"):
         X = X.toarray()
@@ -30,13 +33,13 @@ def Pca_Extracted_features(X,n_components):
     scaler = StandardScaler()
     scaled_X  = scaler.fit_transform(X)
 
-    pca = PCA(n_components= n_components)
-    X_pca = pca.fit_transform(scaled_X)
+    svd = TruncatedSVD(n_components=n_components)
+    X_svd = svd.fit_transform(scaled_X)
 
-    pca_features = [f"PCA_{i+1}" for i in range(X.shape[1])]
-    pca_df = pd.DataFrame(X_pca, columns=pca_features)
+    Svd_features = [f"PCA_{i+1}" for i in range(X_svd.shape[1])]
+    Final_df = pd.DataFrame(X_svd, columns=Svd_features)
 
-    return pca_df 
+    return Final_df,Svd_features,svd
 
 
 

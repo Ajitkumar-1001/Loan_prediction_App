@@ -17,6 +17,6 @@ feature_selection:
             top_k : 10 
 
 Pca_feature_parameters: 
-                  n_components : 0.95
+                  n_components : 12
                   
 
