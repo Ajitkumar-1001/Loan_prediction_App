@@ -7,3 +7,8 @@
 
 ## Second : 
 ### Create a Sqlite3 Database and the dependency tables to manipulate data to Pandas framework for machine learning train.
+
+## Third : 
+### 1.Train the model with Machine Learning Techniques ( such as Feature Engineering, Feature Extraction, PCA ( Dimensionality Reduction) etc).
+### 2.Once done with the training, log each value to the mlflow experiments.
+
