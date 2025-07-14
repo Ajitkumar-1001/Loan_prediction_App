@@ -90,6 +90,7 @@ join_query = """
     LEFT JOIN LoanDetails L ON A.ApplicantID = L.ApplicantID;
     """
 
+
 insert_financial_query = """
     INSERT INTO FinancialDetails (ApplicantID, AnnualIncome, MonthlyIncome, SavingsAccountBalance, CheckingAccountBalance,
     TotalAssets, TotalLiabilities, NetWorth, DebtToIncomeRatio, TotalDebtToIncomeRatio)
@@ -118,3 +119,4 @@ insert_loan_data_query = """
     InterestRate, LoanApproved, RiskScore)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
     """
+
