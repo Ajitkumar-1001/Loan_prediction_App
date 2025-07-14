@@ -6,12 +6,9 @@ from App_files.data_loader import load_file
 import csv
 
 
-db_path = Path(__file__).resolve().parent.parent / "data" / "LoanDATABASE.db"
 
 
-
-
-def create_connection(db_file = db_path, delete_db = False):
+def create_connection(db_file, delete_db = False):
 
     assert str(db_file).endswith(".db")
 

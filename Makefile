@@ -3,7 +3,7 @@ BRANCH_1 = ak
 BRANCH_2 = api 
 BRANCH_3 = ak_ml 
 
-MSG_3 = "Utility functions added as modules"
+MSG_3 = "debugged and cleaned the modules code"
 
 git-push1: 
 			git add	. 

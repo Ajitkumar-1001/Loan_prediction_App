@@ -10,3 +10,7 @@ data/
 .env
 Notebook/mlruns/
 
+App_files/__pycache__
+config/__pycache__
+
+visualizations/__pycache__
