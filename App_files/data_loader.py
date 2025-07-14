@@ -9,6 +9,9 @@ def load_file(path):
              raise ValueError(str(e))
     else:
         raise ValueError("Unsupported file format. Only .csv is allowed.")
+    
+
+
 
 def target_feature(df):
     
