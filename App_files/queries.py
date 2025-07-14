@@ -89,3 +89,34 @@ join_query = """
     LEFT JOIN EmploymentDetails E ON A.ApplicantID = E.ApplicantID
     LEFT JOIN LoanDetails L ON A.ApplicantID = L.ApplicantID;
     """
+
+
+insert_financial_query = """
+    INSERT INTO FinancialDetails (ApplicantID, AnnualIncome, MonthlyIncome, SavingsAccountBalance, CheckingAccountBalance,
+    TotalAssets, TotalLiabilities, NetWorth, DebtToIncomeRatio, TotalDebtToIncomeRatio)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+    """
+
+insert_applicant_query = """
+    INSERT INTO Applicants (ApplicationDate, Age, MaritalStatus, NumberOfDependents, HomeOwnershipStatus)
+    VALUES (?, ?, ?, ?, ?);
+    """
+
+insert_credit_history_query =  """
+    INSERT INTO CreditHistory (ApplicantID, CreditScore, PaymentHistory, NumberOfOpenCreditLines, NumberOfCreditInquiries,
+    CreditCardUtilizationRate, BankruptcyHistory, PreviousLoanDefaults, UtilityBillsPaymentHistory,
+    LengthOfCreditHistory)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+    """
+
+insert_employment_details_query = """
+    INSERT INTO EmploymentDetails (ApplicantID, EmploymentStatus, EducationLevel, Experience, JobTenure)
+    VALUES (?, ?, ?, ?, ?);
+    """
+
+insert_loan_data_query = """
+    INSERT INTO LoanDetails (ApplicantID, LoanAmount, LoanDuration, LoanPurpose, MonthlyLoanPayment, BaseInterestRate,
+    InterestRate, LoanApproved, RiskScore)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
+    """
+
