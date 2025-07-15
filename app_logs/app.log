@@ -1,0 +1,5 @@
+2025-07-15 12:51:17 | INFO | __main__ | DAGSHUB Token: a9c9******
+2025-07-15 12:51:17 | INFO | __main__ | Repo Owner: ajitkumarsenthil5
+2025-07-15 12:51:17 | INFO | __main__ | MLflow Tracking URI: https://dagshub.com/ajitkumarsenthil5/Loan_Approval_logs.mlflow
+2025-07-15 12:51:17 | INFO | __main__ | Use MLflow: True
+2025-07-15 12:51:17 | INFO | __main__ | Experiment Name: Loan_Approval_ML
