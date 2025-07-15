@@ -3,7 +3,7 @@ BRANCH_1 = ak
 BRANCH_2 = api 
 BRANCH_3 = ak_ml 
 
-MSG_3 = "Experimented PCA with 4 components with XGboost classifier "
+MSG_3 = "plots for f1-score comparison"
 
 git-push1: 
 			git add	. 
