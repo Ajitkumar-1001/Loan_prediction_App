@@ -191,3 +191,18 @@
 2025-07-15 19:39:54 | INFO | root | ✅ Ridge Classifier → Accuracy: 0.9995, F1 Score: 0.9995
 2025-07-15 19:40:51 | INFO | root | ✅ RandomForestClassifier → Accuracy: 0.9695, F1 Score: 0.9690
 2025-07-15 19:41:09 | INFO | root | ✅ XGBClassifier → Accuracy: 0.9975, F1 Score: 0.9975
+2025-07-15 19:46:22 | INFO | root | Loading dataframe for manual testing of the 3NF dataframe with Machine Learning algorithms
+2025-07-15 19:46:22 | INFO | root | Creating Connection to the database
+2025-07-15 19:46:22 | INFO | root | Connection created successfully
+2025-07-15 19:46:22 | INFO | root | Creating tables
+2025-07-15 19:46:22 | INFO | root | Tables created successfully
+2025-07-15 19:46:22 | INFO | root | Loading the database and Normalizing for a 3NF..
+2025-07-15 19:46:22 | INFO | root | Normalization done !.
+2025-07-15 19:46:22 | INFO | root | Inserting data to the tables
+2025-07-15 19:46:22 | INFO | root | All data inserted successfully
+2025-07-15 19:46:22 | INFO | root | 🧹 Tables created, data inserted, and DB connection closed.
+2025-07-15 19:46:22 | INFO | root | Dataframe loaded successfully!
+2025-07-15 19:56:11 | INFO | root | Features Extracted out of 40 features including Feature Engineered : {Features_extracted}
+2025-07-15 19:56:19 | INFO | root | Features Extracted out of 40 features including Feature Engineered : ['BaseInterestRate', 'InterestRate', 'RiskScore', 'LoanAmount', 'AnnualIncome', 'TotalDebtToIncomeRatio', 'IncomePerDependent']
+2025-07-15 19:57:09 | INFO | root | Features Extracted out of 40 features including Feature Engineered : ['BaseInterestRate', 'InterestRate', 'RiskScore', 'LoanAmount', 'AnnualIncome', 'TotalDebtToIncomeRatio', 'IncomePerDependent']
+2025-07-15 19:57:09 | INFO | root | Total number of Features extracted out of Data: 7
