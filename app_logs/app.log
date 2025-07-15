@@ -325,3 +325,19 @@
 2025-07-15 21:51:17 | INFO | root | PCA applied with shape: (16000, 4)
 2025-07-15 21:51:17 | INFO | root | PCA applied with shape: (4000, 4)
 2025-07-15 21:51:17 | INFO | root | ✅ Logged PCA experiment with accuracy=0.6432 and f1=0.6380
+2025-07-15 22:07:27 | INFO | root | Loading dataframe for manual testing of the 3NF dataframe with Machine Learning algorithms
+2025-07-15 22:07:27 | INFO | root | Creating Connection to the database
+2025-07-15 22:07:27 | INFO | root | Connection created successfully
+2025-07-15 22:07:27 | INFO | root | Creating tables
+2025-07-15 22:07:27 | INFO | root | Tables created successfully
+2025-07-15 22:07:27 | INFO | root | Loading the database and Normalizing for a 3NF..
+2025-07-15 22:07:27 | INFO | root | Normalization done !.
+2025-07-15 22:07:27 | INFO | root | Inserting data to the tables
+2025-07-15 22:07:27 | INFO | root | All data inserted successfully
+2025-07-15 22:07:28 | INFO | root | 🧹 Tables created, data inserted, and DB connection closed.
+2025-07-15 22:07:28 | INFO | root | Dataframe loaded successfully!
+2025-07-15 22:10:07 | INFO | root | Training process Initiated for the custom experiment
+2025-07-15 22:10:07 | INFO | root | MLflow setup initiated
+2025-07-15 22:10:23 | INFO | root | PCA applied with shape: (16000, 4)
+2025-07-15 22:10:26 | INFO | root | PCA applied with shape: (4000, 4)
+2025-07-15 22:10:26 | INFO | root | ✅ Logged PCA experiment with accuracy=0.9163 and f1=0.9153
