@@ -39,3 +39,19 @@ def plot_model_comparison(results:dict, log_to_mlflow:bool = True):
 
 
 
+def plot_f1_score_comparison(results: list, save_path="f1_score_comparison.png"):
+
+    df = pd.DataFrame(results)
+    plt.figure(figsize=(12,6))
+    sns.barplot(data=df, x="f1",y="experiment",palette="crest", edgecolor="black")
+    plt.xlabel("F1 Score")
+    plt.ylabel("Experiment")
+    plt.title("F1 Score Comparison of Models")
+    plt.xlim(0, 1.05)
+    plt.grid(axis="x", linestyle="--", alpha=0.7)
+    plt.tight_layout()
+    plt.savefig(save_path)
+    plt.close()
+
+    return save_path
+
