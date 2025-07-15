@@ -15,5 +15,5 @@ config/__pycache__
 
 visualizations/__pycache__
 
-
-Notebook/Notebook.ipynb  #IGNORE DUE TO THE SIZE OF THE NOTEBOOK 
+#IGNORE DUE TO THE SIZE OF THE NOTEBOOK 
+Notebook/Notebook.ipynb 
