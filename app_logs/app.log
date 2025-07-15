@@ -175,3 +175,19 @@
 2025-07-15 18:57:13 | INFO | root | ✅ Ridge Classifier → Accuracy: 0.9995, F1 Score: 0.9995
 2025-07-15 18:58:19 | INFO | root | ✅ RandomForestClassifier → Accuracy: 0.9718, F1 Score: 0.9712
 2025-07-15 18:58:36 | INFO | root | ✅ XGBClassifier → Accuracy: 0.9978, F1 Score: 0.9977
+2025-07-15 19:36:35 | INFO | root | Loading dataframe for manual testing of the 3NF dataframe with Machine Learning algorithms
+2025-07-15 19:36:35 | INFO | root | Creating Connection to the database
+2025-07-15 19:36:35 | INFO | root | Connection created successfully
+2025-07-15 19:36:35 | INFO | root | Creating tables
+2025-07-15 19:36:35 | INFO | root | Tables created successfully
+2025-07-15 19:36:35 | INFO | root | Loading the database and Normalizing for a 3NF..
+2025-07-15 19:36:35 | INFO | root | Normalization done !.
+2025-07-15 19:36:35 | INFO | root | Inserting data to the tables
+2025-07-15 19:36:35 | INFO | root | All data inserted successfully
+2025-07-15 19:36:35 | INFO | root | 🧹 Tables created, data inserted, and DB connection closed.
+2025-07-15 19:36:35 | INFO | root | Dataframe loaded successfully!
+2025-07-15 19:38:29 | INFO | root | split the data into target and features with feature engineered and defined models
+2025-07-15 19:39:06 | INFO | root | ✅ Logistic Regression  → Accuracy: 1.0000, F1 Score: 1.0000
+2025-07-15 19:39:54 | INFO | root | ✅ Ridge Classifier → Accuracy: 0.9995, F1 Score: 0.9995
+2025-07-15 19:40:51 | INFO | root | ✅ RandomForestClassifier → Accuracy: 0.9695, F1 Score: 0.9690
+2025-07-15 19:41:09 | INFO | root | ✅ XGBClassifier → Accuracy: 0.9975, F1 Score: 0.9975
