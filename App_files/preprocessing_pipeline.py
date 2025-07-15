@@ -23,7 +23,7 @@ def preprocessing_pipeline(df):
 
     
     Numeric_Pipeline = Pipeline(steps=[("log",log_transformer),("scale",StandardScaler())])
-    Categorical_Pipeline = Pipeline(steps=[("encoder",OneHotEncoder(handle_unknown="ignore"))])
+    Categorical_Pipeline = Pipeline(steps=[("encoder",OneHotEncoder(handle_unknown="ignore", sparse_output=False))])
 
     preprocessor = ColumnTransformer(transformers = [("num",Numeric_Pipeline,numerical_Features),("cat",Categorical_Pipeline,categorical_Features)])
 

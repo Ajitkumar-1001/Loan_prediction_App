@@ -1,4 +1,6 @@
 import pandas as pd 
+from sklearn.model_selection import train_test_split 
+
 
 def load_file(path):
     if str(path).endswith(".csv"):
@@ -10,8 +12,6 @@ def load_file(path):
     else:
         raise ValueError("Unsupported file format. Only .csv is allowed.")
     
-
-
 
 def target_feature(df):
     
@@ -27,6 +27,11 @@ def target_feature(df):
     return features,target
 
 
+def data_split(X,y): 
+
+    X_train,X_test,y_train,y_test = train_test_split(X,y,test_size=0.2,stratify=y, random_state=42)
+
+    return X_train,X_test,y_train,y_test
     
 
-    
+__all__ = ["load_file", "target_feature", "data_split"]

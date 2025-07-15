@@ -9,6 +9,7 @@ dagshub:
 
 mlflow: 
       set_experiment : "Loan_Approval_ML"
+      set_experiment_1 : "Loan_classfication_models"
       set_experiment_2 : "PCA_Loan_approval"
       set_experiment_3 : "PCA with Hybrid experiment"
 
