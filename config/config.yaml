@@ -11,7 +11,9 @@ mlflow:
       set_experiment : "Loan_Approval_ML"
       set_experiment_1 : "Loan_classfication_models"
       set_experiment_2 : "PCA_Loan_approval"
-      set_experiment_3 : "PCA with Hybrid experiment"
+      set_experiment_3 : "PCA custom experiment with Logistic Regression"
+      set_experiment_4 : "PCA custom experiment with Ridge Classification"
+      set_experiment_5 : "PCA custom experiment with XGBOOST"
 
 feature_selection:
             threshold : 0.85

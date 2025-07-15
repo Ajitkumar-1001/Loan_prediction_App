@@ -274,3 +274,54 @@
 2025-07-15 20:46:16 | INFO | root | PCA applied with shape: (20000, 4)
 2025-07-15 20:46:22 | INFO | root | Generating and logging Scree Plot...
 2025-07-15 20:46:23 | INFO | root | Logged values for the PCA done!
+2025-07-15 21:38:06 | INFO | root | Loading dataframe for manual testing of the 3NF dataframe with Machine Learning algorithms
+2025-07-15 21:38:06 | INFO | root | Creating Connection to the database
+2025-07-15 21:38:06 | INFO | root | Connection created successfully
+2025-07-15 21:38:06 | INFO | root | Creating tables
+2025-07-15 21:38:06 | INFO | root | Tables created successfully
+2025-07-15 21:38:06 | INFO | root | Loading the database and Normalizing for a 3NF..
+2025-07-15 21:38:06 | INFO | root | Normalization done !.
+2025-07-15 21:38:06 | INFO | root | Inserting data to the tables
+2025-07-15 21:38:06 | INFO | root | All data inserted successfully
+2025-07-15 21:38:07 | INFO | root | 🧹 Tables created, data inserted, and DB connection closed.
+2025-07-15 21:38:07 | INFO | root | Dataframe loaded successfully!
+2025-07-15 21:40:43 | INFO | root | Loading dataframe for manual testing of the 3NF dataframe with Machine Learning algorithms
+2025-07-15 21:40:43 | INFO | root | Creating Connection to the database
+2025-07-15 21:40:43 | INFO | root | Connection created successfully
+2025-07-15 21:40:43 | INFO | root | Creating tables
+2025-07-15 21:40:43 | INFO | root | Tables created successfully
+2025-07-15 21:40:43 | INFO | root | Loading the database and Normalizing for a 3NF..
+2025-07-15 21:40:43 | INFO | root | Normalization done !.
+2025-07-15 21:40:43 | INFO | root | Inserting data to the tables
+2025-07-15 21:40:43 | INFO | root | All data inserted successfully
+2025-07-15 21:40:44 | INFO | root | 🧹 Tables created, data inserted, and DB connection closed.
+2025-07-15 21:40:44 | INFO | root | Dataframe loaded successfully!
+2025-07-15 21:41:05 | INFO | root | PCA applied with shape: (20000, 4)
+2025-07-15 21:41:05 | INFO | root | Initiated experiment for the PCA
+2025-07-15 21:41:24 | INFO | root | PCA applied with shape: (20000, 4)
+2025-07-15 21:41:29 | INFO | root | Generating and logging Scree Plot...
+2025-07-15 21:41:30 | INFO | root | Logged values for the PCA done!
+2025-07-15 21:48:45 | INFO | root | PCA applied with shape: (16000, 4)
+2025-07-15 21:48:46 | INFO | root | PCA applied with shape: (4000, 4)
+2025-07-15 21:49:53 | INFO | root | Training process Initiated for the custom experiment
+2025-07-15 21:49:53 | INFO | root | MLflow setup initiated
+2025-07-15 21:49:53 | INFO | root | PCA applied with shape: (16000, 4)
+2025-07-15 21:49:53 | INFO | root | PCA applied with shape: (4000, 4)
+2025-07-15 21:50:56 | INFO | root | Loading dataframe for manual testing of the 3NF dataframe with Machine Learning algorithms
+2025-07-15 21:50:56 | INFO | root | Creating Connection to the database
+2025-07-15 21:50:56 | INFO | root | Connection created successfully
+2025-07-15 21:50:56 | INFO | root | Creating tables
+2025-07-15 21:50:56 | INFO | root | Tables created successfully
+2025-07-15 21:50:56 | INFO | root | Loading the database and Normalizing for a 3NF..
+2025-07-15 21:50:56 | INFO | root | Normalization done !.
+2025-07-15 21:50:56 | INFO | root | Inserting data to the tables
+2025-07-15 21:50:57 | INFO | root | All data inserted successfully
+2025-07-15 21:50:57 | INFO | root | 🧹 Tables created, data inserted, and DB connection closed.
+2025-07-15 21:50:57 | INFO | root | Dataframe loaded successfully!
+2025-07-15 21:51:15 | INFO | root | PCA applied with shape: (16000, 4)
+2025-07-15 21:51:17 | INFO | root | PCA applied with shape: (4000, 4)
+2025-07-15 21:51:17 | INFO | root | Training process Initiated for the custom experiment
+2025-07-15 21:51:17 | INFO | root | MLflow setup initiated
+2025-07-15 21:51:17 | INFO | root | PCA applied with shape: (16000, 4)
+2025-07-15 21:51:17 | INFO | root | PCA applied with shape: (4000, 4)
+2025-07-15 21:51:17 | INFO | root | ✅ Logged PCA experiment with accuracy=0.6432 and f1=0.6380
