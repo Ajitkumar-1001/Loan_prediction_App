@@ -23,7 +23,8 @@ def preprocessing_pipeline(df):
 
     
     Numeric_Pipeline = Pipeline(steps=[("log",log_transformer),("scale",StandardScaler())])
-    Categorical_Pipeline = Pipeline(steps=[("encoder",OneHotEncoder(handle_unknown="ignore", sparse_output=False))])
+    Categorical_Pipeline = Pipeline(steps=[("encoder",OneHotEncoder(handle_unknown="ignore", sparse_output=False))]) # we need dense matrix for the PCA
+    
 
     preprocessor = ColumnTransformer(transformers = [("num",Numeric_Pipeline,numerical_Features),("cat",Categorical_Pipeline,categorical_Features)])
 

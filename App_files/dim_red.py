@@ -1,10 +1,15 @@
+import sys 
+from pathlib import Path
+sys.path.append(str(Path(__file__).resolve().parent.parent))
+
+from config.config import logger
 import os 
 import pandas as pd 
 import numpy as np 
 from sklearn.decomposition import PCA 
 from sklearn.preprocessing import StandardScaler 
-from pathlib import Path
-from config import config 
+
+
 import yaml 
 import mlflow 
 from visualizations.pca_plots import pca_scree_plot
@@ -24,13 +29,16 @@ try:
 except Exception as e: 
     raise ValueError(f"Failed to load config.yaml: {e}")
 
+
 uri = Conf.get("dagshub",{}).get("mlflow_uri")
+experimentname = Conf.get("mlflow",{}).get("set_experiment_2")
 
-mlflow.set_tracking_uri(uri)
+n_comp = Conf.get("Pca_feature_parameters",{}).get("n_components")
 
 
 
-def Apply_pca(X, n_components=None):
+
+def Apply_pca(X, n_components=n_comp):
     assert n_components is not None and n_components > 1, "n_components must be > 1"
 
     if hasattr(X, "toarray"):
@@ -42,10 +50,11 @@ def Apply_pca(X, n_components=None):
     pca_model = PCA(n_components=n_components)
     X_pca = pca_model.fit_transform(scaled_input)
 
+    logger.info(f"PCA applied with shape: {X_pca.shape}")
     return pca_model, X_pca
 
 
-def PCA_pipeline(X, n_components=None):
+def PCA_pipeline(X, n_components=n_comp, experiment_name = experimentname):
 
     load_dotenv() 
 
@@ -58,8 +67,9 @@ def PCA_pipeline(X, n_components=None):
     os.environ["MLFLOW_TRACKING_USERNAME"] = username
     os.environ["MLFLOW_TRACKING_PASSWORD"] = key
 
-
-    # mlflow.set_experiment(experiment_name)
+    logger.info("Initiated experiment for the PCA")
+    mlflow.set_tracking_uri(uri=uri)
+    mlflow.set_experiment(experiment_name)
 
     with mlflow.start_run(run_name="PCA dim run"):
         pca_model, X_pca = Apply_pca(X, n_components=n_components)
@@ -71,12 +81,25 @@ def PCA_pipeline(X, n_components=None):
 
         mlflow.log_param("Number of Components", pca_model.n_components_)
 
+        logger.info("Generating and logging Scree Plot...")
+
         # Generate and log scree plot
         scree_plot_path = pca_scree_plot(pca_model)
+
+    
 
         if scree_plot_path and os.path.exists(scree_plot_path):
             mlflow.log_artifact(scree_plot_path)
 
-        return X_pca, pca_model
+            # os.remove(scree_plot_path)
+            # logger.info("🧹 Scree plot removed from local directory")
         
+        logger.info("Logged values for the PCA done!")
+
+        return X_pca, pca_model
+    
+if __name__ == "__main__":
+    logger.info("Starting experiment for PCA")
+    logger.info("Done executing PCA")
+
 
