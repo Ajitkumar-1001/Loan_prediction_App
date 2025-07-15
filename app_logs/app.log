@@ -341,3 +341,14 @@
 2025-07-15 22:10:23 | INFO | root | PCA applied with shape: (16000, 4)
 2025-07-15 22:10:26 | INFO | root | PCA applied with shape: (4000, 4)
 2025-07-15 22:10:26 | INFO | root | ✅ Logged PCA experiment with accuracy=0.9163 and f1=0.9153
+2025-07-16 02:25:13 | INFO | root | Loading dataframe for manual testing of the 3NF dataframe with Machine Learning algorithms
+2025-07-16 02:25:13 | INFO | root | Creating Connection to the database
+2025-07-16 02:25:13 | INFO | root | Connection created successfully
+2025-07-16 02:25:13 | INFO | root | Creating tables
+2025-07-16 02:25:13 | INFO | root | Tables created successfully
+2025-07-16 02:25:13 | INFO | root | Loading the database and Normalizing for a 3NF..
+2025-07-16 02:25:13 | INFO | root | Normalization done !.
+2025-07-16 02:25:13 | INFO | root | Inserting data to the tables
+2025-07-16 02:25:13 | INFO | root | All data inserted successfully
+2025-07-16 02:25:13 | INFO | root | 🧹 Tables created, data inserted, and DB connection closed.
+2025-07-16 02:25:13 | INFO | root | Dataframe loaded successfully!
