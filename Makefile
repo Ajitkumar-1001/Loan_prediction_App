@@ -3,7 +3,7 @@ BRANCH_1 = ak
 BRANCH_2 = api 
 BRANCH_3 = ak_ml 
 
-MSG_3 = "Train model with feature engineering columns and logged results"
+MSG_3 = "Extracted Features "
 
 git-push1: 
 			git add	. 
