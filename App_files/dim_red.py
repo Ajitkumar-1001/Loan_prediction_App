@@ -1,4 +1,5 @@
 import sys 
+from pathlib import Path
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 
 from config.config import logger
@@ -7,8 +8,8 @@ import pandas as pd
 import numpy as np 
 from sklearn.decomposition import PCA 
 from sklearn.preprocessing import StandardScaler 
-from pathlib import Path
-from config import config 
+
+
 import yaml 
 import mlflow 
 from visualizations.pca_plots import pca_scree_plot
