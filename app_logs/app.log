@@ -3,3 +3,25 @@
 2025-07-15 12:51:17 | INFO | __main__ | MLflow Tracking URI: https://dagshub.com/ajitkumarsenthil5/Loan_Approval_logs.mlflow
 2025-07-15 12:51:17 | INFO | __main__ | Use MLflow: True
 2025-07-15 12:51:17 | INFO | __main__ | Experiment Name: Loan_Approval_ML
+2025-07-15 13:53:51 | INFO | root | 🚀 Running df_loader from main block
+2025-07-15 13:53:51 | INFO | root | Creating Connection to the database
+2025-07-15 13:56:11 | INFO | root | 🚀 Running df_loader from main block
+2025-07-15 13:56:11 | INFO | root | Creating Connection to the database
+2025-07-15 13:56:11 | INFO | root | Connection created successfully
+2025-07-15 13:56:11 | INFO | root | Creating tables
+2025-07-15 13:56:11 | INFO | root | Tables created successfully
+2025-07-15 13:56:11 | INFO | root | Loading the database and Normalizing for a 3NF..
+2025-07-15 13:56:11 | INFO | root | Normalization done !.
+2025-07-15 13:56:11 | INFO | root | Inserting data to the tables
+2025-07-15 13:56:11 | INFO | root | All data inserted successfully
+2025-07-15 13:56:12 | INFO | root | 🧹 Tables created, data inserted, and DB connection closed.
+2025-07-15 13:56:12 | INFO | root | ✅ df_loader completed
+2025-07-15 14:11:37 | INFO | root | Creating Connection to the database
+2025-07-15 14:11:37 | INFO | root | Connection created successfully
+2025-07-15 14:11:37 | INFO | root | Creating tables
+2025-07-15 14:11:37 | INFO | root | Tables created successfully
+2025-07-15 14:11:37 | INFO | root | Loading the database and Normalizing for a 3NF..
+2025-07-15 14:11:37 | INFO | root | Normalization done !.
+2025-07-15 14:11:37 | INFO | root | Inserting data to the tables
+2025-07-15 14:11:37 | INFO | root | All data inserted successfully
+2025-07-15 14:11:37 | INFO | root | 🧹 Tables created, data inserted, and DB connection closed.
