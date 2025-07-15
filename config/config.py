@@ -24,11 +24,13 @@ file_handler.setFormatter(formatter)
 console_Handler = logging.StreamHandler() 
 console_Handler.setFormatter(formatter)
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 logger.addHandler(file_handler)
 logger.addHandler(console_Handler)
 
+
+logger.propagate = False
 
 env_path = Path(__file__).resolve().parent.parent / ".env"
 load_dotenv(dotenv_path=env_path)
