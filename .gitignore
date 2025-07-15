@@ -17,3 +17,5 @@ visualizations/__pycache__
 
 #IGNORE DUE TO THE SIZE OF THE NOTEBOOK 
 Notebook/Notebook.ipynb 
+
+custom_experiments/__pycache__
