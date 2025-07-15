@@ -48,6 +48,7 @@ def execute_sql_statement(sql_statement, conn, parameters=()):
         cur = conn.cursor()
         cur.execute(sql_statement, parameters)
         return cur.fetchall()
+    
     except sqlite3.Error as e:
         print(f"Error executing SQL statement: {e}")
         return None

@@ -6,6 +6,9 @@ from sklearn.preprocessing import StandardScaler
 import yaml 
 from dotenv import load_dotenv 
 from pathlib import Path 
+import mlflow 
+from  visualizations import pca_plots
+
 
 yaml_path = Path(__file__).resolve().parent.parent / "config" / "config.yaml"
 
@@ -18,7 +21,7 @@ if yaml_path.exists():
     
 n_Components = Conf.get("Pca_feature_parameters",{}).get("n_components")
 
-
+dotenv_path = Path(__file__).resolve().parent / ".env"
 
 def Pca_Extracted_features(X):
 
@@ -40,6 +43,31 @@ def Pca_Extracted_features(X):
     Final_df = pd.DataFrame(X_svd, columns=Svd_features)
 
     return Final_df,Svd_features,svd
+
+
+# def log_metricsinmlflow(X,set_experiment): 
+
+#     load_dotenv(dotenv_path= dotenv_path) 
+
+
+#     username = Conf.get("dagshub",{}).get("repo_owner")
+#     repo = Conf.get("dagshub",{}).get("repo_name")
+
+#     key = os.getenv("DAGSHUB_ACCESS_KEY")
+
+#     if not key:
+#         raise ValueError("DAGSHUB_ACCESS_KEY not found. Make sure it's defined in your .env file.")
+
+
+#     os.environ["MLFLOW_TRACKING_USERNAME"] = username
+#     os.environ["MLFLOW_TRACKING_PASSWORD"] = key
+
+#     with mlflow.start_run(run_name="PCA with SVD"):
+
+#         Final_df,Svd_Features,svd = Pca_Extracted_features(X=X)
+        
+
+
 
 
 
