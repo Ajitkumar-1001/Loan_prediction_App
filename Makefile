@@ -3,7 +3,7 @@ BRANCH_1 = ak
 BRANCH_2 = api 
 BRANCH_3 = ak_ml 
 
-MSG_3 = "debugged and cleaned the modules code"
+MSG_3 = "enhanced modules for plots and logged artifact"
 
 git-push1: 
 			git add	. 
@@ -45,6 +45,7 @@ venv12:
 venv11: 
 	python3.11 -m venv Loan_APP
 	source Loan_APP/bin/activate 
+
 
 
 

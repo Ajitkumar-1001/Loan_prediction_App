@@ -25,3 +25,153 @@
 2025-07-15 14:11:37 | INFO | root | Inserting data to the tables
 2025-07-15 14:11:37 | INFO | root | All data inserted successfully
 2025-07-15 14:11:37 | INFO | root | 🧹 Tables created, data inserted, and DB connection closed.
+2025-07-15 14:56:33 | INFO | root | Loading dataframe for manual testing of the 3NF dataframe with Machine Learning algorithms
+2025-07-15 14:56:33 | INFO | root | Creating Connection to the database
+2025-07-15 14:56:33 | INFO | root | Connection created successfully
+2025-07-15 14:56:33 | INFO | root | Creating tables
+2025-07-15 14:56:33 | INFO | root | Tables created successfully
+2025-07-15 14:56:33 | INFO | root | Loading the database and Normalizing for a 3NF..
+2025-07-15 14:56:33 | INFO | root | Normalization done !.
+2025-07-15 14:56:33 | INFO | root | Inserting data to the tables
+2025-07-15 14:56:33 | INFO | root | All data inserted successfully
+2025-07-15 14:56:34 | INFO | root | 🧹 Tables created, data inserted, and DB connection closed.
+2025-07-15 14:56:34 | INFO | root | Dataframe loaded successfully!
+2025-07-15 15:47:22 | INFO | root | split the data into target and features and defined models
+2025-07-15 15:56:15 | INFO | root | Loading dataframe for manual testing of the 3NF dataframe with Machine Learning algorithms
+2025-07-15 15:56:15 | INFO | root | Creating Connection to the database
+2025-07-15 15:56:15 | INFO | root | Connection created successfully
+2025-07-15 15:56:15 | INFO | root | Creating tables
+2025-07-15 15:56:15 | INFO | root | Tables created successfully
+2025-07-15 15:56:15 | INFO | root | Loading the database and Normalizing for a 3NF..
+2025-07-15 15:56:15 | INFO | root | Normalization done !.
+2025-07-15 15:56:15 | INFO | root | Inserting data to the tables
+2025-07-15 15:56:15 | INFO | root | All data inserted successfully
+2025-07-15 15:56:15 | INFO | root | 🧹 Tables created, data inserted, and DB connection closed.
+2025-07-15 15:56:15 | INFO | root | Dataframe loaded successfully!
+2025-07-15 15:56:29 | INFO | root | split the data into target and features and defined models
+2025-07-15 16:42:08 | INFO | root | 🚀 Running the pipeline build train
+2025-07-15 16:42:08 | INFO | root | ✅ logged success
+2025-07-15 16:47:22 | INFO | root | Loading dataframe for manual testing of the 3NF dataframe with Machine Learning algorithms
+2025-07-15 16:47:22 | INFO | root | Creating Connection to the database
+2025-07-15 16:47:22 | INFO | root | Connection created successfully
+2025-07-15 16:47:22 | INFO | root | Creating tables
+2025-07-15 16:47:22 | INFO | root | Tables created successfully
+2025-07-15 16:47:22 | INFO | root | Loading the database and Normalizing for a 3NF..
+2025-07-15 16:47:23 | INFO | root | Normalization done !.
+2025-07-15 16:47:23 | INFO | root | Inserting data to the tables
+2025-07-15 16:47:23 | INFO | root | All data inserted successfully
+2025-07-15 16:47:23 | INFO | root | 🧹 Tables created, data inserted, and DB connection closed.
+2025-07-15 16:47:23 | INFO | root | Dataframe loaded successfully!
+2025-07-15 16:47:29 | INFO | root | split the data into target and features and defined models
+2025-07-15 16:57:10 | INFO | root | Loading dataframe for manual testing of the 3NF dataframe with Machine Learning algorithms
+2025-07-15 16:57:10 | INFO | root | Creating Connection to the database
+2025-07-15 16:57:10 | INFO | root | Connection created successfully
+2025-07-15 16:57:10 | INFO | root | Creating tables
+2025-07-15 16:57:10 | INFO | root | Tables created successfully
+2025-07-15 16:57:10 | INFO | root | Loading the database and Normalizing for a 3NF..
+2025-07-15 16:57:10 | INFO | root | Normalization done !.
+2025-07-15 16:57:10 | INFO | root | Inserting data to the tables
+2025-07-15 16:57:10 | INFO | root | All data inserted successfully
+2025-07-15 16:57:10 | INFO | root | 🧹 Tables created, data inserted, and DB connection closed.
+2025-07-15 16:57:10 | INFO | root | Dataframe loaded successfully!
+2025-07-15 16:57:10 | INFO | root | split the data into target and features and defined models
+2025-07-15 16:58:46 | INFO | root | Loading dataframe for manual testing of the 3NF dataframe with Machine Learning algorithms
+2025-07-15 16:58:46 | INFO | root | Creating Connection to the database
+2025-07-15 16:58:46 | INFO | root | Connection created successfully
+2025-07-15 16:58:46 | INFO | root | Creating tables
+2025-07-15 16:58:46 | INFO | root | Tables created successfully
+2025-07-15 16:58:46 | INFO | root | Loading the database and Normalizing for a 3NF..
+2025-07-15 16:58:46 | INFO | root | Normalization done !.
+2025-07-15 16:58:46 | INFO | root | Inserting data to the tables
+2025-07-15 16:58:46 | INFO | root | All data inserted successfully
+2025-07-15 16:58:46 | INFO | root | 🧹 Tables created, data inserted, and DB connection closed.
+2025-07-15 16:58:46 | INFO | root | Dataframe loaded successfully!
+2025-07-15 16:58:46 | INFO | root | split the data into target and features and defined models
+2025-07-15 17:00:24 | INFO | root | Loading dataframe for manual testing of the 3NF dataframe with Machine Learning algorithms
+2025-07-15 17:00:24 | INFO | root | Creating Connection to the database
+2025-07-15 17:00:24 | INFO | root | Connection created successfully
+2025-07-15 17:00:24 | INFO | root | Creating tables
+2025-07-15 17:00:24 | INFO | root | Tables created successfully
+2025-07-15 17:00:24 | INFO | root | Loading the database and Normalizing for a 3NF..
+2025-07-15 17:00:24 | INFO | root | Normalization done !.
+2025-07-15 17:00:24 | INFO | root | Inserting data to the tables
+2025-07-15 17:00:24 | INFO | root | All data inserted successfully
+2025-07-15 17:00:24 | INFO | root | 🧹 Tables created, data inserted, and DB connection closed.
+2025-07-15 17:00:24 | INFO | root | Dataframe loaded successfully!
+2025-07-15 17:00:24 | INFO | root | split the data into target and features and defined models
+2025-07-15 17:04:40 | INFO | root | Loading dataframe for manual testing of the 3NF dataframe with Machine Learning algorithms
+2025-07-15 17:04:40 | INFO | root | Creating Connection to the database
+2025-07-15 17:04:40 | INFO | root | Connection created successfully
+2025-07-15 17:04:40 | INFO | root | Creating tables
+2025-07-15 17:04:40 | INFO | root | Tables created successfully
+2025-07-15 17:04:40 | INFO | root | Loading the database and Normalizing for a 3NF..
+2025-07-15 17:04:40 | INFO | root | Normalization done !.
+2025-07-15 17:04:40 | INFO | root | Inserting data to the tables
+2025-07-15 17:04:40 | INFO | root | All data inserted successfully
+2025-07-15 17:04:40 | INFO | root | 🧹 Tables created, data inserted, and DB connection closed.
+2025-07-15 17:04:40 | INFO | root | Dataframe loaded successfully!
+2025-07-15 17:04:46 | INFO | root | split the data into target and features and defined models
+2025-07-15 17:04:57 | INFO | root | ✅ Logistic Regression  → Accuracy: 1.0000, F1 Score: 1.0000
+2025-07-15 17:05:43 | INFO | root | ✅ Ridge Classifier → Accuracy: 0.9995, F1 Score: 0.9995
+2025-07-15 17:06:47 | INFO | root | ✅ RandomForestClassifier → Accuracy: 0.9718, F1 Score: 0.9712
+2025-07-15 17:07:01 | INFO | root | ✅ XGBClassifier → Accuracy: 0.9978, F1 Score: 0.9977
+2025-07-15 18:21:58 | INFO | root | Loading dataframe for manual testing of the 3NF dataframe with Machine Learning algorithms
+2025-07-15 18:21:58 | INFO | root | Creating Connection to the database
+2025-07-15 18:21:58 | INFO | root | Connection created successfully
+2025-07-15 18:21:58 | INFO | root | Creating tables
+2025-07-15 18:21:58 | INFO | root | Tables created successfully
+2025-07-15 18:21:58 | INFO | root | Loading the database and Normalizing for a 3NF..
+2025-07-15 18:21:58 | INFO | root | Normalization done !.
+2025-07-15 18:21:58 | INFO | root | Inserting data to the tables
+2025-07-15 18:21:58 | INFO | root | All data inserted successfully
+2025-07-15 18:21:59 | INFO | root | 🧹 Tables created, data inserted, and DB connection closed.
+2025-07-15 18:21:59 | INFO | root | Dataframe loaded successfully!
+2025-07-15 18:21:59 | INFO | root | split the data into target and features and defined models
+2025-07-15 18:22:52 | INFO | root | Loading dataframe for manual testing of the 3NF dataframe with Machine Learning algorithms
+2025-07-15 18:22:52 | INFO | root | Creating Connection to the database
+2025-07-15 18:22:52 | INFO | root | Connection created successfully
+2025-07-15 18:22:52 | INFO | root | Creating tables
+2025-07-15 18:22:52 | INFO | root | Tables created successfully
+2025-07-15 18:22:52 | INFO | root | Loading the database and Normalizing for a 3NF..
+2025-07-15 18:22:52 | INFO | root | Normalization done !.
+2025-07-15 18:22:52 | INFO | root | Inserting data to the tables
+2025-07-15 18:22:53 | INFO | root | All data inserted successfully
+2025-07-15 18:22:53 | INFO | root | 🧹 Tables created, data inserted, and DB connection closed.
+2025-07-15 18:22:53 | INFO | root | Dataframe loaded successfully!
+2025-07-15 18:22:53 | INFO | root | split the data into target and features and defined models
+2025-07-15 18:22:58 | INFO | root | ✅ Logistic Regression  → Accuracy: 1.0000, F1 Score: 1.0000
+2025-07-15 18:23:43 | INFO | root | ✅ Ridge Classifier → Accuracy: 0.9995, F1 Score: 0.9995
+2025-07-15 18:24:54 | INFO | root | ✅ RandomForestClassifier → Accuracy: 0.9718, F1 Score: 0.9712
+2025-07-15 18:25:11 | INFO | root | ✅ XGBClassifier → Accuracy: 0.9978, F1 Score: 0.9977
+2025-07-15 18:51:55 | INFO | root | Loading dataframe for manual testing of the 3NF dataframe with Machine Learning algorithms
+2025-07-15 18:51:55 | INFO | root | Creating Connection to the database
+2025-07-15 18:51:55 | INFO | root | Connection created successfully
+2025-07-15 18:51:55 | INFO | root | Creating tables
+2025-07-15 18:51:55 | INFO | root | Tables created successfully
+2025-07-15 18:51:55 | INFO | root | Loading the database and Normalizing for a 3NF..
+2025-07-15 18:51:55 | INFO | root | Normalization done !.
+2025-07-15 18:51:55 | INFO | root | Inserting data to the tables
+2025-07-15 18:51:55 | INFO | root | All data inserted successfully
+2025-07-15 18:51:55 | INFO | root | 🧹 Tables created, data inserted, and DB connection closed.
+2025-07-15 18:51:55 | INFO | root | Dataframe loaded successfully!
+2025-07-15 18:51:55 | INFO | root | split the data into target and features and defined models
+2025-07-15 18:52:02 | INFO | root | ✅ Logistic Regression  → Accuracy: 1.0000, F1 Score: 1.0000
+2025-07-15 18:52:48 | INFO | root | ✅ Ridge Classifier → Accuracy: 0.9995, F1 Score: 0.9995
+2025-07-15 18:54:05 | INFO | root | ✅ RandomForestClassifier → Accuracy: 0.9718, F1 Score: 0.9712
+2025-07-15 18:54:22 | INFO | root | ✅ XGBClassifier → Accuracy: 0.9978, F1 Score: 0.9977
+2025-07-15 18:56:19 | INFO | root | Loading dataframe for manual testing of the 3NF dataframe with Machine Learning algorithms
+2025-07-15 18:56:19 | INFO | root | Creating Connection to the database
+2025-07-15 18:56:19 | INFO | root | Connection created successfully
+2025-07-15 18:56:19 | INFO | root | Creating tables
+2025-07-15 18:56:19 | INFO | root | Tables created successfully
+2025-07-15 18:56:19 | INFO | root | Loading the database and Normalizing for a 3NF..
+2025-07-15 18:56:19 | INFO | root | Normalization done !.
+2025-07-15 18:56:19 | INFO | root | Inserting data to the tables
+2025-07-15 18:56:19 | INFO | root | All data inserted successfully
+2025-07-15 18:56:19 | INFO | root | 🧹 Tables created, data inserted, and DB connection closed.
+2025-07-15 18:56:19 | INFO | root | Dataframe loaded successfully!
+2025-07-15 18:56:19 | INFO | root | split the data into target and features and defined models
+2025-07-15 18:56:25 | INFO | root | ✅ Logistic Regression  → Accuracy: 1.0000, F1 Score: 1.0000
+2025-07-15 18:57:13 | INFO | root | ✅ Ridge Classifier → Accuracy: 0.9995, F1 Score: 0.9995
+2025-07-15 18:58:19 | INFO | root | ✅ RandomForestClassifier → Accuracy: 0.9718, F1 Score: 0.9712
+2025-07-15 18:58:36 | INFO | root | ✅ XGBClassifier → Accuracy: 0.9978, F1 Score: 0.9977
