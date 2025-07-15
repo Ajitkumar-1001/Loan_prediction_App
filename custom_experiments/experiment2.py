@@ -32,7 +32,7 @@ experiment_name = Conf.get("mlflow", {}).get("set_experiment_5")
 
 
 
-def pca_experiment_1(X_train,X_test,y_train,y_test):
+def pca_experiment_2(X_train,X_test,y_train,y_test):
 
     logger.info("Training process Initiated for the custom experiment")
 
@@ -65,6 +65,6 @@ def pca_experiment_1(X_train,X_test,y_train,y_test):
     
 
 if __name__ == "__main__":
-    logger.info("Experiment started for the custom experiment 1")
+    logger.info("Experiment started for the custom experiment 2")
     logger.info("Done with the experiment for XGBoost Classifier with PCA")
 
