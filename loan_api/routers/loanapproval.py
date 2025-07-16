@@ -1,4 +1,8 @@
 from fastapi import APIRouter, HTTPException
+import sys
+from pathlib import Path
+
+sys.path.append(str(Path(__file__).resolve().parent.parent))
 from models.Loan_approval import LoanApproval
 from joblib import load 
 import numpy as np 
