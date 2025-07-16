@@ -1,4 +1,4 @@
-MSG_1 = "Created predict for loan_approval in FastAPI"
+MSG_1 = "tested Fastapi endpoints and added UI page"
 BRANCH_1 = ak 
 BRANCH_2 = api 
 BRANCH_3 = ak_ml 
