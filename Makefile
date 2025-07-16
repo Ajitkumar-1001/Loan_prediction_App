@@ -1,4 +1,4 @@
-MSG_1 = "Added User login models to the api"
+MSG_1 = "Created predict for loan_approval in FastAPI"
 BRANCH_1 = ak 
 BRANCH_2 = api 
 BRANCH_3 = ak_ml 
