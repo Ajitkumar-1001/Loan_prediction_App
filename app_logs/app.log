@@ -352,3 +352,14 @@
 2025-07-16 02:25:13 | INFO | root | All data inserted successfully
 2025-07-16 02:25:13 | INFO | root | 🧹 Tables created, data inserted, and DB connection closed.
 2025-07-16 02:25:13 | INFO | root | Dataframe loaded successfully!
+2025-07-16 12:38:06 | INFO | root | Database exists and ready for further process
+2025-07-16 12:38:06 | INFO | root | Executing the database api file
+2025-07-16 12:39:45 | INFO | root | Database exists and ready for further process
+2025-07-16 12:39:45 | INFO | root | Executing the database api file
+2025-07-16 12:39:45 | INFO | root | Successfully fetched !
+2025-07-16 12:40:11 | INFO | root | Database exists and ready for further process
+2025-07-16 12:40:11 | INFO | root | Executing the database api file
+2025-07-16 12:40:11 | INFO | root | Successfully fetched !
+2025-07-16 12:40:31 | INFO | root | Database exists and ready for further process
+2025-07-16 12:40:31 | INFO | root | Executing the database api file
+2025-07-16 12:40:32 | INFO | root | Successfully fetched !
