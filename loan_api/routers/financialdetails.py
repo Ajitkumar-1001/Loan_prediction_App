@@ -6,7 +6,7 @@ from database import get_connection
 
 router = APIRouter(prefix = "/financialdetails" , tags = ["FinancialDetails"])
 
-@router.get("/", response_model= List[FinancialDetails])
+@router.get("/", response_model= List[FinancialDetails]) # type: ignore
 def get_findetails():
      conn = get_connection() 
      cursor = conn.cursor() 
@@ -20,4 +20,5 @@ def get_findetails():
 
      except Exception as e: 
           raise HTTPException(status_code = 500, details = str(e))
+      
       
