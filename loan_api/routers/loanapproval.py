@@ -24,10 +24,11 @@ def predict(loandet : LoanApproval):
 
     try:
         prediction = model.predict(values)[0]
-        
+        status = "Approved" if prediction == 1 else "Not Approved"
 
         return {
-            "Loan Approval Status": "Approved" if prediction == 1 else "Not Approved"
+            "prediction": status,
+            "message": f"Loan is likely to be {status}"
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
