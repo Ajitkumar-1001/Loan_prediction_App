@@ -1,0 +1,17 @@
+__pycache__/
+*.pyc
+
+.env
+App_files/
+app_logs/
+config/
+custom_experiments/
+data/
+frontend/
+ModelFiles/Logisitic Regression_pipeline.pkl
+ModelFiles/Random Forest Classification_pipeline.pkl
+ModelFiles/Ridge Classification_pipeline.pkl
+ModelFiles/XGB classifier_pipeline.pkl
+Notebook/
+resource/
+visualizations/
