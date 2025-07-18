@@ -19,27 +19,6 @@ This project predicts **Loan Approval** with trained machine learning models suc
 **FastAPI** (backend) + **SQLite3** (database) + **React + Tailwind + TypeScript** (frontend) + **MLflow** (tracking) + **LLM (Gemini)** for insights.
 
 ---
-
-## 📦 Step 1: Environment Setup
-
-✅ **Python Version:** 3.8 - 3.10 (Recommended < 3.11)
-
-```bash
-git clone https://github.com/Ajitkumar-1001/Loan_prediction_App.git
-cd Loan_prediction_App
-python -m venv Loan_App
-source Loan_App/bin/activate
-pip install -r requirements.txt
-```
-# Loan Prediction App
-
-<div align="center">
-  <h1>Loan Prediction</h1>
-  <p>This project uses Machine Learning algorithms to predict loan approval for customers based on credit scores, income, loan amount, and other financial features.</p>
-</div>
-
----
-
 ## 🚀 Features
 
 * 📊 Trained ML model using feature engineering, PCA, and classification algorithms
@@ -52,17 +31,19 @@ pip install -r requirements.txt
 
 ---
 
-## 📦 Installation Instructions
+## 📦 Step 1: Environment Setup
 
-### 1️⃣ Python Setup
-
-> Recommended Python version: **< 3.11**
+✅ **Python Version:** 3.8 - 3.10 (Recommended < 3.11)
 
 ```bash
-conda create -n Loan_App python=3.10 -y
-conda activate Loan_App
+git clone https://github.com/Ajitkumar-1001/Loan_prediction_App.git
+cd Loan_prediction_App
+python -m venv Loan_App
+source Loan_App/bin/activate
 pip install -r requirements.txt
 ```
+---
+
 
 ### 2️⃣ Database Setup
 
@@ -80,7 +61,7 @@ Train the model with feature selection, PCA, and classifiers like Logistic Regre
 python train_model.py
 ```
 
-Logged to `mlruns/` directory.
+Logged to `dagshub`
 
 ---
 
@@ -116,27 +97,6 @@ npm run dev
 * Form input fields
 * Animated prediction + suggestions
 * Validation to avoid empty or negative values
-
----
-
-
-
-### 🔗 Backend (FastAPI):
-
-* Create new **Web Service** on Render
-* Connect GitHub repo
-* Start command:
-
-  ```bash
-  uvicorn loan_api.main:app --host=0.0.0.0 --port=8000
-  ```
-* Add Environment Variables like `GEMINI_API_KEY`
-
-### 🧑‍💻 Frontend (React):
-
-* Create new **Static Site**
-* Build command: `npm run build`
-* Publish directory: `dist` or `build`
 
 ---
 
@@ -185,11 +145,5 @@ Ajit Kumar — [GitHub](https://github.com/Ajitkumar-1001)
 ---
 
 ## 📜 License
-
-MIT License
-
-
-
-## License
 
 This project is licensed under the [MIT License](./LICENSE).
