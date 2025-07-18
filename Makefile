@@ -1,4 +1,4 @@
-MSG_1 = "tested Fastapi endpoints and added UI page"
+MSG_1 = "Prepared files and folders for containerization"
 BRANCH_1 = ak 
 BRANCH_2 = api 
 BRANCH_3 = ak_ml 

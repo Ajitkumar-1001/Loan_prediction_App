@@ -9,7 +9,7 @@ scipy
 pydantic 
 ydata-profiling
 ipywodgets
-
+google-generativeai
 xgboost
 mlflow 
 dagshub

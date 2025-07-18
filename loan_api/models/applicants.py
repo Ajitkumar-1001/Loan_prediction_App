@@ -10,9 +10,7 @@ class Applicants(BaseModel):
     ApplicationDate : date
     Age : int 
     MaritalStatus : str 
-
     NumberOfDependents : int 
-
     HomeOwnershioStatus : str 
 
 

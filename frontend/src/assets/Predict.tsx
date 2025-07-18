@@ -1,258 +1,211 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-// Using inline SVG for icons to avoid external dependency resolution issues.
+import React, { useState, useEffect, useMemo } from 'react';
+import { motion, useAnimation } from 'framer-motion';
 
-// Define the type for the input data based on your API's expected payload
+
 interface LoanPredictionInput {
-  IncomePerDependent: number;
-  LoanAmount: number;
-  RiskScore: number; // Added new field
-  TotalDebtToIncomeRatio: number;
-  InterestRate: number; // Added new field
-  AnnualIncome: number;
-  BaseInterestRate: number;
-  // Removed Age as per user's updated features
+  IncomePerDependent: string | number;
+  LoanAmount: string | number;
+  RiskScore: string | number;
+  TotalDebtToIncomeRatio: string | number;
+  InterestRate: string | number;
+  AnnualIncome: string | number;
+  BaseInterestRate: string | number;
 }
 
-// Define the type for the prediction result
 interface LoanPredictionResult {
-  prediction: string; // e.g., "Approved" or "Rejected"
-  probability?: number; // Optional probability score
-  message?: string; // Optional message from the backend
+  prediction: string;
+  message?: string;
+  llm_response?: string;
 }
 
 const Predict: React.FC = () => {
   const [formData, setFormData] = useState<LoanPredictionInput>({
-    IncomePerDependent: 0, // Changed from " " to 0
-    LoanAmount: 0, // Changed from " " to 0
-    RiskScore: 0, // Initialized new field, changed from " " to 0
-    TotalDebtToIncomeRatio: 0, // Changed from " " to 0
-    InterestRate: 0, // Initialized new field, changed from " " to 0
-    AnnualIncome: 0, // Changed from " " to 0
-    BaseInterestRate: 0, // Changed from " " to 0
-    // Age removed
-  });
+    IncomePerDependent: "",
+    LoanAmount: "",
+    RiskScore: "",
+    TotalDebtToIncomeRatio: "",
+    InterestRate: "",
+    AnnualIncome: "",
+    BaseInterestRate: "",
+  } as any);
 
   const [predictionResult, setPredictionResult] = useState<LoanPredictionResult | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Handle input changes for numerical fields
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
-      [name]: parseFloat(value) || 0, // Parse as float, default to 0 if invalid
+      [name]: value === "" ? "" : parseFloat(value),
     }));
   };
 
-  // Handle form submission
+  const isFormValid = () => {
+    return Object.values(formData).every(
+      (val) => typeof val === "number" && !isNaN(val) && val > 0
+    );
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
     setError(null);
     setPredictionResult(null);
 
+    if (!isFormValid()) {
+      setError("Please fill in all fields with valid non-zero values.");
+      return;
+    }
+
+    setLoading(true);
+
     try {
-      // IMPORTANT: Replace with your actual FastAPI endpoint URL for loan prediction
-      // Based on the screenshot, it was 'http://127.0.0.1:8000/loan-predict-loan'
-      const response = await fetch('http://127.0.0.1:8000/Loan/predict-loan', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+      const response = await fetch("http://127.0.0.1:8000/Loan/predict-loan", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.detail || 'Something went wrong with the prediction.');
+        throw new Error(errorData.detail || "Something went wrong with the prediction.");
       }
 
       const data: LoanPredictionResult = await response.json();
       setPredictionResult(data);
     } catch (err: any) {
-      setError(err.message || 'Failed to get prediction.');
+      setError(err.message || "Failed to get prediction.");
     } finally {
       setLoading(false);
     }
   };
 
-  // Framer Motion variants for animations
-  const containerVariants = {
-    hidden: { opacity:0, y:100, rotate: 90 }, // Added initial rotation
-    visible: { opacity: 1, y:0, rotate: 0, transition: { duration:1.0, ease: 'easeOut' } }, // Rotates to 0 degrees
-  };
+  const control1 = useAnimation();
+  const control2 = useAnimation();
+  const control3 = useAnimation();
 
-  const headingvariant = {
-    hidden : { opacity : 0, x:50 ,y:50},
-    visible : { opacity : 1, x:0 , y: 0, transition : {duration:0.3, ease:"easeOut"}}, // Added comma here
-    hover : {scale : 1.25, textShadow: '5px 5px 5px rgba(0,0,0,0.2)'}
-  }
 
-  const itemVariants=  {
-        "hidden" : {opacity : 0 , x : 5 , y : 10 },
-        "visible" : {opacity : 1 , x : 0 , y : 0, transition : {duration : 1.0, ease : "easeOut"}}
 
+  useEffect(() => {
+    const sequence = async () => {
+      await control1.start("visible");
+      await new Promise((res) => setTimeout(res, 100));
+
+      await control2.start("visible");
+      await new Promise((res) => setTimeout(res, 50));
+
+      await control3.start("visible");
+      await new Promise((res) => setTimeout(res, 50));
+
+      // Optional: Animate LLM block after a small delay (container only)
+      if (predictionResult?.llm_response) {
+        await new Promise((res) => setTimeout(res, 300));
+      }
+    };
+
+    sequence();
+  }, [control1, control2, control3, predictionResult?.llm_response]);
+
+
+  const containervariantllm: Record<string, any> = useMemo(() => ({
+    hidden: {},
+    visible: {
+      transition: { staggerChildren: 1.0 },
+    },
+  }), []);
+
+
+  const paravariantllm: Record<string, any> = useMemo(() => ({
+    hidden: { opacity: 0 },
+    visible: { opacity: 1, transition: { duration: 0.5, ease: "easeIn" } },
+  }), []);
+
+  const containerVariants = useMemo(() => ({
+    hidden: { opacity: 0, y: 100, rotate: 90 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      rotate: 0,
+      transition: { duration: 1.0, ease: 'easeOut', staggerChildren: 0.2 }
     }
+  }), []);
 
-  const buttonVariants = {
+
+  const headingvariant = useMemo(() => ({
+    hidden: { opacity: 0, x: 50, y: 50 },
+    visible: { opacity: 1, x: 0, y: 0, transition: { duration: 0.3, ease: 'easeOut' } },
+    hover: { scale: 1.25, textShadow: '5px 5px 5px rgba(0,0,0,0.2)' }
+  }), []);
+
+  const itemVariants = useMemo(() => ({
+    hidden: { opacity: 0, x: 5, y: 10 },
+    visible: { opacity: 1, x: 0, y: 0, transition: { duration: 1.0, ease: 'easeOut', staggerchildren: 0.1 } }
+  }), []);
+
+  const buttonVariants = useMemo(() => ({
     hover: { scale: 1.05, boxShadow: '5px 5px 5px rgba(0,0,0,0.2)' },
     tap: { scale: 0.95 },
-  };
+  }), []);
 
-  const resultVariants = {
+  const resultVariants = useMemo(() => ({
     hidden: { opacity: 0, scale: 0.8 },
     visible: { opacity: 1, scale: 1, transition: { duration: 0.5, ease: 'easeOut' } },
-  };
+  }), []);
 
   return (
-    
-
-    <div className="min-w-screen min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-sky-950 to-blue-850 ">
-
-      
-
+    <div className="min-w-screen min-h-screen flex flex-col md:flex-row gap-6 items-center justify-center bg-gradient-to-br from-sky-950 to-blue-350">
       <motion.div
         className="w-full max-w-xl bg-gradient-to-br from-sky-950 to-blue-850 rounded-2xl shadow-3xl p-8 md:p-10 border border-gray-700 mx-auto"
         variants={containerVariants as any}
         initial="hidden"
-        animate="visible"
+        animate={control1}
       >
         <motion.h1
           className="text-4xl font-extrabold text-center mb-8 text-zinc-400"
           variants={headingvariant as any}
-        initial = "hidden"
-        animate = "visible">
+
+        >
           Loan Prediction
-        </motion.h1> {/* Corrected closing tag */}
+        </motion.h1>
 
         <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Input Field: Income Per Dependent */}
-          <motion.div variants={itemVariants as any} className="">
-            <label htmlFor="IncomePerDependent" className="block text-sm font-medium text-gray-300 mb-1">
-              Income Per Dependent ($)
-            </label>
-            <input
-              type="number"
-              id="IncomePerDependent"
-              name="IncomePerDependent"
-              value={formData.IncomePerDependent}
-              onChange={handleChange}
-              className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-gray-100 placeholder-gray-400 transition duration-200"
-              placeholder="e.g., 50000"
-              step="0.01"
-              required
-            />
-          </motion.div>
+          {Object.entries(formData).map(([key, value]) => (
+            <motion.div key={key} variants={itemVariants as any}>
+              <label htmlFor={key} className="block text-sm font-medium text-gray-300 mb-1">
+                {key.replace(/([A-Z])/g, ' $1')}
+              </label>
+              <input
+                type="number"
+                id={key}
+                name={key}
+                value={value}
+                placeholder={(() => {
+                  switch (key) {
+                    case "AnnualIncome":
+                    case "IncomePerDependent":
+                      return "e.g., 10000";
+                    case "LoanAmount":
+                      return "e.g., 2500000";
+                    case "RiskScore":
+                      return "e.g., 650";
+                    case "InterestRate":
+                    case "BaseInterestRate":
+                      return "e.g., 7.5";
+                    case "TotalDebtToIncomeRatio":
+                      return "e.g., 0.35";
+                    default:
+                      return `Enter ${key.replace(/([A-Z])/g, " $1")}`;
+                  }
+                })()}
+                onChange={handleChange}
+                className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-gray-100 placeholder-gray-400 transition duration-200"
+                step="0.01"
+                min="0"
+              />
 
-          {/* Input Field: Loan Amount */}
-          <motion.div variants={itemVariants as any} className="relative">
-            <label htmlFor="LoanAmount" className="block text-sm font-medium text-gray-300 mb-1">
-              Loan Amount ($)
-            </label>
-            <input
-              type="number"
-              id="LoanAmount"
-              name="LoanAmount"
-              value={formData.LoanAmount}
-              onChange={handleChange}
-              className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-gray-100 placeholder-gray-400 transition duration-200"
-              placeholder="e.g., 250000"
-              step="0.01"
-              required
-            />
-          </motion.div>
 
-          {/* Input Field: Risk Score (New Field) */}
-          <motion.div variants={itemVariants as any} className="relative">
-            <label htmlFor="RiskScore" className="block text-sm font-medium text-gray-300 mb-1">
-              Risk Score
-            </label>
-            <input
-              type="number"
-              id="RiskScore"
-              name="RiskScore"
-              value={formData.RiskScore}
-              onChange={handleChange}
-              className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-gray-100 placeholder-gray-400 transition duration-200"
-              placeholder="e.g., 0.35"
-              step="0.01"
-              required
-            />
-          </motion.div>
-
-          {/* Input Field: Total Debt To Income Ratio */}
-          <motion.div variants={itemVariants as any} className="relative">
-            <label htmlFor="TotalDebtToIncomeRatio" className="block text-sm font-medium text-gray-300 mb-1">
-              Debt-to-Income Ratio (%)
-            </label>
-            <input
-              type="number"
-              id="TotalDebtToIncomeRatio"
-              name="TotalDebtToIncomeRatio"
-              value={formData.TotalDebtToIncomeRatio}
-              onChange={handleChange}
-              className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-gray-100 placeholder-gray-400 transition duration-200"
-              placeholder="e.g., 0.4"
-              step="0.01"
-              required
-            />
-          </motion.div>
-
-          {/* Input Field: Interest Rate (New Field) */}
-          <motion.div variants={itemVariants as any} className="relative">
-            <label htmlFor="InterestRate" className="block text-sm font-medium text-gray-300 mb-1">
-              Interest Rate (%)
-            </label>
-            <input
-              type="number"
-              id="InterestRate"
-              name="InterestRate"
-              value={formData.InterestRate}
-              onChange={handleChange}
-              className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-gray-100 placeholder-gray-400 transition duration-200"
-              placeholder="e.g., 5.5"
-              step="0.01"
-              required
-            />
-          </motion.div>
-
-          {/* Input Field: Annual Income */}
-          <motion.div variants={itemVariants as any} className="relative">
-            <label htmlFor="AnnualIncome" className="block text-sm font-medium text-gray-300 mb-1">
-              Annual Income ($)
-            </label>
-            <input
-              type="number"
-              id="AnnualIncome"
-              name="AnnualIncome"
-              value={formData.AnnualIncome}
-              onChange={handleChange}
-              className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-gray-100 placeholder-gray-400 transition duration-200"
-              placeholder="e.g., 750000"
-              step="0.01"
-              required
-            />
-          </motion.div>
-
-          {/* Input Field: Base Interest Rate */}
-          <motion.div variants={itemVariants as any} className="relative">
-            <label htmlFor="BaseInterestRate" className="block text-sm font-medium text-gray-300 mb-1">
-              Base Interest Rate (%)
-            </label>
-            <input
-              type="number"
-              id="BaseInterestRate"
-              name="BaseInterestRate"
-              value={formData.BaseInterestRate}
-              onChange={handleChange}
-              className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-gray-100 placeholder-gray-400 transition duration-200"
-              placeholder="e.g., 3.5"
-              step="0.01"
-              required
-            />
-          </motion.div>
+            </motion.div>
+          ))}
 
           <motion.div className="md:col-span-2 flex justify-center mt-6">
             <motion.button
@@ -263,16 +216,6 @@ const Predict: React.FC = () => {
               whileTap="tap"
               disabled={loading}
             >
-              {loading ? (
-                <svg className="animate-spin h-5 w-5 text-white mr-3" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-              ) : (
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2 text-xl">
-                    <path d="M22 12H2M15 5l7 7-7 7"/>
-                </svg>
-              )}
               {loading ? 'Predicting...' : 'Get Loan Prediction'}
             </motion.button>
           </motion.div>
@@ -280,51 +223,68 @@ const Predict: React.FC = () => {
 
         {error && (
           <motion.div
-            className="mt-8 p-4 bg-red-800 text-red-100 rounded-lg shadow-md flex items-center justify-center"
+            className="mt-8 p-4 bg-red-800 text-red-100 rounded-lg shadow-md"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
           >
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-2xl mr-3">
-                <circle cx="12" cy="12" r="10"/>
-                <path d="M15 9l-6 6M9 9l6 6"/>
-            </svg>
             <p className="font-medium">Error: {error}</p>
           </motion.div>
         )}
 
         {predictionResult && (
           <motion.div
-            className={`mt-8 p-6 rounded-lg shadow-xl text-center ${
-              predictionResult.prediction === 'Approved' ? 'bg-green-700' : 'bg-red-700'
-            }`}
+            className={`mt-8 p-6 rounded-lg shadow-xl text-center ${predictionResult.prediction === 'Approved' ? 'bg-green-700' : 'bg-red-700'
+              }`}
             variants={resultVariants as any}
             initial="hidden"
             animate="visible"
           >
-            <h2 className="text-3xl font-bold mb-4 flex items-center justify-center">
-              {predictionResult.prediction === 'Approved' ? (
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-4xl mr-3">
-                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-                    <path d="M22 4L12 14.01l-3-3"/>
-                </svg>
-              ) : (
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-4xl mr-3">
-                    <circle cx="12" cy="12" r="10"/>
-                    <path d="M15 9l-6 6M9 9l6 6"/>
-                </svg>
-              )}
-              Loan Status: {predictionResult.prediction}
-            </h2>
-          
+            <h2 className="text-3xl font-bold mb-4">Loan Status: {predictionResult.prediction}</h2>
             {predictionResult.message && (
               <p className="text-lg text-gray-200">{predictionResult.message}</p>
             )}
           </motion.div>
         )}
       </motion.div>
+
+      {predictionResult?.llm_response && (
+        <motion.div
+          className="flex flex-col justify-self-end m-8 max-w-xl from-sky-650 to-blue-850  p-6  rounded-xl border border-gray-700 text-gray-100 font-sans font-bold shadow-lg"
+          initial="hidden"
+          animate="visible"
+          variants={{
+            hidden: { opacity: 0 },
+            visible: { opacity: 1, transition: { staggerChildren: 0.2 } },
+          }}
+        >
+          <motion.h3
+            className="text-xl font-semibold text-center text-blue-300 mb-3"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            Suggestions
+          </motion.h3>
+
+          <div className="flex flex-col gap-2">
+            {predictionResult.llm_response.split('\n').map((line, index) => (
+              <motion.p
+                key={index}
+                className="text-sm font-sans font-bold text-gray-100 whitespace-pre-wrap"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 + index * 0.25, duration: 0.4 }}
+              >
+                {line}
+              </motion.p>
+            ))}
+          </div>
+        </motion.div>
+      )}
+
+
     </div>
-    
   );
 };
 

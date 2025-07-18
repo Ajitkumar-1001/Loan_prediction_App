@@ -1,6 +1,6 @@
-# Loan Prediction 
+# <div align = "center"> Loan Prediction </div>
 
-## This project is based on Machine Learning Algorithms such as Prediciton and Classification to predict the Loan approval rate for a customer based on the credit values and other features
+##  <div align ="center"> This project is based on Machine Learning Algorithms such as Prediciton and Classification to predict the Loan approval rate for a customer based on the credit values and other features </div>
 
 ## First : 
 ### Install packages using the recommended python version < 3.11 For Machine learning Projects
