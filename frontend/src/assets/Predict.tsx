@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+// import axios from 'axios';
 // Using inline SVG for icons to avoid external dependency resolution issues.
 
 // Define the type for the input data based on your API's expected payload
@@ -23,14 +24,14 @@ interface LoanPredictionResult {
 
 const Predict: React.FC = () => {
   const [formData, setFormData] = useState<LoanPredictionInput>({
-    IncomePerDependent: 0, // Changed from " " to 0
-    LoanAmount: 0, // Changed from " " to 0
-    RiskScore: 0, // Initialized new field, changed from " " to 0
-    TotalDebtToIncomeRatio: 0, // Changed from " " to 0
-    InterestRate: 0, // Initialized new field, changed from " " to 0
-    AnnualIncome: 0, // Changed from " " to 0
-    BaseInterestRate: 0, // Changed from " " to 0
-    // Age removed
+    IncomePerDependent: 0, 
+    LoanAmount: 0, 
+    RiskScore: 0, 
+    TotalDebtToIncomeRatio: 0, 
+    InterestRate: 0, 
+    AnnualIncome: 0,
+    BaseInterestRate: 0, 
+    
   });
 
   const [predictionResult, setPredictionResult] = useState<LoanPredictionResult | null>(null);
@@ -42,7 +43,7 @@ const Predict: React.FC = () => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
-      [name]: parseFloat(value) || 0, // Parse as float, default to 0 if invalid
+      [name]: parseFloat(value) || "", 
     }));
   };
 
@@ -54,8 +55,7 @@ const Predict: React.FC = () => {
     setPredictionResult(null);
 
     try {
-      // IMPORTANT: Replace with your actual FastAPI endpoint URL for loan prediction
-      // Based on the screenshot, it was 'http://127.0.0.1:8000/loan-predict-loan'
+      
       const response = await fetch('http://127.0.0.1:8000/Loan/predict-loan', {
         method: 'POST',
         headers: {

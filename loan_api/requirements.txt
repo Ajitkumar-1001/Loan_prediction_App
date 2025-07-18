@@ -4,3 +4,4 @@ joblib
 numpy
 scikit-learn
 pydantic
+google-generativeai
