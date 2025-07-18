@@ -1,6 +1,6 @@
 # <div align="center">💰 Loan Prediction System</div>
 
-## <div align="center">🔍 Predict Loan Approval using Machine Learning, FastAPI, and LLMs</div>
+## <div align="center">🔍 A Smart Loan Approval AI Tool Predict Loan Approval using Machine Learning , with REST API </div>
 
 <p align="center">
   <img src="https://img.shields.io/badge/build-passing-brightgreen" alt="Build Passing"/>
@@ -13,7 +13,7 @@
 
 ### 📌 Overview
 
-This project predicts **Loan Approval** using a trained machine learning model built on credit and income features. Additionally, it generates **custom financial advice** using a Generative LLM (Gemini).
+This project predicts **Loan Approval** with trained machine learning models such as (Logistic Regression , Ridge Classification, XGBOOST and Random forest Classifier )built on credit and income features. Additionally, it generates **custom financial advice** using a LLM, customized Report based on the outcome.
 
 > 🔧 Stack:  
 **FastAPI** (backend) + **SQLite3** (database) + **React + Tailwind + TypeScript** (frontend) + **MLflow** (tracking) + **LLM (Gemini)** for insights.
