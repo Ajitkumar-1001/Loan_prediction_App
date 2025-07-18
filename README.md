@@ -30,3 +30,10 @@ cd Loan_prediction_App
 python -m venv Loan_App
 source Loan_App/bin/activate
 pip install -r requirements.txt
+```
+
+
+
+## License
+
+This project is licensed under the [MIT License](./LICENSE).
