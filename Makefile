@@ -1,4 +1,4 @@
-MSG_1 = "Prepared files and folders for containerization"
+MSG_1 = "modified content in UI"
 BRANCH_1 = ak 
 BRANCH_2 = api 
 BRANCH_3 = ak_ml 
