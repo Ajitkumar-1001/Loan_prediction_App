@@ -19,6 +19,17 @@ This project predicts **Loan Approval** with trained machine learning models suc
 **FastAPI** (backend) + **SQLite3** (database) + **React + Tailwind + TypeScript** (frontend) + **MLflow** (tracking) + **LLM (Gemini)** for insights.
 
 ---
+## 🚀 Features
+
+* 📊 Trained ML model using feature engineering, PCA, and classification algorithms
+* 🧠 MLflow experiment tracking
+* 🔗 SQLite3 for relational data
+* 🧪 FastAPI backend for inference
+* 💻 React + TypeScript frontend with animated results
+* 💬 LLM response suggestions via Gemini Pro API
+* 🌐 Ready for cloud deployment
+
+---
 
 ## 📦 Step 1: Environment Setup
 
@@ -31,9 +42,108 @@ python -m venv Loan_App
 source Loan_App/bin/activate
 pip install -r requirements.txt
 ```
+---
 
 
+### 2️⃣ Database Setup
 
-## License
+> Create a SQLite database and required tables from the CSV dataset.
+
+```bash
+python create_database.py
+```
+
+### 3️⃣ Model Training + Logging
+
+Train the model with feature selection, PCA, and classifiers like Logistic Regression, Random Forest, and Ridge. Log metrics using MLflow.
+
+```bash
+python train_model.py
+```
+
+Logged to `dagshub`
+
+---
+
+## 🧠 FastAPI Backend
+
+### 🔧 Start the server:
+
+```bash
+uvicorn loan_api.main:app --reload
+```
+
+### 🔁 Endpoints:
+
+* `POST /Loan/predict-loan` → returns prediction + LLM-based suggestion
+
+---
+
+## 💻 React Frontend
+
+### 📁 Navigate to frontend:
+
+```bash
+cd frontend
+npm install
+```
+
+### 🚀 Start development server:
+
+```bash
+npm run dev
+```
+
+* Form input fields
+* Animated prediction + suggestions
+* Validation to avoid empty or negative values
+
+---
+
+## 📬 API Example
+
+```json
+POST /Loan/predict-loan
+{
+  "IncomePerDependent": 10000,
+  "LoanAmount": 2500000,
+  "RiskScore": 650,
+  "TotalDebtToIncomeRatio": 0.4,
+  "InterestRate": 7.5,
+  "AnnualIncome": 60000,
+  "BaseInterestRate": 5.5
+}
+```
+
+Response:
+
+```json
+{
+  "prediction": "Approved",
+  "message": "You are eligible for the loan.",
+  "llm_response": "Based on your high income and low risk, we suggest going ahead with the loan application."
+}
+```
+
+---
+
+## 📚 Tech Stack
+
+* FastAPI
+* SQLite3
+* MLflow
+* React + TailwindCSS
+* Gemini LLM API
+* Docker-ready (optional)
+
+---
+
+## 🧑‍💻 Author
+
+Ajit Kumar — [GitHub](https://github.com/Ajitkumar-1001)
+
+---
+
+## 📜 License
 
 This project is licensed under the [MIT License](./LICENSE).

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { motion, useAnimation } from 'framer-motion';
+import { useLocation } from 'react-router-dom';
 
 
 interface LoanPredictionInput {
@@ -85,9 +86,11 @@ const Predict: React.FC = () => {
   const control3 = useAnimation();
 
 
-
+  const location = useLocation();
   useEffect(() => {
     const sequence = async () => {
+
+      if ( location.pathname === "/predict") {
       await control1.start("visible");
       await new Promise((res) => setTimeout(res, 100));
 
@@ -97,23 +100,20 @@ const Predict: React.FC = () => {
       await control3.start("visible");
       await new Promise((res) => setTimeout(res, 50));
 
-      // Optional: Animate LLM block after a small delay (container only)
+      
       if (predictionResult?.llm_response) {
         await new Promise((res) => setTimeout(res, 300));
       }
     };
+  };
 
     sequence();
-  }, [control1, control2, control3, predictionResult?.llm_response]);
-
+  }, [location.pathname,predictionResult?.llm_response]);
 
   const containervariantllm: Record<string, any> = useMemo(() => ({
-    hidden: {},
-    visible: {
-      transition: { staggerChildren: 1.0 },
-    },
+    hidden: { opacity: 0 },
+    visible: { opacity: 1, transition: { staggerChildren: 0.2 } },
   }), []);
-
 
   const paravariantllm: Record<string, any> = useMemo(() => ({
     hidden: { opacity: 0 },
@@ -161,7 +161,7 @@ const Predict: React.FC = () => {
         animate={control1}
       >
         <motion.h1
-          className="text-4xl font-extrabold text-center mb-8 text-zinc-400"
+          className="text-4xl font-extrabold text-center mb-8 bg-gradient-to-r from-cyan-400 to-blue-600 bg-clip-text text-transparent"
           variants={headingvariant as any}
 
         >
@@ -250,13 +250,10 @@ const Predict: React.FC = () => {
 
       {predictionResult?.llm_response && (
         <motion.div
-          className="flex flex-col justify-self-end m-8 max-w-xl from-sky-650 to-blue-850  p-6  rounded-xl border border-gray-700 text-gray-100 font-sans font-bold shadow-lg"
+          className="flex flex-col justify-self-end m-4 max-w-xl from-sky-650 to-blue-850  p-6  rounded-xl border border-gray-700 text-gray-100 font-sans font-bold shadow-lg"
           initial="hidden"
           animate="visible"
-          variants={{
-            hidden: { opacity: 0 },
-            visible: { opacity: 1, transition: { staggerChildren: 0.2 } },
-          }}
+          variants={containervariantllm}
         >
           <motion.h3
             className="text-xl font-semibold text-center text-blue-300 mb-3"
@@ -267,7 +264,7 @@ const Predict: React.FC = () => {
             Suggestions
           </motion.h3>
 
-          <div className="flex flex-col gap-2">
+          <div className="flex max-w-4xl w-full flex-col gap-2">
             {predictionResult.llm_response.split('\n').map((line, index) => (
               <motion.p
                 key={index}
