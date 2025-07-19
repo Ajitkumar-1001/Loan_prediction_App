@@ -58,7 +58,7 @@ const Home: React.FC =()=>{
                         onClick={() => nav("/predict")}
                         className="text-2xl font-extrabold text-center mb-8 bg-gradient-to-r from-cyan-400 to-blue-600 bg-clip-text text-transparent cursor-pointer"
                     >
-                        About
+                        Predictor
                     </span>{" "}
                     to Know your credit eligibility!. <br />
                  </motion.p>
