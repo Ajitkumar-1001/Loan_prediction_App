@@ -6,6 +6,7 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 from routers.loanapproval import router
 
+
 app = FastAPI() 
 
 app.add_middleware(
@@ -17,3 +18,4 @@ app.add_middleware(
 )
 
 app.include_router(router=router)
+
