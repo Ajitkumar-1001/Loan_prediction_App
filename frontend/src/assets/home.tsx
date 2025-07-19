@@ -52,6 +52,16 @@ const Home: React.FC =()=>{
                     </span>{" "}
                     to Know the Tech Stack and about the project in detail. <br />
                  </motion.p>
+                 <motion.p className="font-bold text-xl mb-4 m-15" variants={paraprops} >
+                    Please visit{" "}
+                    <span
+                        onClick={() => nav("/predict")}
+                        className="text-2xl font-extrabold text-center mb-8 bg-gradient-to-r from-cyan-400 to-blue-600 bg-clip-text text-transparent cursor-pointer"
+                    >
+                        About
+                    </span>{" "}
+                    to Know your credit eligibility!. <br />
+                 </motion.p>
                 </motion.div>
         </div>
     );
