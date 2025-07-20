@@ -5,10 +5,14 @@ from pathlib import Path
 
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 from routers.loanapproval import router
+from routers.Users import rout
+from database import engine
+from models.user import Base
 
 
 app = FastAPI() 
 
+Base.metadata.create_all(bind=engine)
 app.add_middleware(
     CORSMiddleware, 
     allow_origins=["http://localhost:5173"],
@@ -18,4 +22,5 @@ app.add_middleware(
 )
 
 app.include_router(router=router)
+app.include_router(router=rout)
 

@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException 
 from typing import List 
-from models import EmploymentDetails 
+from schema import EmploymentDetails 
 from database import get_connection 
 
 

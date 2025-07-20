@@ -39,13 +39,13 @@ const Footer: React.FC = () => {
     const email = "sachinajitkumarpr@gmail.com";
 
     return (
-        <footer className="bg-gradient-to-t from-sky-950 to-gray-900 text-gray-300 py-10 shadow-inner mt-auto">
-        <div className="max-w-3xl mx-auto px-6">
+        <footer className="bg-gradient-to-t from-sky-950 to-gray-900 text-gray-300 py-12 shadow-outer mt-auto text-sm">
+        <div className=" max-w-10rem mx-auto px-6 gap-5">
           <div className="flex flex-col md:flex-row justify-evenly items-center md:items-start gap-5">
             
             {/* Left: Personal Info */}
-            <div className="text-center md:text-left max-w-md">
-              <h1 className="text-xl md:text-xl font-extrabold  text-white">
+            <div className="text-left md:text-left max-w-md">
+              <h1 className="text-sm md:text-sm font-extrabold  text-white">
                 Designed & Built by
                 <span className="bg-gradient-to-r from-cyan-400 to-blue-600 bg-clip-text text-transparent ml-2">
                   Ajitkumar
@@ -57,7 +57,7 @@ const Footer: React.FC = () => {
             </div>
       
             {/* Right: Social Links */}
-            <div className="flex flex-col items-center md:items-end space-y-3">
+            <div className="flex2 flex-row items-center md:items-end space-y-3">
               <h2 className="text-white text-xl md:text-2xl font-bold">Connect with me:</h2>
               <div className="flex flex-rowjustify-self-end items-center gap-6">
                 {socialLinks.map((link) => (
@@ -91,7 +91,7 @@ const Footer: React.FC = () => {
           </div>
       
           {/* Footer Bottom */}
-          <div className="mt-10 pt-6 border-t border-gray-700 text-center text-gray-500">
+          <div className="fixed-bottom mt-10 pt-6 border-t border-gray-700 text-center text-gray-500">
             <p className="text-sm">&copy; {new Date().getFullYear()} Ajitkumar. All Rights Reserved.</p>
             <p className="text-xs mt-1">Licensed under the MIT License.</p>
           </div>

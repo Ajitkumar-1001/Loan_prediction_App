@@ -363,3 +363,107 @@
 2025-07-16 12:40:31 | INFO | root | Database exists and ready for further process
 2025-07-16 12:40:31 | INFO | root | Executing the database api file
 2025-07-16 12:40:32 | INFO | root | Successfully fetched !
+2025-07-20 14:39:11 | INFO | root | Database exists and ready for further process
+2025-07-20 14:39:11 | INFO | root | Executing the database api file
+2025-07-20 14:39:39 | INFO | root | Database exists and ready for further process
+2025-07-20 14:39:39 | INFO | root | Executing the database api file
+2025-07-20 14:40:31 | INFO | root | Database exists and ready for further process
+2025-07-20 14:40:31 | INFO | root | Executing the database api file
+2025-07-20 14:40:31 | INFO | root | Successfully fetched !
+2025-07-20 17:56:15 | INFO | root | Database exists and ready for further process
+2025-07-20 17:56:16 | INFO | root | Database exists and ready for further process
+2025-07-20 17:56:25 | INFO | root | Database exists and ready for further process
+2025-07-20 17:57:08 | INFO | root | Database exists and ready for further process
+2025-07-20 17:57:51 | INFO | root | Database exists and ready for further process
+2025-07-20 17:58:24 | INFO | root | Database exists and ready for further process
+2025-07-20 18:06:09 | INFO | root | Database exists and ready for further process
+2025-07-20 18:06:10 | INFO | root | Database exists and ready for further process
+2025-07-20 18:08:49 | INFO | root | Database exists and ready for further process
+2025-07-20 18:10:40 | INFO | root | Database exists and ready for further process
+2025-07-20 18:10:42 | INFO | root | Database exists and ready for further process
+2025-07-20 18:11:04 | INFO | root | Database exists and ready for further process
+2025-07-20 18:11:06 | INFO | root | Database exists and ready for further process
+2025-07-20 18:11:08 | INFO | root | Database exists and ready for further process
+2025-07-20 18:13:16 | INFO | root | Database exists and ready for further process
+2025-07-20 18:14:34 | INFO | root | Database exists and ready for further process
+2025-07-20 18:14:44 | INFO | root | Database exists and ready for further process
+2025-07-20 18:16:02 | INFO | root | Database exists and ready for further process
+2025-07-20 18:16:13 | INFO | root | Database exists and ready for further process
+2025-07-20 18:19:29 | INFO | root | Database exists and ready for further process
+2025-07-20 18:22:02 | INFO | root | Database exists and ready for further process
+2025-07-20 18:22:40 | INFO | root | Database exists and ready for further process
+2025-07-20 18:22:46 | WARNING | passlib.handlers.bcrypt | (trapped) error reading bcrypt version
+Traceback (most recent call last):
+  File "/Users/ajit/Desktop/loan_predictor_app/Loan_App/lib/python3.11/site-packages/passlib/handlers/bcrypt.py", line 620, in _load_backend_mixin
+    version = _bcrypt.__about__.__version__
+              ^^^^^^^^^^^^^^^^^
+AttributeError: module 'bcrypt' has no attribute '__about__'
+2025-07-20 18:23:30 | INFO | root | Database exists and ready for further process
+2025-07-20 18:24:10 | INFO | root | Database exists and ready for further process
+2025-07-20 18:24:10 | WARNING | passlib.handlers.bcrypt | (trapped) error reading bcrypt version
+Traceback (most recent call last):
+  File "/Users/ajit/Desktop/loan_predictor_app/Loan_App/lib/python3.11/site-packages/passlib/handlers/bcrypt.py", line 620, in _load_backend_mixin
+    version = _bcrypt.__about__.__version__
+              ^^^^^^^^^^^^^^^^^
+AttributeError: module 'bcrypt' has no attribute '__about__'
+2025-07-20 18:24:24 | INFO | root | Database exists and ready for further process
+2025-07-20 18:24:31 | WARNING | passlib.handlers.bcrypt | (trapped) error reading bcrypt version
+Traceback (most recent call last):
+  File "/Users/ajit/Desktop/loan_predictor_app/Loan_App/lib/python3.11/site-packages/passlib/handlers/bcrypt.py", line 620, in _load_backend_mixin
+    version = _bcrypt.__about__.__version__
+              ^^^^^^^^^^^^^^^^^
+AttributeError: module 'bcrypt' has no attribute '__about__'
+2025-07-20 18:30:46 | INFO | root | Database exists and ready for further process
+2025-07-20 18:30:48 | INFO | root | Database exists and ready for further process
+2025-07-20 18:30:49 | INFO | root | Database exists and ready for further process
+2025-07-20 18:30:51 | INFO | root | Database exists and ready for further process
+2025-07-20 18:36:45 | INFO | root | Database exists and ready for further process
+2025-07-20 18:38:51 | INFO | root | Database exists and ready for further process
+2025-07-20 18:39:47 | INFO | root | Database exists and ready for further process
+2025-07-20 18:39:53 | WARNING | passlib.handlers.bcrypt | (trapped) error reading bcrypt version
+Traceback (most recent call last):
+  File "/Users/ajit/Desktop/loan_predictor_app/Loan_App/lib/python3.11/site-packages/passlib/handlers/bcrypt.py", line 620, in _load_backend_mixin
+    version = _bcrypt.__about__.__version__
+              ^^^^^^^^^^^^^^^^^
+AttributeError: module 'bcrypt' has no attribute '__about__'
+2025-07-20 18:40:26 | INFO | root | Database exists and ready for further process
+2025-07-20 18:41:38 | INFO | root | Database exists and ready for further process
+2025-07-20 18:42:29 | WARNING | passlib.handlers.bcrypt | (trapped) error reading bcrypt version
+Traceback (most recent call last):
+  File "/Users/ajit/Desktop/loan_predictor_app/Loan_App/lib/python3.11/site-packages/passlib/handlers/bcrypt.py", line 620, in _load_backend_mixin
+    version = _bcrypt.__about__.__version__
+              ^^^^^^^^^^^^^^^^^
+AttributeError: module 'bcrypt' has no attribute '__about__'
+2025-07-20 18:50:29 | INFO | root | Database exists and ready for further process
+2025-07-20 18:51:13 | WARNING | passlib.handlers.bcrypt | (trapped) error reading bcrypt version
+Traceback (most recent call last):
+  File "/Users/ajit/Desktop/loan_predictor_app/Loan_App/lib/python3.11/site-packages/passlib/handlers/bcrypt.py", line 620, in _load_backend_mixin
+    version = _bcrypt.__about__.__version__
+              ^^^^^^^^^^^^^^^^^
+AttributeError: module 'bcrypt' has no attribute '__about__'
+2025-07-20 22:49:27 | INFO | root | Database exists and ready for further process
+2025-07-20 22:49:28 | INFO | root | Database exists and ready for further process
+2025-07-20 22:55:27 | WARNING | passlib.handlers.bcrypt | (trapped) error reading bcrypt version
+Traceback (most recent call last):
+  File "/Users/ajit/Desktop/loan_predictor_app/Loan_App/lib/python3.11/site-packages/passlib/handlers/bcrypt.py", line 620, in _load_backend_mixin
+    version = _bcrypt.__about__.__version__
+              ^^^^^^^^^^^^^^^^^
+AttributeError: module 'bcrypt' has no attribute '__about__'
+2025-07-20 22:59:38 | INFO | root | Database exists and ready for further process
+2025-07-20 23:00:35 | INFO | root | Database exists and ready for further process
+2025-07-20 23:02:09 | INFO | root | Database exists and ready for further process
+2025-07-20 23:02:11 | INFO | root | Database exists and ready for further process
+2025-07-20 23:02:12 | INFO | root | Database exists and ready for further process
+2025-07-20 23:02:39 | INFO | root | Database exists and ready for further process
+2025-07-20 23:02:40 | INFO | root | Database exists and ready for further process
+2025-07-20 23:02:44 | INFO | root | Database exists and ready for further process
+2025-07-20 23:04:02 | INFO | root | Database exists and ready for further process
+2025-07-20 23:04:48 | INFO | root | Database exists and ready for further process
+2025-07-20 23:04:49 | INFO | root | Database exists and ready for further process
+2025-07-20 23:04:50 | WARNING | passlib.handlers.bcrypt | (trapped) error reading bcrypt version
+Traceback (most recent call last):
+  File "/Users/ajit/Desktop/loan_predictor_app/Loan_App/lib/python3.11/site-packages/passlib/handlers/bcrypt.py", line 620, in _load_backend_mixin
+    version = _bcrypt.__about__.__version__
+              ^^^^^^^^^^^^^^^^^
+AttributeError: module 'bcrypt' has no attribute '__about__'
+2025-07-20 23:08:07 | INFO | root | Database exists and ready for further process

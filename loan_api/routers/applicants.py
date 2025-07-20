@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException 
 from typing import List 
-from models import Applicants
+from schema import Applicants
 from database import get_connection 
 
 router = APIRouter(prefix="/applicants",tags = ["Applicants"])
