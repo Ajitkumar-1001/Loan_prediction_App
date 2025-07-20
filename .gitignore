@@ -26,3 +26,5 @@ loan_api/models/__pycache__
 
 loan_api/routers/__pycache__
 
+loan_api/schema/__pycache__
+
