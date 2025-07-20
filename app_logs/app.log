@@ -467,3 +467,4 @@ Traceback (most recent call last):
               ^^^^^^^^^^^^^^^^^
 AttributeError: module 'bcrypt' has no attribute '__about__'
 2025-07-20 23:08:07 | INFO | root | Database exists and ready for further process
+2025-07-20 23:08:55 | INFO | root | Database exists and ready for further process
