@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException 
 from typing import List 
-from models import FinancialDetails 
+from schema import FinancialDetails 
 from database import get_connection 
 
 

@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException
 import google.generativeai as genai  # type: ignore
 import os
 from pathlib import Path
-from loan_api.models.loan_approval import LoanApproval
+from loan_api.schema.loan_approval import LoanApproval
 from joblib import load
 import numpy as np
 from dotenv import load_dotenv

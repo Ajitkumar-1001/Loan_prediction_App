@@ -7,7 +7,7 @@ import smtplib
 import os
 from datetime import datetime
 sys.path.append(str(Path(__file__).resolve().parent.parent))
-from models.feedback import Feedback
+from schema.feedback import Feedback
 
 env_path = Path(__file__).resolve().parent.parent / '.env'
 

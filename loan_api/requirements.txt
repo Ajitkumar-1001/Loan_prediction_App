@@ -5,3 +5,5 @@ numpy
 scikit-learn
 pydantic
 google-generativeai
+sqlalchemy
+passlib[bcrypt]
