@@ -102,7 +102,7 @@ const Predict: React.FC = () => {
 
       
       if (predictionResult?.llm_response) {
-        await new Promise((res) => setTimeout(res, 300));
+        await new Promise((res) => setTimeout(res, 1000));
       }
     };
   };

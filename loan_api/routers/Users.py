@@ -66,5 +66,5 @@ async def get_loginuser(user: UserLogin,request:Request, db: Session = Depends(g
 
     print(await request.body())
 
-    return { "access_token":token, "token_type":"bearer"}
+    return { "access_token":token, "token_type":"bearer", "role" : condition.role ,}
     

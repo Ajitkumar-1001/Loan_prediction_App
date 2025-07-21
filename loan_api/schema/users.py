@@ -49,7 +49,7 @@ class CreateUser(UserBase):
 # Output Response
 class Users(UserBase):
     isAdmin: Optional[bool] = False
-    role: Optional[str] = "guest"
+    role: Optional[str] = "user"
 
     @model_validator(mode="after")
     def sync_admin_flag(self):
