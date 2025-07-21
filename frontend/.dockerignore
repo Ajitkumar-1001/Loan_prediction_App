@@ -1,0 +1,28 @@
+# dependencies
+node_modules
+.pnpm
+.npm
+
+# local dev artifacts
+
+
+.vscode
+*.log
+*.local
+.env.local
+.env.development
+.env.test
+.env
+
+# system files
+.DS_Store
+Thumbs.db
+
+# git
+.git
+.gitignore
+
+# testing/coverage
+coverage
+*.test.tsx
+*.spec.tsx

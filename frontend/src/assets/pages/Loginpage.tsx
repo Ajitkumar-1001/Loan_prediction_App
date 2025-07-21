@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect, useRef } from "react";
 import { useAnimation, motion } from "framer-motion";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useRole } from "../../../context/RoleContext";
+import { useRole ,  } from "../../../context/RoleContext";
 
 
 interface Loginprops {
@@ -100,8 +100,8 @@ const LoginPage: React.FC = () => {
 
       const data: Loginresult = await response.json();
 
-      if (data.role) {
-        setRole(data.role);
+      if (data.role == "user" || data.role == "admin") {
+        setRole(data.role );
       } else {
         throw new Error("User role is missing in response.");
       }
