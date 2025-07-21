@@ -468,3 +468,38 @@ Traceback (most recent call last):
 AttributeError: module 'bcrypt' has no attribute '__about__'
 2025-07-20 23:08:07 | INFO | root | Database exists and ready for further process
 2025-07-20 23:08:55 | INFO | root | Database exists and ready for further process
+2025-07-21 00:01:07 | INFO | root | Database exists and ready for further process
+2025-07-21 00:01:09 | INFO | root | Database exists and ready for further process
+2025-07-21 00:02:01 | WARNING | passlib.handlers.bcrypt | (trapped) error reading bcrypt version
+Traceback (most recent call last):
+  File "/Users/ajit/Desktop/loan_predictor_app/Loan_App/lib/python3.11/site-packages/passlib/handlers/bcrypt.py", line 620, in _load_backend_mixin
+    version = _bcrypt.__about__.__version__
+              ^^^^^^^^^^^^^^^^^
+AttributeError: module 'bcrypt' has no attribute '__about__'
+2025-07-21 00:02:17 | INFO | root | Database exists and ready for further process
+2025-07-21 00:02:25 | INFO | root | Database exists and ready for further process
+2025-07-21 00:08:31 | INFO | root | Database exists and ready for further process
+2025-07-21 00:08:33 | INFO | root | Database exists and ready for further process
+2025-07-21 00:10:10 | WARNING | passlib.handlers.bcrypt | (trapped) error reading bcrypt version
+Traceback (most recent call last):
+  File "/Users/ajit/Desktop/loan_predictor_app/Loan_App/lib/python3.11/site-packages/passlib/handlers/bcrypt.py", line 620, in _load_backend_mixin
+    version = _bcrypt.__about__.__version__
+              ^^^^^^^^^^^^^^^^^
+AttributeError: module 'bcrypt' has no attribute '__about__'
+2025-07-21 00:11:44 | INFO | root | Database exists and ready for further process
+2025-07-21 00:12:22 | WARNING | passlib.handlers.bcrypt | (trapped) error reading bcrypt version
+Traceback (most recent call last):
+  File "/Users/ajit/Desktop/loan_predictor_app/Loan_App/lib/python3.11/site-packages/passlib/handlers/bcrypt.py", line 620, in _load_backend_mixin
+    version = _bcrypt.__about__.__version__
+              ^^^^^^^^^^^^^^^^^
+AttributeError: module 'bcrypt' has no attribute '__about__'
+2025-07-21 00:13:46 | INFO | root | Database exists and ready for further process
+2025-07-21 03:23:22 | INFO | root | Database exists and ready for further process
+2025-07-21 03:23:24 | INFO | root | Database exists and ready for further process
+2025-07-21 03:24:00 | INFO | root | Database exists and ready for further process
+2025-07-21 03:24:54 | WARNING | passlib.handlers.bcrypt | (trapped) error reading bcrypt version
+Traceback (most recent call last):
+  File "/Users/ajit/Desktop/loan_predictor_app/Loan_App/lib/python3.11/site-packages/passlib/handlers/bcrypt.py", line 620, in _load_backend_mixin
+    version = _bcrypt.__about__.__version__
+              ^^^^^^^^^^^^^^^^^
+AttributeError: module 'bcrypt' has no attribute '__about__'

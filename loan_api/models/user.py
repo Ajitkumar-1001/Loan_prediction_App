@@ -11,7 +11,7 @@ class User(Base):
     lastname = Column(String, unique = False, nullable=False)
     email = Column(String,unique=True,nullable=False)
     password = Column(String, nullable=False)
-    role = Column(String,default="guest")
+    role = Column(String,default="user")
 
 
 
