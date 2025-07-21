@@ -133,8 +133,8 @@ Response:
 * SQLite3
 * MLflow
 * React + TailwindCSS
-* Gemini LLM API
-* Docker-ready (optional)
+* LLM (Flash-2.0) 
+* Docker-ready 
 
 ---
 
