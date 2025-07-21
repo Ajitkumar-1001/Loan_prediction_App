@@ -1,9 +1,23 @@
-fastapi
-uvicorn
-joblib
-numpy
-scikit-learn
-pydantic
-google-generativeai
-sqlalchemy
-passlib[bcrypt]
+fastapi==0.116.1
+joblib==1.5.1
+numpy==1.24.4
+passlib==1.7.4
+protobuf==5.29.0                # ✅ Downgraded to avoid conflict with google-gen
+pydantic==2.11.7
+python-dotenv==1.1.1
+python-jose==3.5.0
+SQLAlchemy==2.0.41
+uvicorn==0.35.0
+gunicorn==23.0.0
+
+bcrypt==4.3.0
+pyyaml==6.0.2
+
+# Gemini LLM support
+google-generativeai==0.8.5
+google-ai-generativelanguage==0.6.15
+google-api-core==2.25.1
+google-auth==2.40.3
+google-api-python-client==2.176.0
+tqdm==4.67.1
+proto-plus==1.26.1
