@@ -1,14 +1,14 @@
 import React , {useEffect, useMemo} from "react";
 import {motion, useAnimation} from "framer-motion";
 import { useNavigate } from "react-router-dom";
-
+import { useRole } from '../../../context/RoleContext';
 
 const Home: React.FC =()=>{ 
 
     const control1 = useAnimation();
     const control2 = useAnimation();
     const nav = useNavigate();
-
+    const {role} = useRole();
 
     const containerprops : any = useMemo(() =>({ 
         hidden : {opacity: 0, x :-20},
@@ -55,7 +55,9 @@ const Home: React.FC =()=>{
                  <motion.p className="font-bold text-xl mb-4 m-15" variants={paraprops} >
                     Please visit{" "}
                     <span
-                        onClick={() => nav("/predict")}
+                        onClick={() => {if(role==="guest"){nav("/login")}else{
+                            nav("/predict")
+                        }}}
                         className="text-2xl font-extrabold text-center mb-8 bg-gradient-to-r from-cyan-400 to-blue-600 bg-clip-text text-transparent cursor-pointer"
                     >
                         Predictor

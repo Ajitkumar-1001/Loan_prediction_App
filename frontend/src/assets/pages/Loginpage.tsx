@@ -1,8 +1,8 @@
 import React, { useState, useMemo, useEffect, useRef } from "react";
 import { useAnimation, motion } from "framer-motion";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useRole } from "../../context/RoleContext";
-import Signup from "./Signup";
+import { useRole } from "../../../context/RoleContext";
+
 
 interface Loginprops {
   email: string;
