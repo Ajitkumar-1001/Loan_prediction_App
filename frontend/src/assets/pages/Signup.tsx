@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { motion, useAnimation } from "framer-motion";
-import { useRole } from "../../context/RoleContext";
+import { useRole } from "../../../context/RoleContext";
 
 
 interface signupprops {
@@ -217,6 +217,7 @@ const Signup: React.FC = () => {
           Register
         </button>
         {redirecting && (
+                  <>
                       <motion.div
                           initial={{ opacity: 0, scale: 0.8 }}
                           animate={{ opacity: 1, scale: 1, rotate: 360 }}
@@ -224,10 +225,14 @@ const Signup: React.FC = () => {
                           className="flex justify-center mt-4"
                       >
                           <div className="w-10 h-10 border-4 border-t-transparent border-white rounded-full animate-spin"></div>
-                          
                       </motion.div>
-                      
-                  ) }
+
+                      <p className='flex flex-col items-center justify-center text-sm font-sans text-center text-green-500 mt-2'>
+                          .....Redirecting to Login
+                      </p>
+                  </>
+              )}
+
         {error && <p className="text-red-500 font-medium text-sm mt-2 text-center px-2">{error}</p>}
       </div>
     </div>
@@ -237,4 +242,3 @@ const Signup: React.FC = () => {
 export default Signup;
 
 
-// && (<p className='flex flex-col items-center justify-center text-sm font-sans font-sm text-center text-green-500'>.....Redirecting to Login </p>)

@@ -1,8 +1,8 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import Loginsymbol from "./Login";
-import {useRole} from "../../context/RoleContext";
-import Logoutsymbol from "./Logout";
+import {useRole} from "../../../context/RoleContext";
+import Logoutsymbol from "../pages/Logout";
 
 const Header: React.FC = () => {
   const navigate = useNavigate();

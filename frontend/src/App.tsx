@@ -1,13 +1,13 @@
 import { Routes, Route } from "react-router-dom";
 
-import Header from "./assets/Header";
-import Footer from "./assets/footer";
-import About from "./assets/About";
-import Predict from "./assets/Predict";
-import Home from "./assets/home";
+import Header from "./assets/components/Header";
+import Footer from "./assets/components/footer";
+import About from "./assets/pages/About";
+import Predict from "./assets/pages/Predict";
+import Home from "./assets/pages/home";
 import {useRole} from "../context/RoleContext";
-import LoginPage from "./assets/Loginpage";
-import Signup from "./assets/Signup";
+import LoginPage from "./assets/pages/Loginpage";
+import Signup from "./assets/pages/Signup";
 
 function App() {
   const {role} = useRole();
