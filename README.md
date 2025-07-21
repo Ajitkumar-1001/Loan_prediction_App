@@ -16,7 +16,7 @@
 This project predicts **Loan Approval** with trained machine learning models such as (Logistic Regression , Ridge Classification, XGBOOST and Random forest Classifier )built on credit and income features. Additionally, it generates **custom financial advice** using a LLM, customized Report based on the outcome.
 
 > 🔧 Stack:  
-**FastAPI** (backend) + **SQLite3** (database) + **React + Tailwind + TypeScript** (frontend) + **MLflow** (tracking) + **LLM (Gemini)** for insights.
+**FastAPI** (backend) + **SQLite3** (database) + **React + Tailwind + TypeScript** (frontend) + **MLflow** (tracking) + **LLM ** for insights.
 
 ---
 ## 🚀 Features
@@ -26,7 +26,7 @@ This project predicts **Loan Approval** with trained machine learning models suc
 * 🔗 SQLite3 for relational data
 * 🧪 FastAPI backend for inference
 * 💻 React + TypeScript frontend with animated results
-* 💬 LLM response suggestions via Gemini Pro API
+* 💬 LLM response according to the Result
 * 🌐 Ready for cloud deployment
 
 ---
@@ -133,8 +133,8 @@ Response:
 * SQLite3
 * MLflow
 * React + TailwindCSS
-* Gemini LLM API
-* Docker-ready (optional)
+* LLM (Flash-2.0) 
+* Docker-ready 
 
 ---
 
