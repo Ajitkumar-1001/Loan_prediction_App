@@ -26,7 +26,7 @@ This project predicts **Loan Approval** with trained machine learning models suc
 * 🔗 SQLite3 for relational data
 * 🧪 FastAPI backend for inference
 * 💻 React + TypeScript frontend with animated results
-* 💬 LLM response suggestions via Gemini Pro API
+* 💬 LLM response according to the Result
 * 🌐 Ready for cloud deployment
 
 ---
