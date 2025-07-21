@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { motion, useAnimation } from "framer-motion";
+import {  motion, useAnimation } from "framer-motion";
 import { useRole } from "../../../context/RoleContext";
+
 
 
 interface signupprops {
@@ -69,6 +70,23 @@ const Signup: React.FC = () => {
     }
   }), []);
 
+  const headingvariant = useMemo(() => ({
+    hidden: { opacity: 0, x: 50, y: 50 },
+    visible: { opacity: 1, x: 0, y: 0, transition: { duration: 0.3, ease: 'easeOut' } },
+    hover: { scale: 1.25, textShadow: '5px 5px 5px rgba(0,0,0,0.2)' }
+  }), []);
+
+  const itemVariants = useMemo(() => ({
+    hidden: { opacity: 0, x: 5, y: 10 },
+    visible: { opacity: 1, x: 0, y: 0, transition: { duration: 1.0, ease: 'easeOut', staggerchildren: 0.1 } }
+  }), []);
+
+  const buttonVariants = useMemo(() => ({
+    hover: { scale: 1.05, boxShadow: '5px 5px 5px rgba(0,0,0,0.2)' },
+    tap: { scale: 0.95 },
+  }), []);
+
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
@@ -103,7 +121,7 @@ const Signup: React.FC = () => {
 
       const data: SignupResult = await response.json();
 
-      if (data.role) {
+      if (data.role == "user" || data.role == "admin") {
         setRole(data.role);
       } else {
         throw new Error("User role is missing in response.");
@@ -185,11 +203,11 @@ const Signup: React.FC = () => {
 
   return (
     <div className='min-w-screen min-h-screen flex flex-col md:flex-row gap-6 items-center justify-center bg-gradient-to-br from-sky-950 to-blue-350'>
-      <div className="w-full max-w-md md:max-w-xl border-2 border-silver-500 rounded-2xl shadow-3xl bg-gradient-to-br from-sky-950 to-blue-350 hover:bg-gradient-to-t from-sky-950 to-gray-900 p-6 mx-auto" >
-        <h2 className='text-xl md:text-3xl font-extrabold text-center mb-8 bg-gradient-to-r from-cyan-400 to-blue-600 bg-clip-text text-transparent'>Sign up!</h2>
+      <motion.div className="w-full max-w-md md:max-w-xl border-2 border-silver-500 rounded-2xl shadow-3xl bg-gradient-to-br from-sky-950 to-blue-350 hover:bg-gradient-to-t from-sky-950 to-gray-900 p-6 mx-auto" variants={containerVariants as any} initial="hidden" animate ={control1} >
+        <motion.h2 className='text-xl md:text-3xl font-extrabold text-center mb-8 bg-gradient-to-r from-cyan-400 to-blue-600 bg-clip-text text-transparent' variants={headingvariant as any}>Sign up!</motion.h2>
         <form ref={formref} onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {Object.entries(formData).map(([key, value]) => (
-            <div key={key}>
+          {Object.entries(formData).map(([key, _value]) => (
+            <motion.div key={key} variants={itemVariants as any}>
               <label htmlFor={key} className="block text-sm font-medium text-gray-300 mb-1">
                 {key.replace(/_/g, " ").replace(/([A-Z])/g, " $1").replace(/\b\w/g, (l) => l.toUpperCase())}
               </label>
@@ -206,16 +224,20 @@ const Signup: React.FC = () => {
                 placeholder={`Enter ${key}`}
                 className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-gray-100 placeholder-gray-400 transition duration-200"
               />
-            </div>
+            </motion.div>
           ))}
         </form>
-        <button
+        <motion.button
           type="submit"
           onClick={handleSubmit}
           className="flex flex-col justify-center items-center mx-auto w-40 mt-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition duration-200 mt-10"
+          variants={buttonVariants as any}
+          whileHover="hover"
+          whileTap="tap"
+          
         >
           Register
-        </button>
+        </motion.button>
         {redirecting && (
                   <>
                       <motion.div
@@ -234,7 +256,7 @@ const Signup: React.FC = () => {
               )}
 
         {error && <p className="text-red-500 font-medium text-sm mt-2 text-center px-2">{error}</p>}
-      </div>
+      </motion.div>
     </div>
   );
 };

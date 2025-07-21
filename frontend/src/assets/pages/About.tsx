@@ -39,7 +39,7 @@ const About: React.FC = () => {
         
         <div className="min-w-screen min-h-screen flex flex-col md:flex-row gap-6 items-center justify-center bg-gradient-to-br from-sky-950 to-blue-350">
             <motion.div className="max-w-4xl mx-auto px-6 py-12 text-gray-200 font-sans leading-relaxed" variants={containerprops} initial ="hidden" animate={control1}>
-                <motion.h2 className="text-4xl font-bold mb-6 text-center text-blue-400" variants={paraprops} >About This Project</motion.h2>
+                <motion.h2 className="mt-10 text-4xl font-bold mb-6 text-center text-blue-400" variants={paraprops} >About This Project</motion.h2>
 
                 <motion.p className=" text-lg font-sans text-center mb-4" variants={paraprops} >
                     This Loan Prediction platform is a full-stack machine learning application designed to assess loan eligibility using modern predictive analytics and automated intelligence assistance.
