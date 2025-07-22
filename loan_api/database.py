@@ -5,7 +5,7 @@ import os
 import sys 
 sys.path.append(str(Path().resolve().parent))
 # sys.path.append(str(Path(__file__).resolve().parent / 'config' /'config.yaml'))
-from App_files.queries import join_query
+from App_files.queries import join_query 
 from config.config import logger
 from contextlib import contextmanager
 
@@ -23,7 +23,7 @@ database_path = os.getenv("DATABASE_PATH")
 if database_path: 
     logger.info("Database exists and ready for further process")
 else:
-    logger.error("Database not found, Check for the path or the saved destination in before files")
+    logger.info("Database not found, Check for the path or the saved destination in before files")
 
 @contextmanager
 def get_connection(): 
@@ -49,7 +49,8 @@ def return_vals():
         raise ValueError(str(e))
 
 
-DATABASE_URL = "sqlite:////Users/ajit/Desktop/loan_predictor_app/data/LoanDATABASE.db"
+DATABASE_URL = "sqlite:///./data/LoanDATABASE.db"
+
 
 
 engine = create_engine(
@@ -70,6 +71,6 @@ if __name__ == "__main__":
     if val:
         logger.info("Successfully fetched !")
     else:
-        logger.error("There is an error in fetching values")
+        logger.info("There is an error in fetching values")
     
     

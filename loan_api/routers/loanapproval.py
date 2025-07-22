@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException
 import google.generativeai as genai  # type: ignore
 import os
 from pathlib import Path
-from loan_api.schema.loan_approval import LoanApproval
+from schema.loan_approval import LoanApproval
 from joblib import load
 import numpy as np
 from dotenv import load_dotenv
@@ -18,8 +18,10 @@ if not api_key:
 
 genai.configure(api_key=api_key)
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+MODEL_PATH = os.path.join(BASE_DIR, "..", "ModelFiles", "final_loan_approval_model.pkl")
 # Load your model
-model = load("/Users/ajit/Desktop/loan_predictor_app/ModelFiles/final_loan_approval_model.pkl")
+model = load(MODEL_PATH)
 
 # Define the router
 router = APIRouter(prefix="/Loan", tags=["LoanApproval"])

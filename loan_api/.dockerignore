@@ -1,4 +1,19 @@
+# Ignore Python virtual environments
+.venv/
+env/
+venv/
+Loan_App/
+
+# Ignore Python cache files
 __pycache__/
 *.pyc
-.env
-*.db
+*.pyo
+*.pyd
+
+# Ignore IDE and editor specific files
+.vscode/
+.idea/
+*.swp
+
+# Ignore other common files
+.DS_Store
