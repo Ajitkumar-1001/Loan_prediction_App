@@ -61,7 +61,7 @@ const Predict: React.FC = () => {
     setLoading(true);
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/Loan/predict-loan", {
+      const response = await fetch("http://localhost:8000/api/Loan/predict-loan", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -151,6 +151,8 @@ const Predict: React.FC = () => {
     hidden: { opacity: 0, scale: 0.8 },
     visible: { opacity: 1, scale: 1, transition: { duration: 0.5, ease: 'easeOut' } },
   }), []);
+
+ 
 
   return (
     <div className="min-w-screen min-h-screen flex flex-col md:flex-row gap-6 items-center justify-center bg-gradient-to-br from-sky-950 to-blue-350">
@@ -250,7 +252,7 @@ const Predict: React.FC = () => {
 
       {predictionResult?.llm_response && (
         <motion.div
-          className="flex flex-col justify-self-end m-4 max-w-xl from-sky-650 to-blue-850  p-6  rounded-xl border border-gray-700 text-gray-100 font-sans font-bold shadow-lg"
+          className="flex flex-col justify-evenly mt-15 m-4 max-w-xl from-sky-650 to-blue-850  p-6  rounded-xl border border-gray-700 text-gray-100 font-sans font-bold shadow-lg"
           initial="hidden"
           animate="visible"
           variants={containervariantllm}
@@ -264,7 +266,7 @@ const Predict: React.FC = () => {
             Suggestions
           </motion.h3>
 
-          <div className="flex max-w-4xl w-full flex-col gap-2">
+          <div className="flex max-w-4xl w-full  flex-col gap-2">
             {predictionResult.llm_response.split('\n').map((line, index) => (
               <motion.p
                 key={index}

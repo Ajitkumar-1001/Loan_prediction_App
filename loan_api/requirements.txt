@@ -21,3 +21,5 @@ google-auth==2.40.3
 google-api-python-client==2.176.0
 tqdm==4.67.1
 proto-plus==1.26.1
+
+scikit-learn

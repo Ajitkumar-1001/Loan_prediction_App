@@ -15,12 +15,12 @@ app = FastAPI()
 Base.metadata.create_all(bind=engine)
 app.add_middleware(
     CORSMiddleware, 
-    allow_origins=["http://localhost:5173"],
+    allow_origins=["http://localhost:8080"],
     allow_methods=["POST"],
     allow_headers=["*"],
     allow_credentials = True
 )
 
-app.include_router(router=router)
-app.include_router(router=rout)
+app.include_router(router=router,prefix="/api")
+app.include_router(router=rout, prefix="/api")
 
