@@ -1,5 +1,9 @@
 import pandas as pd 
 from sklearn.model_selection import train_test_split 
+import sys 
+from pathlib import Path 
+sys.path.append(str(Path(__file__).resolve().parent.parent))
+from config.config import logger
 
 
 def load_file(path):
@@ -18,13 +22,24 @@ def target_feature(df):
     target_column = "LoanApproved"
 
     if target_column not in df.columns:
-        print(f"The target column {target_column} is not present in the dataframe ")
+        logger.error(f"The target column {target_column} is not present in the dataframe ")
 
 
     features = df.drop(columns= [target_column])
     target = df[target_column]
 
     return features,target
+
+def target_risk(df):
+    target = "RiskScore"
+    
+    if target not in df.columns:
+        logger.error(f"The Target feature {target} is not available in the data!!")
+    
+    f = df.drop(columns=[target])
+    t = df[target]
+
+    return f,t
 
 
 def data_split(X,y): 
@@ -34,4 +49,4 @@ def data_split(X,y):
     return X_train,X_test,y_train,y_test
     
 
-__all__ = ["load_file", "target_feature", "data_split"]
+__all__ = ["load_file", "target_feature", "target_risk","data_split"]
