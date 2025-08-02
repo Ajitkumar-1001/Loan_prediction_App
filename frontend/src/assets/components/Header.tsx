@@ -30,6 +30,12 @@ const Header: React.FC = () => {
           >
             About
           </li>
+          <li
+            onClick={() => navigate("/policy")}
+            className="text-sm font-extrabold font-sans bg-gradient-to-r from-cyan-400 to-blue-600 bg-clip-text text-transparent md:text-xl cursor-pointer hover:scale-110"
+          >
+            Policy
+          </li>
           {(role === "user" ||role === "admin") && (
           <li
             onClick={() => navigate("/predict")}
@@ -51,6 +57,7 @@ const Header: React.FC = () => {
             navigate('/');
               
             }}/>
+             
           </li>
 
           )}

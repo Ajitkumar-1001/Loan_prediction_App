@@ -124,12 +124,12 @@ const Predict: React.FC = () => {
   // }), []);
 
   const containerVariants = useMemo(() => ({
-    hidden: { opacity: 0, y: 100, rotate: 90 },
+    hidden: { opacity: 0, y: 100, rotate: 360 },
     visible: {
       opacity: 1,
       y: 0,
       rotate: 0,
-      transition: { duration: 1.0, ease: 'easeOut', staggerChildren: 0.2 }
+      transition: { delay: 0.5, duration: 1.0, ease: 'easeOut', staggerChildren: 0.2 }
     }
   }), []);
 

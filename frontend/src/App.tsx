@@ -8,6 +8,7 @@ import Home from "./assets/pages/home";
 import {useRole} from "../context/RoleContext";
 import LoginPage from "./assets/pages/Loginpage";
 import Signup from "./assets/pages/Signup";
+import Policy from "./assets/pages/Policy";
 
 function App() {
   const {role} = useRole();
@@ -21,6 +22,7 @@ function App() {
         <Route path="/predict" element={<Predict />} /> )}
         <Route path="/login" element={<LoginPage/>} />
         <Route path="/signup" element={<Signup/>} />
+        <Route path="/policy" element={<Policy/>} />
 
         
       </Routes>
