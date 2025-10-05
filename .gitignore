@@ -28,3 +28,18 @@ loan_api/routers/__pycache__
 
 loan_api/schema/__pycache__
 
+API_ENDPOINTS.md
+DOCKER_SETUP.md
+
+frontend/node_modules/
+frontend/dist/
+frontend/build/
+frontend/public/
+
+start.sh
+verify_setup.sh
+
+
+Rag_files/init_ollama.sh
+Rag_files/__pycache__/
+Rag_files/chroma_db/

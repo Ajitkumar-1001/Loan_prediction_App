@@ -593,3 +593,12 @@ AttributeError: module 'bcrypt' has no attribute '__about__'
 2025-08-02 21:04:56 | INFO | root | Inserting data to the tables
 2025-08-02 21:04:57 | INFO | root | All data inserted successfully
 2025-08-02 21:04:57 | INFO | root | 🧹 Tables created, data inserted, and DB connection closed.
+2025-08-03 06:55:43 | INFO | root | Creating Connection to the database
+2025-08-03 06:55:43 | INFO | root | Connection created successfully
+2025-08-03 06:55:43 | INFO | root | Creating tables
+2025-08-03 06:55:43 | INFO | root | Tables created successfully
+2025-08-03 06:55:43 | INFO | root | Loading the database and Normalizing for a 3NF..
+2025-08-03 06:55:43 | INFO | root | Normalization done !.
+2025-08-03 06:55:43 | INFO | root | Inserting data to the tables
+2025-08-03 06:55:43 | INFO | root | All data inserted successfully
+2025-08-03 06:55:43 | INFO | root | 🧹 Tables created, data inserted, and DB connection closed.

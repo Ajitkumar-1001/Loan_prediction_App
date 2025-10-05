@@ -6,7 +6,7 @@ from database import get_connection
 
 router = APIRouter(prefix="/employmentdetails" , tags= ["EmploymentDetails"])
 
-@router.get("/", response_model= List[EmploymentDetails])
+@router.get("/", response_model= List[EmploymentDetails]) # type: ignore
 def get_empdetails(): 
 
     conn = get_connection() 

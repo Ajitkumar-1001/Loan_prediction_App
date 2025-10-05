@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { motion, useAnimation, AnimatePresence } from 'framer-motion';
 import { useLocation } from 'react-router-dom';
 
@@ -44,11 +44,11 @@ const Predict: React.FC = () => {
     }));
   };
 
-  const isFormValid = () => {
+  const isFormValid = useCallback(() => {
     return Object.values(formData).every(
       (val) => typeof val === "number" && !isNaN(val) && val > 0
     );
-  };
+  },[formData]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -123,12 +123,23 @@ const Predict: React.FC = () => {
   //   visible: { opacity: 1, transition: { duration: 0.5, ease: "easeIn" } },
   // }), []);
 
+  const noteprops: Record<string, any> = useMemo(() => ({ 
+    hidden : {opacity : 0 }, 
+    visible : {opacity:1, transition: {staggerChildren:0.2, duration: 0.5 , ease:"easeIn"}}
+
+  }),[]); 
+
+  const noteparaprops:Record<string,any> = useMemo(() => ({ 
+    hidden : {opacity:0},
+    visible : {opacity:1 , transition : {duration : 0.7, ease: "easeOut"}}
+  }), [])
+
   const containerVariants = useMemo(() => ({
-    hidden: { opacity: 0, y: 100, rotate: 360 },
+    hidden: { opacity: 0, y: 100},
     visible: {
       opacity: 1,
       y: 0,
-      rotate: 0,
+      // rotate: 0,
       transition: { delay: 0.5, duration: 1.0, ease: 'easeOut', staggerChildren: 0.2 }
     }
   }), []);
@@ -158,33 +169,33 @@ const Predict: React.FC = () => {
 
 
   return (
-    <div className="min-w-screen min-h-screen flex flex-col md:flex-row gap-6 items-center justify-center bg-gradient-to-br from-sky-950 to-blue-350">
+    <div className="min-w-screen min-h-screen flex flex-col md:flex-row gap-6 items-center justify-center bg-gradient-to-br from-sky-950 to-sky-900">
 
 
       <div className="flex flex-row gap-8 items-center m-3">
 
 
         {note && (
-          <div className="flex flex-col items-center gap-4 mt-4 bg-gradient-to-r from-cyan-400 to-blue-600 rounded-3xl mx-3 p-6 shadow-md">
-            <h5 className="text-2xl font-bold text-black">Quick Tips!</h5>
+          <div className="flex flex-col items-center gap-4 mt-4 bg-gradient-to-tr from-white-950 to-white-900 backdrop-blur-lg rounded-3xl mx-3 p-6 shadow-md">
+            <h2 className="text-2xl font-sans font-bold bg-gradient-to-tr from-blue-400 to-emarald-800 bg-clip-text text-transparent">Quick Tips!</h2>
 
-            <div className="w-full max-w-3xl bg-gradient-to-r from-yellow-300 to-blue-300 rounded-2xl shadow-md p-6">
-              <h6 className="text-lg font-bold text-black mb-2">Risk Score!</h6>
+            <div className="w-full max-w-3xl bg-gradient-to-r from-blue-300 to-gray-600 border-2 border-white rounded-2xl shadow-md p-6">
+              <h6 className="text-lg text-center font-bold text-black mb-2">Risk Score!</h6>
               <p className="text-sm font-medium text-black leading-relaxed">
-                It is a special metric unlike CIBIL score. Most users mix up the terms Risk Score and CIBIL score. Risk Score is calculated from accountancy metrics and plays an important role in determining your success rate of loan approval.
+              Risk Score is a numerical estimate of a borrower's financial reliability, calculated using key financial indicators like income, assets, liabilities, and credit history to assess their likelihood of loan repayment.
               </p>
-              <h4 className='text-xl font-sans font-bold text-black'>Don't Know your Scores! <span className='text-lg font-sans font-bold text-green'>No worries</span> Use our Calc page to know your scores!
+              <h4 className='text-xl font-sans font-bold text-black'>Don't Know your Scores! <span className='text-lg font-sans font-bold text-green'>No worries  We have our model to Calculate your score!, this is a prediction which is near most equal to the True value.</span>
               </h4>
             </div>
 
-            <div className="w-full max-w-3xl bg-gradient-to-r from-yellow-300 to-blue-300 rounded-2xl shadow-md p-6">
-              <h6 className="text-lg font-bold text-black mb-2">Income !!</h6>
-              <p className="text-sm font-medium text-black leading-relaxed"> We ask Income from customer since it is a predominant factor in determining the credit eligibility of one!, we have Income PER dependent which is the applicant's annual income, In some cases,if the Applicant's income rate is Low,we ask for Family Income to support the chances of Loan Approval.
+            <div className="w-full max-w-3xl bg-gradient-to-r from-blue-300 to-gray-600 rounded-2xl border-2 border-white shadow-md p-6">
+              <h6 className="text-lg font-bold text-black text-center mb-2">Income Per Dependent !!</h6>
+              <p className="text-sm font-medium text-black leading-relaxed"> It is something , where the Income of the applicant is divided by the number of dependents of the applicant's income, like if the dad's income is shared by the children .
               </p>
             </div>
 
-            <div className="w-full max-w-3xl bg-gradient-to-r from-yellow-300 to-blue-300 rounded-2xl shadow-md p-6">
-              <h6 className="text-lg font-bold text-black mb-2">Interest Rate!</h6>
+            <div className="w-full max-w-3xl bg-gradient-to-r from-blue-300 to-gray-600 rounded-2xl border-2 border-white  shadow-md p-6">
+              <h6 className="text-lg font-bold text-black text-center mb-2">Interest Rate!</h6>
               <p className="text-sm font-medium text-black leading-relaxed">
                 As per the Federal Policy, we cant access the Interest Rates from the Banks officially, Please be aware of the Interest Rates according to the Loan type you seek from the Bank's official or the Bank's Offical Website
               </p>
@@ -321,19 +332,17 @@ const Predict: React.FC = () => {
         </motion.div>
       )}
 
-      <div className='absolute flex flex-col mt-[52rem]  z-0 items-center'>
+      <div className='absolute flex flex-col mt-[52rem]  z-0 items-center'  >
         <AnimatePresence>
-          {note && (
+          {true && (
             <motion.div
-              initial={{ opacity: 1 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.5 }}
+            variants={noteprops} initial="hidden" animate={control3}
               className="w-full md:w-96 bg-gradient-to-br from-yellow-300 to-yellow-600 rounded-2xl shadow-md p-6 border-gray-700 overflow-y-auto "
             >
-              <h2 className="text-lg font-bold text-black mb-2 text-center">Note:</h2>
-              <p className="text-sm font-medium text-black text-center leading-relaxed">
+              <motion.h2 className="text-lg font-bold text-black mb-2 text-center" variants={noteparaprops}>Note:</motion.h2>
+              <motion.p className="text-sm font-medium text-black text-center leading-relaxed" variants={noteparaprops}>
                 We respect your privacy and None of your data is stored internally or shared to your bank. It’s completely stateless and transparent!
-              </p>
+              </motion.p>
             </motion.div>
           )}
         </AnimatePresence>

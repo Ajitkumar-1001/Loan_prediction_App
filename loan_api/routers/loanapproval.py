@@ -1,11 +1,14 @@
 from fastapi import APIRouter, HTTPException
+from fastapi.datastructures import Default
 import google.generativeai as genai  # type: ignore
 import os
 from pathlib import Path
-from schema.loan_approval import LoanApproval
+from loan_api.schema.loan_approval import LoanApproval
+# from ..schema.riskscore import RiskScore 
 from joblib import load
 import numpy as np
 from dotenv import load_dotenv
+
 
 # Load environment variables
 env_path = Path(__file__).resolve().parent.parent / ".env"
@@ -20,17 +23,36 @@ genai.configure(api_key=api_key)
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 MODEL_PATH = os.path.join(BASE_DIR, "..", "ModelFiles", "final_loan_approval_model.pkl")
+# Model2_path = os.path.join(BASE_DIR, "..", "ModelFiles", "final_riskscore_model.pkl")
 # Load your model
 model = load(MODEL_PATH)
+# model2 = load(Model2_path)
 
 # Define the router
 router = APIRouter(prefix="/Loan", tags=["LoanApproval"])
 
 
 @router.post("/predict-loan")
-async def predict(loandet: LoanApproval):
+async def predict(loandet: LoanApproval):  #predict_riskscore:bool = Default[False]
     try:
-        # Prepare input
+        # if predict_riskscore == True:
+        #     values  = np.array(([
+        #         model.MonthlyIncome,
+        #         model.AnnualIncome,
+        #         model.SavingsAccountBalance,
+        #         model.NetWorth,
+        #         model.BankruptcyHistory,
+        #         model.PreviousLoanDefaults,
+        #         model.TotalAssets,
+        #         model.TotalLiabilities
+        #     ]))
+
+        #     pred_val = model2.predict(values.reshape(1,-1))[0]
+
+        #     return pred_val
+    
+
+
         values = np.array([[
             loandet.IncomePerDependent,
             loandet.LoanAmount,
@@ -50,6 +72,7 @@ async def predict(loandet: LoanApproval):
             prompt = (
                 f"The loan has been approved for the applicant with Annual Income = {loandet.AnnualIncome}, "
                 f"Loan Amount = {loandet.LoanAmount}, and Risk Score = {loandet.RiskScore}.\n"
+                f"Also with the information of {loandet.RiskScore} , {loandet.TotalDebtToIncomeRatio} suggest the Highest Loan amount one can apply for also depending on {loandet.AnnualIncome}"
                 f"Suggest 3 short and professional tips to maintain a good credit profile and ensure future loan eligibility. and you are an bank assistant provide report on why the loan got approved"
             )
         else:
@@ -72,3 +95,9 @@ async def predict(loandet: LoanApproval):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Prediction or LLM failed: {str(e)}")
+
+
+
+    
+
+        

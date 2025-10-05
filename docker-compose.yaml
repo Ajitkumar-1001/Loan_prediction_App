@@ -7,16 +7,45 @@ services:
     ports:
       - "8000:8000"
     volumes:
-     - ./data:/app/loan_api/data  
+     - ./data:/app/loan_api/data
      -  backend-logs:/app_logs
-     - ./loan_api/ModelFiles:/app/loan_api/ModelFiles  
-    working_dir: /app/loan_api 
+     - ./loan_api/ModelFiles:/app/loan_api/ModelFiles
+     - ./Rag_files:/app/Rag_files
+     - chroma-db:/app/Rag_files/chroma_db
+    working_dir: /app/loan_api
     environment:
       - GOOGLE_API_KEY=${GEMINI_API_KEY}
+      - OLLAMA_HOST=http://ollama:11434
     env_file:
       - .env
+    depends_on:
+      ollama:
+        condition: service_healthy
     networks:
       - app-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/chatbot/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: smartloanpred-ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama-data:/root/.ollama
+    networks:
+      - app-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
 
   frontend:
     build:
@@ -51,3 +80,5 @@ networks:
 volumes:
   backend-data:
   backend-logs:
+  ollama-data:
+  chroma-db:

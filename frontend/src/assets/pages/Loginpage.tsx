@@ -10,9 +10,10 @@ interface Loginprops {
 }
 
 interface Loginresult {
-  accesstoken: string;
-  bearer?: string;
+  access_token: string;
+  token_type?: string;
   role?: string;
+  first_name?: string;
 }
 
 const LoginPage: React.FC = () => {
@@ -100,6 +101,11 @@ const LoginPage: React.FC = () => {
 
       const data: Loginresult = await response.json();
 
+      // Store access token in localStorage
+      if (data.access_token) {
+        localStorage.setItem('access_token', data.access_token);
+      }
+
       if (data.role == "user" || data.role == "admin") {
         setRole(data.role );
       } else {
@@ -120,7 +126,7 @@ const LoginPage: React.FC = () => {
   },[redirecting])
 
   return (
-    <div className="min-w-screen min-h-screen bg-gradient-to-br from-sky-950 to-blue-350 flex items-center justify-center px-4">
+    <div className="min-w-screen min-h-screen bg-gradient-to-br from-sky-950 to-sky-900 flex items-center justify-center px-4">
       <motion.div
         className="w-full max-w-md p-6 border rounded-2xl shadow-3xl bg-gradient-to-br from-sky-950 to-blue-350 hover:bg-gradient-to-t from-sky-950 to-gray-900"
         variants={containerVariants as any}

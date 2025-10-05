@@ -35,7 +35,7 @@ const Home: React.FC =()=>{
     }, [control1, control2]);
 
     return(
-        <div  className="min-w-screen min-h-screen flex flex-col md:flex-row gap-6 p-5 items-top bg-gradient-to-br from-sky-950 to-blue-350 space-y-10">
+        <div className="min-w-screen min-h-screen flex flex-col md:flex-row gap-6 p-5 items-top bg-gradient-to-br from-sky-950 to-sky-900 space-y-10">
         <motion.div className="max-w-4xl m-10 mx-auto px-6 py-12 text-gray-200 font-sans mt-50 leading-relaxed" variants={containerprops} initial ="hidden" animate={control1}>
                 <motion.h2 className="text-4xl font-bold mb-6 text-center text-blue-400" variants={paraprops} >Hey ! Welcome to the SmartLoanPredictor app</motion.h2>
 

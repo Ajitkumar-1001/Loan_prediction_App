@@ -6,7 +6,7 @@ from database import get_connection
 
 router = APIRouter(prefix="/loandetails" , tags= ["LoanDetails"])
 
-@router.get("/", response_model= List[LoanDetails])
+@router.get("/", response_model= List[LoanDetails]) # type: ignore
 def get_empdetails(): 
 
     conn = get_connection() 

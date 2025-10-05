@@ -1,12 +1,12 @@
 from fastapi import APIRouter, HTTPException 
 from typing import List 
-from models import CreditHistory
+from schema import CreditHistory
 from database import get_connection 
 
 
 router = APIRouter(prefix="/credithistory" , tags= ["CreditHistory"])
 
-@router.get("/", response_model= List[CreditHistory])
+@router.get("/", response_model= List[CreditHistory]) # type: ignore
 def get_empdetails(): 
 
     conn = get_connection() 

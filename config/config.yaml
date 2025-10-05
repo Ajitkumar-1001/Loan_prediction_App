@@ -24,3 +24,8 @@ Pca_feature_parameters:
                   n_components : 4
                   
 
+llm:
+      temperature : 0.8 
+      model : "llama3.2"
+
+

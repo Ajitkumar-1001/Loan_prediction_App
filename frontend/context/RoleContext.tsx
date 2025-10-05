@@ -8,9 +8,14 @@ import React, {
   
   type Roles = "guest" | "user" | "admin";
   
+  type Name = string|null; 
+
+  
   interface RolesContextType {
     role: Roles;
+    firstname : Name; 
     setRole: (role: Roles) => void;
+    setName : (name:Name)=> void; 
     logout: () => void;
   }
   
@@ -22,30 +27,38 @@ import React, {
   
   export const RoleProvider: React.FC<InheritProps> = ({ children }) => {
     const [role, setRoleState] = useState<Roles>("guest");
-  
-    // Load role from localStorage on first render
+    const [firstname, setFirstName] = useState<Name>(null);  
+   
     useEffect(() => {
       const storedRole = localStorage.getItem("user_role") as Roles | null;
+      const storedName = localStorage.getItem("firstname");
       if (storedRole === "user" || storedRole === "admin") {
         setRoleState(storedRole);
+        setFirstName(storedName);
       }
     }, []);
   
-    // Set role and persist in localStorage
+   
     const setRole = (newRole: Roles) => {
       setRoleState(newRole);
       localStorage.setItem("user_role", newRole);
     };
   
-    // Clear role and token on logout
+    const setName = (newName : Name) => { 
+      setFirstName(newName); 
+      if (newName){
+      localStorage.setItem("firstname",newName);}
+    };
+
     const logout = () => {
       setRoleState("guest");
+      setFirstName(null); 
       localStorage.removeItem("user_role");
-      localStorage.removeItem("access_token"); // optional if you're storing token
+      localStorage.removeItem("access_token"); 
     };
   
     return (
-      <RoleContext.Provider value={{ role, setRole, logout }}>
+      <RoleContext.Provider value={{  role, firstname, setRole, setName, logout }}>
         {children}
       </RoleContext.Provider>
     );

@@ -202,7 +202,7 @@ const Signup: React.FC = () => {
   },[redirecting]);
 
   return (
-    <div className='min-w-screen min-h-screen flex flex-col md:flex-row gap-6 items-center justify-center bg-gradient-to-br from-sky-950 to-blue-350'>
+    <div className='min-w-screen min-h-screen flex flex-col md:flex-row gap-6 items-center justify-center bg-gradient-to-br from-sky-950 to-sky-900'>
       <motion.div className="w-full max-w-md md:max-w-xl border-2 border-silver-500 rounded-2xl shadow-3xl bg-gradient-to-br from-sky-950 to-blue-350 hover:bg-gradient-to-t from-sky-950 to-gray-900 p-6 mx-auto mt-20 " variants={containerVariants as any} initial="hidden" animate ={control1} >
         <motion.h2 className='text-xl md:text-3xl font-extrabold text-center mb-8 bg-gradient-to-r from-cyan-400 to-blue-600 bg-clip-text text-transparent' variants={headingvariant as any}>Sign up!</motion.h2>
         <form ref={formref} onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">

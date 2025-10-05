@@ -9,6 +9,8 @@ import {useRole} from "../context/RoleContext";
 import LoginPage from "./assets/pages/Loginpage";
 import Signup from "./assets/pages/Signup";
 import Policy from "./assets/pages/Policy";
+import Versions  from "./assets/pages/Versions";
+import Chatbot from "./assets/pages/Chatbot";
 
 function App() {
   const {role} = useRole();
@@ -18,12 +20,18 @@ function App() {
       <Routes>
         <Route path ="/" element ={<Home />} />
         <Route path="/about" element={<About />} />
-        { (role==="user" || role ==="admin") && (
-        <Route path="/predict" element={<Predict />} /> )}
+        { 
+        (role==="user" || role ==="admin") && (
+          <>
+          <Route path="/predict" element={<Predict />} /> 
+           
+           </> )
+        }
         <Route path="/login" element={<LoginPage/>} />
         <Route path="/signup" element={<Signup/>} />
         <Route path="/policy" element={<Policy/>} />
-
+        <Route path="/versions" element ={<Versions/>} />
+        <Route path="/assistant" element={<Chatbot />}/>
         
       </Routes>
 
