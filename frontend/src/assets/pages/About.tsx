@@ -1,124 +1,229 @@
-import React, { useEffect, useMemo } from 'react';
-import { motion, useAnimation } from "framer-motion";
+import React from 'react';
+import { motion } from "framer-motion";
 import "../../index.css"
-// import CardSwap from '../components/Cardswap';
 
 const About: React.FC = () => {
+    const features = [
+        { label: "Income", color: "text-cyan-400" },
+        { label: "Debt", color: "text-sky-400" },
+        { label: "Credit History", color: "text-blue-400" },
+        { label: "Dependents", color: "text-cyan-300" }
+    ];
 
-    const control1 = useAnimation();
-    const control2 = useAnimation();
-    const control3 = useAnimation();
-    const control4 = useAnimation();
-
-
-
-    const containerprops: any = useMemo(() => ({
-        hidden: { opacity: 0, x: -20 },
-        visible: { opacity: 1, x: 0, transition: { duration: 0.5, staggerChildren: 0.6 } }
-    }), []);
-
-    const paraprops: any = useMemo(() => ({
-        hidden: { opacity: 0, x: 10 },
-        visible: { opacity: 1, x: 0, transition: { duration: 0.6 } }
-    }), []);
-
-
-
-
-    useEffect(() => {
-
-        const sequence = async () => {
-            await control1.start("visible");
-            await new Promise((res) => { setTimeout(res, 1000) });
-            await control2.start("visible");
-            await new Promise((res) => { setTimeout(res, 200) });
-            await control3.start("visible");
-            await new Promise((res) => { setTimeout(res, 300) });
-            await control4.start("visible")
-        };
-
-        sequence();
-
-    }, [control1, control2, control3, control4]);
-
+    const assistantFeatures = [
+        { label: "Income", color: "text-cyan-400" },
+        { label: "Debt", color: "text-sky-400" },
+        { label: "Credit History", color: "text-blue-400" },
+        { label: "FICO Score", color: "text-cyan-300" }
+    ];
 
     return (
-        <main className="bg-gradient-to-br from-sky-950 to-sky-900">
-        <div className="min-w-screen min-h-screen flex flex-col md:flex-row gap-6 items-center justify-center bg-gradient-to-br from-sky-950 to-sky-900">
+        <main className="min-h-screen  bg-gradient-to-br from-sky-950 to-sky-900 relative overflow-hidden">
+            {/* Animated Background */}
+            <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                <div className="absolute top-0 left-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl animate-pulse"></div>
+                <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-blue-500/10 rounded-full blur-3xl animate-pulse delay-700"></div>
+                <div className="absolute top-1/2 left-1/2 w-[600px] h-[600px] bg-sky-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+            </div>
 
-            {/* Left side: Text */}
-            <motion.div className="flex flex-col  items-start space-y-7 m-15 p-3 w-full md:w-1/2" variants={containerprops as any} initial="hidden" animate={control2}>
-                <div className="max-w-4xl w-full bg-transparent m-3 p-3">
-                    <motion.h1
-                        className="text-7xl font-sans font-extrabold bg-gradient-to-tr from-cyan-400 via-white-300 to-blue-600 bg-clip-text text-transparent text-center  mb-6"
-                        variants={paraprops as any}
-                    >
-                        SmartLoanPred
-                    </motion.h1>
+            {/* Section 1: SmartLoanPred */}
+            <section className="relative min-h-screen flex items-center py-20 px-6">
+                <div className="max-w-7xl mx-auto w-full">
+                    <div className="grid md:grid-cols-2 gap-12 items-center">
+                        {/* Text Content */}
+                        <motion.div
+                            initial={{ opacity: 0, x: -50 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.8 }}
+                            className="space-y-6"
+                        >
+                            {/* Badge */}
+                            <motion.div
+                                initial={{ opacity: 0, y: -20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: 0.2 }}
+                                className="inline-block"
+                            >
+                                <div className="px-4 py-2 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 rounded-full border border-cyan-500/30 backdrop-blur-sm">
+                                    <span className="text-cyan-400 font-semibold text-sm tracking-wider">INTELLIGENT PREDICTION</span>
+                                </div>
+                            </motion.div>
 
-                    <motion.p
-                        className="text-lg font-sans font-bold text-slate-200 leading-relaxed"
-                        variants={paraprops as any}
-                    >  Powered with 
-                        <span className="text-2xl font-extrabold bg-gradient-to-r from-blue-400 to-cyan-600 bg-clip-text text-transparent capitalize"> advanced Machine Learning</span>, SmartLoanPred analyzes your financial profile in real-time to forecast your <span className="text-amber-300 font-semibold">Loan Approval Rate</span> with confidence.
-                        <br /><br />
-                        Whether you're applying for a personal, home, or business loan, our model evaluates key indicators — <span className="text-emerald-400">income</span>, <span className="text-emerald-400">debt</span>, <span className="text-emerald-400">credit history</span>, and <span className="text-emerald-400">dependents</span> — to ensure fast, accurate, and bias-free predictions.
-                        <br /><br />
-                        With our built-in <span className='text-3xl font-bold bg-gradient-to-b from-blue-700  to-indigo-700 bg-clip-text text-transparent brightness-200'>Intelligence Assistant</span> You’ll also receive a personalized AI-generated report outlining your credit score, estimated approval rate, and tailored recommendations to help improve your <span className="text-amber-300">FICO score</span> and future loan eligibility.
-                        <br /><br />
-                        <span className="font-semibold text-white">With SmartLoanPred, experience clarity, trust, and speed — all in one smart click.</span>
-                    </motion.p>
+                            {/* Title */}
+                            <motion.h1
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: 0.3 }}
+                                className="text-6xl md:text-7xl font-black bg-gradient-to-r from-cyan-400 via-blue-300 to-sky-500 bg-clip-text text-transparent leading-tight"
+                            >
+                                SmartLoanPred
+                            </motion.h1>
+
+                            {/* Description */}
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                whileInView={{ opacity: 1 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: 0.4 }}
+                                className="space-y-4 text-gray-300 text-lg leading-relaxed"
+                            >
+                                <p>
+                                    Powered with <span className="text-2xl font-extrabold bg-gradient-to-r from-blue-400 to-cyan-600 bg-clip-text text-transparent">advanced Machine Learning</span>, SmartLoanPred analyzes your financial profile in real-time to forecast your <span className="text-cyan-400 font-semibold">Loan Approval Rate</span> with confidence.
+                                </p>
+
+                                <p>
+                                    Whether you're applying for a personal, home, or business loan, our model evaluates key indicators — {features.map((feature, idx) => (
+                                        <span key={idx}>
+                                            <span className={`${feature.color} font-semibold`}>{feature.label}</span>
+                                            {idx < features.length - 1 ? ', ' : ' '}
+                                        </span>
+                                    ))}— to ensure fast, accurate, and bias-free predictions.
+                                </p>
+
+                                <p>
+                                    With our built-in <span className='text-2xl font-bold bg-gradient-to-r from-blue-500 to-cyan-500 bg-clip-text text-transparent'>Intelligence Assistant</span>, you'll also receive a personalized AI-generated report outlining your credit score, estimated approval rate, and tailored recommendations to help improve your <span className="text-cyan-400 font-semibold">FICO score</span> and future loan eligibility.
+                                </p>
+
+                                <p className="text-white font-semibold text-xl pt-4">
+                                    Experience clarity, trust, and speed — all in one smart click.
+                                </p>
+                            </motion.div>
+                        </motion.div>
+
+                        {/* Image */}
+                        <motion.div
+                            initial={{ opacity: 0, x: 50 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.8, delay: 0.3 }}
+                            className="relative group"
+                        >
+                            <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-2xl blur-xl opacity-30 group-hover:opacity-50 transition duration-500"></div>
+                            <div className="relative bg-slate-900/50 p-2 rounded-2xl border border-cyan-500/30 backdrop-blur-sm">
+                                <img
+                                    src="../../about_image.png"
+                                    className="w-full h-auto rounded-xl transform transition duration-500 group-hover:scale-[1.02]"
+                                    alt="SmartLoanPred Dashboard"
+                                />
+                            </div>
+                        </motion.div>
+                    </div>
                 </div>
+            </section>
 
-            </motion.div>
-
-
-            <motion.div className="flex justify-center items-center m-2 w-full md:w-1/2" variants={containerprops as any} initial="hidden" animate={control2}>
-                <motion.div className="max-w-2xl w-full shadow-lg" variants={paraprops as any}>
-                    <img src="../../about_image.png" className="w-full w-[60rem] h-[40rem] hover:scale-110 object-stretch rounded-xl shadow-lg" alt="SmartLoanPred Image" />
-                </motion.div>
-            </motion.div>
-        </div>
-
-        <div className=" relative min-h-screen flex flex-col md:flex-row gap-6 items-center justify-center bg-transparent">
-
-           
-            <motion.div className="flex flex-col  items-start space-y-7 m-15 p-3 w-full md:w-1/2" variants={containerprops as any} initial="hidden" animate={control2}>
-                <div className="max-w-4xl w-full bg-transparent m-3 p-3">
-                    <motion.h1
-                        className="text-7xl font-sans font-extrabold bg-gradient-to-tr from-cyan-400 via-white-300 to-blue-600 bg-clip-text text-transparent text-center  mb-6"
-                        variants={paraprops as any}
-                    >
-                        Smart Assistant 
-
-                    </motion.h1>
-
-                    <motion.p
-                        className="text-lg font-sans font-bold text-slate-200 leading-relaxed"
-                        variants={paraprops as any}
-                    >  This version comes with a smart assistant 
-                        <span className="text-2xl font-extrabold bg-gradient-to-r from-blue-400 to-cyan-600 bg-clip-text text-transparent capitalize"> with AI optimized with RAG </span>, can helps and assist you in the regard of the bank loan approval and financial wealth <span className="text-amber-300 font-semibold">Loan Approval Rate</span> with confidence.
-                        <br /><br />
-                        Our assistant is a smart and banking knowledge based model that can help with your queries on  — <span className="text-emerald-400">income</span>, <span className="text-emerald-400">debt</span>, <span className="text-emerald-400">credit history</span>, and even with your <span className="text-emerald-400">CIBIL score</span> — to ensure you have a secure future with higher chances for loans .
-                        <br /><br />
-                       
-                    </motion.p>
+            {/* Divider */}
+            <div className="relative">
+                <div className="absolute inset-0 flex items-center" aria-hidden="true">
+                    <div className="w-full border-t border-cyan-500/20"></div>
                 </div>
+                <div className="relative flex justify-center">
+                    <span className="bg-slate-950 px-6 py-2">
+                        <div className="w-3 h-3 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 animate-pulse"></div>
+                    </span>
+                </div>
+            </div>
 
-            </motion.div>
+            {/* Section 2: Smart Assistant */}
+            <section className="relative min-h-screen flex items-center py-20 px-6">
+                <div className="max-w-7xl mx-auto w-full">
+                    <div className="grid md:grid-cols-2 gap-12 items-center">
+                        {/* Image - Order First on Desktop */}
+                        <motion.div
+                            initial={{ opacity: 0, x: -50 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.8, delay: 0.3 }}
+                            className="relative group order-2 md:order-1"
+                        >
+                            <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 to-sky-500 rounded-2xl blur-xl opacity-30 group-hover:opacity-50 transition duration-500"></div>
+                            <div className="relative bg-slate-900/50 p-2 rounded-2xl border border-blue-500/30 backdrop-blur-sm">
+                                <img
+                                    src="../../about_image_2.png"
+                                    className="w-full h-auto rounded-xl transform transition duration-500 group-hover:scale-[1.02]"
+                                    alt="Smart Assistant Interface"
+                                />
+                            </div>
+                        </motion.div>
 
+                        {/* Text Content */}
+                        <motion.div
+                            initial={{ opacity: 0, x: 50 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.8 }}
+                            className="space-y-6 order-1 md:order-2"
+                        >
+                            {/* Badge */}
+                            <motion.div
+                                initial={{ opacity: 0, y: -20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: 0.2 }}
+                                className="inline-block"
+                            >
+                                <div className="px-4 py-2 bg-gradient-to-r from-blue-500/20 to-sky-500/20 rounded-full border border-blue-500/30 backdrop-blur-sm">
+                                    <span className="text-blue-400 font-semibold text-sm tracking-wider">AI-POWERED ASSISTANT</span>
+                                </div>
+                            </motion.div>
 
-            <motion.div className="flex justify-center items-center m-2 w-full md:w-1/2" variants={containerprops as any} initial="hidden" animate={control2}>
-                <motion.div className="max-w-2xl w-full shadow-lg" variants={paraprops as any}>
-                    <img src="../../about_image_2.png" className="w-full w-[60rem] h-[40rem] hover:scale-110 object-stretch rounded-xl shadow-lg border-2 border-cyan-200" alt="SmartLoanPred Image" />
-                </motion.div>
-            </motion.div>
-        </div>
-        
+                            {/* Title */}
+                            <motion.h2
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: 0.3 }}
+                                className="text-6xl md:text-7xl font-black bg-gradient-to-r from-blue-400 via-sky-300 to-cyan-500 bg-clip-text text-transparent leading-tight"
+                            >
+                                Smart Assistant
+                            </motion.h2>
+
+                            {/* Description */}
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                whileInView={{ opacity: 1 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: 0.4 }}
+                                className="space-y-4 text-gray-300 text-lg leading-relaxed"
+                            >
+                                <p>
+                                    This version comes with a smart assistant <span className="text-2xl font-extrabold bg-gradient-to-r from-blue-400 to-cyan-600 bg-clip-text text-transparent">with AI optimized with RAG</span>, designed to help and assist you with bank loan approval and financial wealth management with confidence.
+                                </p>
+
+                                <p>
+                                    Our assistant is a smart, banking knowledge-based model that can help with your queries on {assistantFeatures.map((feature, idx) => (
+                                        <span key={idx}>
+                                            <span className={`${feature.color} font-semibold`}>{feature.label}</span>
+                                            {idx < assistantFeatures.length - 1 ? ', ' : ' '}
+                                        </span>
+                                    ))}— ensuring you have a secure future with higher chances for loans.
+                                </p>
+
+                                {/* Feature Cards */}
+                                <div className="grid grid-cols-2 gap-4 pt-6">
+                                    <div className="bg-slate-900/50 backdrop-blur-sm border border-cyan-500/30 rounded-xl p-4 hover:border-cyan-500/50 transition-all duration-300">
+                                        {/* <div className="text-3xl mb-2">🤖</div> */}
+                                        <h4 className="text-cyan-400 font-bold mb-1">RAG-Powered</h4>
+                                        <p className="text-sm text-gray-400">Advanced retrieval augmented generation</p>
+                                    </div>
+                                    <div className="bg-slate-900/50 backdrop-blur-sm border border-blue-500/30 rounded-xl p-4 hover:border-blue-500/50 transition-all duration-300">
+                                        {/* <div className="text-3xl mb-2">💡</div> */}
+                                        <h4 className="text-blue-400 font-bold mb-1">Smart Insights</h4>
+                                        <p className="text-sm text-gray-400">Personalized financial guidance</p>
+                                    </div>
+                                </div>
+                            </motion.div>
+                        </motion.div>
+                    </div>
+                </div>
+            </section>
+
+            {/* Bottom Spacing */}
+            <div className="h-20"></div>
         </main>
-
-    )
-
+    );
 };
 
 export default About;
