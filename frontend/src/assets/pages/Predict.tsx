@@ -131,6 +131,16 @@ const Predict: React.FC = () => {
     return () => clearInterval(intervalId);
   }, []);
 
+  // Hide Quick Tips and Note when user fills form or gets prediction
+  useEffect(() => {
+    const hasFormData = Object.values(formData).some(val => val !== "" && val !== 0);
+    const hasPrediction = predictionResult !== null;
+
+    if ((hasFormData || hasPrediction) && note) {
+      setNote(false);
+    }
+  }, [formData, predictionResult, note]);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -226,7 +236,6 @@ const Predict: React.FC = () => {
     e.preventDefault();
     setError(null);
     setPredictionResult(null);
-    setNote(false);
 
     if (!isFormValid()) {
       setError("Please fill in all fields with valid non-zero values.");
@@ -338,6 +347,11 @@ const Predict: React.FC = () => {
     visible: { opacity: 1, scale: 1, transition: { duration: 0.5, ease: 'easeOut' } },
   }), []);
 
+  const quickTipsVariants = useMemo(() => ({
+    initial: { opacity: 1, x: 0 },
+    exit: { opacity: 0, x: -50, transition: { duration: 0.4 } }
+  }), []);
+
 
 
   return (
@@ -347,33 +361,94 @@ const Predict: React.FC = () => {
       <div className="flex flex-row gap-8 items-center m-3">
 
 
-        {note && (
-          <div className="flex flex-col items-center gap-4 mt-4 bg-gradient-to-tr from-white-950 to-white-900 backdrop-blur-lg rounded-3xl mx-3 p-6 shadow-md">
-            <h2 className="text-2xl font-sans font-bold bg-gradient-to-tr from-blue-400 to-emarald-800 bg-clip-text text-transparent">Quick Tips!</h2>
-
-            <div className="w-full max-w-3xl bg-gradient-to-r from-blue-300 to-gray-600 border-2 border-white rounded-2xl shadow-md p-6">
-              <h6 className="text-lg text-center font-bold text-black mb-2">Risk Score!</h6>
-              <p className="text-sm font-medium text-black leading-relaxed">
-              Risk Score is a numerical estimate of a borrower's financial reliability, calculated using key financial indicators like income, assets, liabilities, and credit history to assess their likelihood of loan repayment.
-              </p>
-              <h4 className='text-xl font-sans font-bold text-black'>Don't Know your Scores! <span className='text-lg font-sans font-bold text-green'>No worries  We have our model to Calculate your score!, this is a prediction which is near most equal to the True value.</span>
-              </h4>
+        <AnimatePresence>
+          {note && (
+            <motion.div
+              variants={quickTipsVariants as any}
+              initial="initial"
+              exit="exit"
+              className="flex flex-col items-center gap-6 mt-4 mx-3 max-w-md"
+            >
+            {/* Header */}
+            <div className="w-full text-center mb-2">
+              <div className="inline-block px-5 py-2 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 rounded-full border border-cyan-500/30 backdrop-blur-sm mb-3">
+                <span className="text-cyan-400 font-semibold text-sm tracking-wider">💡 HELPFUL TIPS</span>
+              </div>
+              <h2 className="text-3xl font-black bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+                Quick Tips
+              </h2>
             </div>
 
-            <div className="w-full max-w-3xl bg-gradient-to-r from-blue-300 to-gray-600 rounded-2xl border-2 border-white shadow-md p-6">
-              <h6 className="text-lg font-bold text-black text-center mb-2">Income Per Dependent !!</h6>
-              <p className="text-sm font-medium text-black leading-relaxed"> It is something , where the Income of the applicant is divided by the number of dependents of the applicant's income, like if the dad's income is shared by the children .
-              </p>
-            </div>
+            {/* Tip Cards */}
+            <div className="w-full space-y-4">
+              {/* Risk Score Tip */}
+              <div className="group relative">
+                <div className="absolute -inset-0.5 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-2xl blur opacity-30 group-hover:opacity-50 transition duration-300"></div>
+                <div className="relative bg-slate-900/80 backdrop-blur-xl rounded-2xl border border-cyan-500/30 p-5 transition-all duration-300 group-hover:border-cyan-500/50">
+                  <div className="flex items-start gap-3 mb-3">
+                    <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-xl flex items-center justify-center">
+                      <span className="text-2xl">📊</span>
+                    </div>
+                    <div className="flex-1">
+                      <h6 className="text-lg font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent mb-2">
+                        Risk Score
+                      </h6>
+                      <p className="text-sm text-gray-300 leading-relaxed">
+                        A numerical estimate of your financial reliability, calculated using income, assets, liabilities, and credit history to assess loan repayment likelihood.
+                      </p>
+                    </div>
+                  </div>
+                  <div className="mt-3 p-3 bg-cyan-500/10 rounded-lg border border-cyan-500/20">
+                    <p className="text-xs text-cyan-300 font-semibold">
+                      🧮 Don't know your score? Use our calculator! Our ML model provides predictions close to the true value.
+                    </p>
+                  </div>
+                </div>
+              </div>
 
-            <div className="w-full max-w-3xl bg-gradient-to-r from-blue-300 to-gray-600 rounded-2xl border-2 border-white  shadow-md p-6">
-              <h6 className="text-lg font-bold text-black text-center mb-2">Interest Rate!</h6>
-              <p className="text-sm font-medium text-black leading-relaxed">
-                As per the Federal Policy, we cant access the Interest Rates from the Banks officially, Please be aware of the Interest Rates according to the Loan type you seek from the Bank's official or the Bank's Offical Website
-              </p>
+              {/* Income Per Dependent Tip */}
+              <div className="group relative">
+                <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500 to-sky-500 rounded-2xl blur opacity-30 group-hover:opacity-50 transition duration-300"></div>
+                <div className="relative bg-slate-900/80 backdrop-blur-xl rounded-2xl border border-blue-500/30 p-5 transition-all duration-300 group-hover:border-blue-500/50">
+                  <div className="flex items-start gap-3">
+                    <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-blue-500 to-sky-600 rounded-xl flex items-center justify-center">
+                      <span className="text-2xl">👨‍👩‍👧‍👦</span>
+                    </div>
+                    <div className="flex-1">
+                      <h6 className="text-lg font-bold bg-gradient-to-r from-blue-400 to-sky-400 bg-clip-text text-transparent mb-2">
+                        Income Per Dependent
+                      </h6>
+                      <p className="text-sm text-gray-300 leading-relaxed">
+                        Your total income divided by the number of dependents. This shows how your income is distributed among family members.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Interest Rate Tip */}
+              <div className="group relative">
+                <div className="absolute -inset-0.5 bg-gradient-to-r from-sky-500 to-cyan-500 rounded-2xl blur opacity-30 group-hover:opacity-50 transition duration-300"></div>
+                <div className="relative bg-slate-900/80 backdrop-blur-xl rounded-2xl border border-sky-500/30 p-5 transition-all duration-300 group-hover:border-sky-500/50">
+                  <div className="flex items-start gap-3">
+                    <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-sky-500 to-cyan-600 rounded-xl flex items-center justify-center">
+                      <span className="text-2xl">💰</span>
+                    </div>
+                    <div className="flex-1">
+                      <h6 className="text-lg font-bold bg-gradient-to-r from-sky-400 to-cyan-400 bg-clip-text text-transparent mb-2">
+                        Interest Rate
+                      </h6>
+                      <p className="text-sm text-gray-300 leading-relaxed">
+                        Check your bank's official website for current interest rates. Federal policy restricts direct access to official bank rates.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
-        )}
+          </motion.div>
+          )}
+        </AnimatePresence>
 
 
         <motion.div
@@ -430,7 +505,7 @@ const Predict: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => openCalculator(key === 'RiskScore' ? 'riskScore' : 'debtRatio')}
-                      className="absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1 bg-cyan-600 hover:bg-cyan-700 text-white text-xs font-bold rounded-md transition duration-200"
+                      className="absolute right-2 top-1/2 -translate-y-1/2 px-5 py-1 bg-cyan-600 hover:bg-cyan-700 text-white text-xs font-bold rounded-md transition duration-200"
                     >
                       🧮 Calc
                     </button>
@@ -515,9 +590,9 @@ const Predict: React.FC = () => {
         </motion.div>
       )}
 
-      <div className='absolute flex flex-col mt-[52rem]  z-0 items-center'  >
+      <div className='absolute flex flex-col  mt-[52rem] z-0 items-end justify-end'  >
         <AnimatePresence>
-          {true && (
+          {note && (
             <motion.div
             variants={noteprops} initial="hidden" animate={control3}
               className="w-full md:w-96 bg-gradient-to-br from-yellow-300 to-yellow-600 rounded-2xl shadow-md p-6 border-gray-700 overflow-y-auto "
