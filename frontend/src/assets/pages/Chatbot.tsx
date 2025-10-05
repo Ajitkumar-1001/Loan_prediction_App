@@ -32,6 +32,77 @@ const Chatbot: React.FC = () => {
 
     const isAdmin = role === 'admin';
 
+    const CHAT_SESSION_KEY = 'chatbot_session';
+    const SESSION_DURATION = 3 * 60 * 1000; // 3 minutes in milliseconds
+
+    // Load chat history from localStorage on mount
+    useEffect(() => {
+        const loadChatSession = () => {
+            try {
+                const savedSession = localStorage.getItem(CHAT_SESSION_KEY);
+                if (savedSession) {
+                    const { messages, timestamp } = JSON.parse(savedSession);
+                    const currentTime = new Date().getTime();
+
+                    // Check if session is still valid (within 3 minutes)
+                    if (currentTime - timestamp < SESSION_DURATION) {
+                        // Convert string timestamps back to Date objects
+                        const restoredMessages = messages.map((msg: any) => ({
+                            ...msg,
+                            timestamp: new Date(msg.timestamp)
+                        }));
+                        setMsgStack(restoredMessages);
+                    } else {
+                        // Session expired, clear it
+                        localStorage.removeItem(CHAT_SESSION_KEY);
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading chat session:', error);
+                localStorage.removeItem(CHAT_SESSION_KEY);
+            }
+        };
+
+        loadChatSession();
+    }, []);
+
+    // Save chat history to localStorage whenever it changes
+    useEffect(() => {
+        if (msgStack.length > 0) {
+            try {
+                const sessionData = {
+                    messages: msgStack,
+                    timestamp: new Date().getTime()
+                };
+                localStorage.setItem(CHAT_SESSION_KEY, JSON.stringify(sessionData));
+            } catch (error) {
+                console.error('Error saving chat session:', error);
+            }
+        }
+    }, [msgStack]);
+
+    // Clear expired sessions periodically
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            try {
+                const savedSession = localStorage.getItem(CHAT_SESSION_KEY);
+                if (savedSession) {
+                    const { timestamp } = JSON.parse(savedSession);
+                    const currentTime = new Date().getTime();
+
+                    if (currentTime - timestamp >= SESSION_DURATION) {
+                        localStorage.removeItem(CHAT_SESSION_KEY);
+                        setMsgStack([]);
+                    }
+                }
+            } catch (error) {
+                console.error('Error checking session expiry:', error);
+            }
+        }, 30000); // Check every 30 seconds
+
+        return () => clearInterval(intervalId);
+    }, []);
+
     const getApiUrl = (endpoint: string) => {
         return window.location.hostname === 'localhost'
             ? `http://localhost:8000${endpoint}`
@@ -308,7 +379,7 @@ const Chatbot: React.FC = () => {
                 </div>
             )}
 
-            {isAdmin && !showAdminPanel && (
+            {!showAdminPanel && (
 
             <div className={`flex-1 max-w-6xl w-full mx-auto flex flex-col gap-5 space-y-3 mt-15 ${msgStack.length === 0 ? 'justify-center' : ''}`}>
                 {/* Messages Area - Only show when there are messages */}
@@ -327,7 +398,7 @@ const Chatbot: React.FC = () => {
                                     <div className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center ${
                                         message.sender === 'user'
                                             ? 'bg-gradient-to-br from-sky-500 to-blue-600'
-                                            : 'bg-gradient-to-br from-purple-500 to-pink-600'
+                                            : 'bg-gradient-to-br from-cyan-500 to-blue-600'
                                     }`}>
                                         {message.sender === 'user' ? <FaUser className='w-5 h-5 text-white' /> : <FaRobot className='w-5 h-5 text-white' />}
                                     </div>
@@ -351,7 +422,7 @@ const Chatbot: React.FC = () => {
                             {/* Loading Indicator */}
                             {isLoading && (
                                 <div className='flex gap-3'>
-                                    <div className='flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center bg-gradient-to-br from-purple-500 to-pink-600'>
+                                    <div className='flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center bg-gradient-to-br from-cyan-500 to-blue-600'>
                                         <FaRobot className='w-5 h-5 text-white' />
                                     </div>
                                     <div className='bg-white/95 rounded-2xl p-4'>

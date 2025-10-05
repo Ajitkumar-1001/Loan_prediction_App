@@ -20,6 +20,9 @@ interface LoanPredictionResult {
 }
 
 const Predict: React.FC = () => {
+  const PREDICT_SESSION_KEY = 'predict_form_session';
+  const SESSION_DURATION = 3 * 60 * 1000; // 3 minutes in milliseconds
+
   const [formData, setFormData] = useState<LoanPredictionInput>({
     IncomePerDependent: "",
     LoanAmount: "",
@@ -34,7 +37,99 @@ const Predict: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   // const noteref = useRef<HTMLDivElement|null>(null);
-  const [note, setNote] = useState<boolean>(true)
+  const [note, setNote] = useState<boolean>(true);
+  const [showCalculatorModal, setShowCalculatorModal] = useState<boolean>(false);
+  const [calculatorType, setCalculatorType] = useState<'riskScore' | 'debtRatio' | null>(null);
+
+  // Calculator form states
+  const [calculatorData, setCalculatorData] = useState({
+    // For Risk Score
+    totalAssets: "",
+    totalLiabilities: "",
+    creditScore: "",
+    monthlyIncome: "",
+    // For Debt to Income Ratio
+    totalMonthlyDebt: "",
+    grossMonthlyIncome: "",
+  });
+
+  // Load form data from localStorage on mount
+  useEffect(() => {
+    const loadFormSession = () => {
+      try {
+        const savedSession = localStorage.getItem(PREDICT_SESSION_KEY);
+        if (savedSession) {
+          const { formData: savedFormData, predictionResult: savedResult, timestamp } = JSON.parse(savedSession);
+          const currentTime = new Date().getTime();
+
+          // Check if session is still valid (within 3 minutes)
+          if (currentTime - timestamp < SESSION_DURATION) {
+            setFormData(savedFormData);
+            if (savedResult) {
+              setPredictionResult(savedResult);
+            }
+          } else {
+            // Session expired, clear it
+            localStorage.removeItem(PREDICT_SESSION_KEY);
+          }
+        }
+      } catch (error) {
+        console.error('Error loading form session:', error);
+        localStorage.removeItem(PREDICT_SESSION_KEY);
+      }
+    };
+
+    loadFormSession();
+  }, []);
+
+  // Save form data to localStorage whenever it changes
+  useEffect(() => {
+    const hasData = Object.values(formData).some(val => val !== "");
+
+    if (hasData) {
+      try {
+        const sessionData = {
+          formData,
+          predictionResult,
+          timestamp: new Date().getTime()
+        };
+        localStorage.setItem(PREDICT_SESSION_KEY, JSON.stringify(sessionData));
+      } catch (error) {
+        console.error('Error saving form session:', error);
+      }
+    }
+  }, [formData, predictionResult]);
+
+  // Clear expired sessions periodically
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      try {
+        const savedSession = localStorage.getItem(PREDICT_SESSION_KEY);
+        if (savedSession) {
+          const { timestamp } = JSON.parse(savedSession);
+          const currentTime = new Date().getTime();
+
+          if (currentTime - timestamp >= SESSION_DURATION) {
+            localStorage.removeItem(PREDICT_SESSION_KEY);
+            setFormData({
+              IncomePerDependent: "",
+              LoanAmount: "",
+              RiskScore: "",
+              TotalDebtToIncomeRatio: "",
+              InterestRate: "",
+              AnnualIncome: "",
+              BaseInterestRate: "",
+            } as any);
+            setPredictionResult(null);
+          }
+        }
+      } catch (error) {
+        console.error('Error checking session expiry:', error);
+      }
+    }, 30000); // Check every 30 seconds
+
+    return () => clearInterval(intervalId);
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -42,6 +137,83 @@ const Predict: React.FC = () => {
       ...prevData,
       [name]: value === "" ? "" : parseFloat(value),
     }));
+  };
+
+  const handleCalculatorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setCalculatorData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const openCalculator = (type: 'riskScore' | 'debtRatio') => {
+    setCalculatorType(type);
+    setShowCalculatorModal(true);
+    setCalculatorData({
+      totalAssets: "",
+      totalLiabilities: "",
+      creditScore: "",
+      monthlyIncome: "",
+      totalMonthlyDebt: "",
+      grossMonthlyIncome: "",
+    });
+  };
+
+  const calculateRiskScore = async () => {
+    try {
+      const response = await fetch("http://localhost:8000/api/Loan/calculate-risk-score", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          totalAssets: parseFloat(calculatorData.totalAssets),
+          totalLiabilities: parseFloat(calculatorData.totalLiabilities),
+          creditScore: parseFloat(calculatorData.creditScore),
+          monthlyIncome: parseFloat(calculatorData.monthlyIncome),
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to calculate risk score");
+      }
+
+      const data = await response.json();
+      setFormData(prev => ({ ...prev, RiskScore: data.riskScore }));
+      setShowCalculatorModal(false);
+    } catch (err: any) {
+      alert(err.message || "Failed to calculate risk score");
+    }
+  };
+
+  const calculateDebtRatio = async () => {
+    try {
+      const response = await fetch("http://localhost:8000/api/Loan/calculate-debt-ratio", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          totalMonthlyDebt: parseFloat(calculatorData.totalMonthlyDebt),
+          grossMonthlyIncome: parseFloat(calculatorData.grossMonthlyIncome),
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to calculate debt ratio");
+      }
+
+      const data = await response.json();
+      setFormData(prev => ({ ...prev, TotalDebtToIncomeRatio: data.debtRatio }));
+      setShowCalculatorModal(false);
+    } catch (err: any) {
+      alert(err.message || "Failed to calculate debt ratio");
+    }
+  };
+
+  const handleCalculatorSubmit = () => {
+    if (calculatorType === 'riskScore') {
+      calculateRiskScore();
+    } else if (calculatorType === 'debtRatio') {
+      calculateDebtRatio();
+    }
   };
 
   const isFormValid = useCallback(() => {
@@ -223,36 +395,47 @@ const Predict: React.FC = () => {
                 <label htmlFor={key} className="block text-sm font-sans font-bold text-center font-medium text-gray-300 mb-1">
                   {key.replace(/([A-Z])/g, ' $1')}
                 </label>
-                <input
-                  type="number"
-                  id={key}
-                  name={key}
-                  value={value}
-                  placeholder={(() => {
-                    switch (key) {
-                      case "AnnualIncome":
-                        return "Total Annual Income"
-                      case "IncomePerDependent":
-                        return "Annual Income of Applicant";
-                      case "LoanAmount":
-                        return "Enter Loan Amount";
-                      case "RiskScore":
-                        return "Calculate from Calc";
-                      case "InterestRate":
-                        return "Highest floating rate"
-                      case "BaseInterestRate":
-                        return "Base floating rate";
-                      case "TotalDebtToIncomeRatio":
-                        return "Calculate from Calc";
-                      default:
-                        return `Enter ${key.replace(/([A-Z])/g, " $1")}`;
-                    }
-                  })()}
-                  onChange={handleChange}
-                  className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-gray-100 placeholder-gray-400 transition duration-200"
-                  step="0.01"
-                  min="0"
-                />
+                <div className="relative">
+                  <input
+                    type="number"
+                    id={key}
+                    name={key}
+                    value={value}
+                    placeholder={(() => {
+                      switch (key) {
+                        case "AnnualIncome":
+                          return "Total Annual Income"
+                        case "IncomePerDependent":
+                          return "Annual Income of Applicant";
+                        case "LoanAmount":
+                          return "Enter Loan Amount";
+                        case "RiskScore":
+                          return "Calculate from Calc";
+                        case "InterestRate":
+                          return "Highest floating rate"
+                        case "BaseInterestRate":
+                          return "Base floating rate";
+                        case "TotalDebtToIncomeRatio":
+                          return "Calculate from Calc";
+                        default:
+                          return `Enter ${key.replace(/([A-Z])/g, " $1")}`;
+                      }
+                    })()}
+                    onChange={handleChange}
+                    className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-gray-100 placeholder-gray-400 transition duration-200"
+                    step="0.01"
+                    min="0"
+                  />
+                  {(key === 'RiskScore' || key === 'TotalDebtToIncomeRatio') && (
+                    <button
+                      type="button"
+                      onClick={() => openCalculator(key === 'RiskScore' ? 'riskScore' : 'debtRatio')}
+                      className="absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1 bg-cyan-600 hover:bg-cyan-700 text-white text-xs font-bold rounded-md transition duration-200"
+                    >
+                      🧮 Calc
+                    </button>
+                  )}
+                </div>
               </motion.div>
             ))}
 
@@ -341,12 +524,160 @@ const Predict: React.FC = () => {
             >
               <motion.h2 className="text-lg font-bold text-black mb-2 text-center" variants={noteparaprops}>Note:</motion.h2>
               <motion.p className="text-sm font-medium text-black text-center leading-relaxed" variants={noteparaprops}>
-                We respect your privacy and None of your data is stored internally or shared to your bank. It’s completely stateless and transparent!
+                We respect your privacy and None of your data is stored internally or shared to your bank. It's completely stateless and transparent!
               </motion.p>
             </motion.div>
           )}
         </AnimatePresence>
       </div>
+
+      {/* Calculator Modal */}
+      <AnimatePresence>
+        {showCalculatorModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+            onClick={() => setShowCalculatorModal(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ type: "spring", duration: 0.5 }}
+              className="bg-gradient-to-br from-slate-900 to-blue-900 rounded-2xl p-8 max-w-md w-full border border-cyan-500/30 shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Header */}
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+                  {calculatorType === 'riskScore' ? 'Risk Score Calculator' : 'Debt Ratio Calculator'}
+                </h3>
+                <button
+                  onClick={() => setShowCalculatorModal(false)}
+                  className="text-gray-400 hover:text-white transition-colors"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+
+              {/* Form */}
+              <div className="space-y-4">
+                {calculatorType === 'riskScore' ? (
+                  <>
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-300 mb-2">Total Assets ($)</label>
+                      <input
+                        type="number"
+                        name="totalAssets"
+                        value={calculatorData.totalAssets}
+                        onChange={handleCalculatorChange}
+                        className="w-full p-3 bg-gray-800 border border-gray-600 rounded-lg focus:ring-cyan-500 focus:border-cyan-500 text-gray-100 placeholder-gray-500"
+                        placeholder="Enter total assets"
+                        step="0.01"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-300 mb-2">Total Liabilities ($)</label>
+                      <input
+                        type="number"
+                        name="totalLiabilities"
+                        value={calculatorData.totalLiabilities}
+                        onChange={handleCalculatorChange}
+                        className="w-full p-3 bg-gray-800 border border-gray-600 rounded-lg focus:ring-cyan-500 focus:border-cyan-500 text-gray-100 placeholder-gray-500"
+                        placeholder="Enter total liabilities"
+                        step="0.01"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-300 mb-2">Credit Score</label>
+                      <input
+                        type="number"
+                        name="creditScore"
+                        value={calculatorData.creditScore}
+                        onChange={handleCalculatorChange}
+                        className="w-full p-3 bg-gray-800 border border-gray-600 rounded-lg focus:ring-cyan-500 focus:border-cyan-500 text-gray-100 placeholder-gray-500"
+                        placeholder="Enter credit score (300-850)"
+                        min="300"
+                        max="850"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-300 mb-2">Monthly Income ($)</label>
+                      <input
+                        type="number"
+                        name="monthlyIncome"
+                        value={calculatorData.monthlyIncome}
+                        onChange={handleCalculatorChange}
+                        className="w-full p-3 bg-gray-800 border border-gray-600 rounded-lg focus:ring-cyan-500 focus:border-cyan-500 text-gray-100 placeholder-gray-500"
+                        placeholder="Enter monthly income"
+                        step="0.01"
+                      />
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-300 mb-2">Total Monthly Debt ($)</label>
+                      <input
+                        type="number"
+                        name="totalMonthlyDebt"
+                        value={calculatorData.totalMonthlyDebt}
+                        onChange={handleCalculatorChange}
+                        className="w-full p-3 bg-gray-800 border border-gray-600 rounded-lg focus:ring-cyan-500 focus:border-cyan-500 text-gray-100 placeholder-gray-500"
+                        placeholder="Enter total monthly debt"
+                        step="0.01"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-300 mb-2">Gross Monthly Income ($)</label>
+                      <input
+                        type="number"
+                        name="grossMonthlyIncome"
+                        value={calculatorData.grossMonthlyIncome}
+                        onChange={handleCalculatorChange}
+                        className="w-full p-3 bg-gray-800 border border-gray-600 rounded-lg focus:ring-cyan-500 focus:border-cyan-500 text-gray-100 placeholder-gray-500"
+                        placeholder="Enter gross monthly income"
+                        step="0.01"
+                      />
+                    </div>
+                  </>
+                )}
+
+                {/* Buttons */}
+                <div className="flex gap-4 pt-4">
+                  <button
+                    type="button"
+                    onClick={() => setShowCalculatorModal(false)}
+                    className="flex-1 px-4 py-3 bg-gray-700 hover:bg-gray-600 text-white font-bold rounded-lg transition duration-200"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleCalculatorSubmit}
+                    className="flex-1 px-4 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white font-bold rounded-lg transition duration-200"
+                  >
+                    Calculate
+                  </button>
+                </div>
+              </div>
+
+              {/* Info */}
+              <div className="mt-6 p-4 bg-cyan-900/30 border border-cyan-500/30 rounded-lg">
+                <p className="text-xs text-gray-400">
+                  {calculatorType === 'riskScore'
+                    ? 'Our ML model will predict your risk score based on your financial indicators.'
+                    : 'The debt-to-income ratio is calculated by dividing total monthly debt by gross monthly income.'}
+                </p>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
     </div>
   );
