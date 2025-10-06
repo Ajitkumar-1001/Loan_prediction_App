@@ -2,7 +2,7 @@
 
 // Get API base URL from environment variables
 const getApiBaseUrl = () => {
-  return import.meta.env.VITE_API_URL || 'http://localhost:8000';
+  return import.meta.env.VITE_API_URL || window.location.origin;
 };
 
 // Get authentication token from localStorage

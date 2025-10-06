@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect, useRef } from "react";
 import { useAnimation, motion } from "framer-motion";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useRole ,  } from "../../../context/RoleContext";
+import { useRole } from "../../../context/RoleContext";
 
 
 interface Loginprops {
@@ -88,7 +88,8 @@ const LoginPage: React.FC = () => {
     setError(null);
 
     try {
-      const response = await fetch("http://localhost:8000/api/user/login", {
+      const apiUrl = import.meta.env.VITE_API_URL || window.location.origin;
+      const response = await fetch(`${apiUrl}/api/user/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formdata),
