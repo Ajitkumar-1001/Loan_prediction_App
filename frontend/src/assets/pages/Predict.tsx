@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { motion, useAnimation, AnimatePresence } from 'framer-motion';
 import { useLocation } from 'react-router-dom';
+import { securePost } from '../../utils/api';
 
 
 interface LoanPredictionInput {
@@ -31,7 +32,7 @@ const Predict: React.FC = () => {
     InterestRate: "",
     AnnualIncome: "",
     BaseInterestRate: "",
-  } as any);
+  });
 
   const [predictionResult, setPredictionResult] = useState<LoanPredictionResult | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
@@ -80,7 +81,7 @@ const Predict: React.FC = () => {
     };
 
     loadFormSession();
-  }, []);
+  }, [PREDICT_SESSION_KEY, SESSION_DURATION]);
 
   // Save form data to localStorage whenever it changes
   useEffect(() => {
@@ -119,7 +120,7 @@ const Predict: React.FC = () => {
               InterestRate: "",
               AnnualIncome: "",
               BaseInterestRate: "",
-            } as any);
+            });
             setPredictionResult(null);
           }
         }
@@ -129,7 +130,7 @@ const Predict: React.FC = () => {
     }, 30000); // Check every 30 seconds
 
     return () => clearInterval(intervalId);
-  }, []);
+  }, [PREDICT_SESSION_KEY, SESSION_DURATION]);
 
   // Hide Quick Tips and Note when user fills form or gets prediction
   useEffect(() => {
@@ -172,49 +173,31 @@ const Predict: React.FC = () => {
 
   const calculateRiskScore = async () => {
     try {
-      const response = await fetch("http://localhost:8000/api/Loan/calculate-risk-score", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          totalAssets: parseFloat(calculatorData.totalAssets),
-          totalLiabilities: parseFloat(calculatorData.totalLiabilities),
-          creditScore: parseFloat(calculatorData.creditScore),
-          monthlyIncome: parseFloat(calculatorData.monthlyIncome),
-        }),
+      const data = await securePost('/api/Loan/calculate-risk-score', {
+        totalAssets: parseFloat(calculatorData.totalAssets),
+        totalLiabilities: parseFloat(calculatorData.totalLiabilities),
+        creditScore: parseFloat(calculatorData.creditScore),
+        monthlyIncome: parseFloat(calculatorData.monthlyIncome),
       });
-
-      if (!response.ok) {
-        throw new Error("Failed to calculate risk score");
-      }
-
-      const data = await response.json();
       setFormData(prev => ({ ...prev, RiskScore: data.riskScore }));
       setShowCalculatorModal(false);
-    } catch (err: any) {
-      alert(err.message || "Failed to calculate risk score");
+    } catch (err) {
+      const error = err as Error;
+      alert(error.message || "Failed to calculate risk score");
     }
   };
 
   const calculateDebtRatio = async () => {
     try {
-      const response = await fetch("http://localhost:8000/api/Loan/calculate-debt-ratio", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          totalMonthlyDebt: parseFloat(calculatorData.totalMonthlyDebt),
-          grossMonthlyIncome: parseFloat(calculatorData.grossMonthlyIncome),
-        }),
+      const data = await securePost('/api/Loan/calculate-debt-ratio', {
+        totalMonthlyDebt: parseFloat(calculatorData.totalMonthlyDebt),
+        grossMonthlyIncome: parseFloat(calculatorData.grossMonthlyIncome),
       });
-
-      if (!response.ok) {
-        throw new Error("Failed to calculate debt ratio");
-      }
-
-      const data = await response.json();
       setFormData(prev => ({ ...prev, TotalDebtToIncomeRatio: data.debtRatio }));
       setShowCalculatorModal(false);
-    } catch (err: any) {
-      alert(err.message || "Failed to calculate debt ratio");
+    } catch (err) {
+      const error = err as Error;
+      alert(error.message || "Failed to calculate debt ratio");
     }
   };
 
@@ -245,21 +228,12 @@ const Predict: React.FC = () => {
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:8000/api/Loan/predict-loan", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.detail || "Something went wrong with the prediction.");
-      }
-
-      const data: LoanPredictionResult = await response.json();
+      // Use secure API request with authentication
+      const data: LoanPredictionResult = await securePost('/api/Loan/predict-loan', formData);
       setPredictionResult(data);
-    } catch (err: any) {
-      setError(err.message || "Failed to get prediction.");
+    } catch (err) {
+      const error = err as Error;
+      setError(error.message || "Failed to get prediction.");
     } finally {
       setLoading(false);
     }
@@ -292,28 +266,12 @@ const Predict: React.FC = () => {
     };
 
     sequence();
-  }, [location.pathname, predictionResult?.llm_response]);
+  }, [location.pathname, predictionResult?.llm_response, control1, control2, control3]);
 
-  const containervariantllm: Record<string, any> = useMemo(() => ({
+  const containervariantllm = useMemo(() => ({
     hidden: { opacity: 0 },
     visible: { opacity: 1, transition: { staggerChildren: 0.2 } },
   }), []);
-
-  // const paravariantllm: Record<string, any> = useMemo(() => ({
-  //   hidden: { opacity: 0 },
-  //   visible: { opacity: 1, transition: { duration: 0.5, ease: "easeIn" } },
-  // }), []);
-
-  const noteprops: Record<string, any> = useMemo(() => ({ 
-    hidden : {opacity : 0 }, 
-    visible : {opacity:1, transition: {staggerChildren:0.2, duration: 0.5 , ease:"easeIn"}}
-
-  }),[]); 
-
-  const noteparaprops:Record<string,any> = useMemo(() => ({ 
-    hidden : {opacity:0},
-    visible : {opacity:1 , transition : {duration : 0.7, ease: "easeOut"}}
-  }), [])
 
   const containerVariants = useMemo(() => ({
     hidden: { opacity: 0, y: 100},
@@ -364,7 +322,7 @@ const Predict: React.FC = () => {
         <AnimatePresence>
           {note && (
             <motion.div
-              variants={quickTipsVariants as any}
+              variants={quickTipsVariants}
               initial="initial"
               exit="exit"
               className="flex flex-col items-center gap-6 mt-4 mx-3 max-w-md"
@@ -453,13 +411,15 @@ const Predict: React.FC = () => {
 
         <motion.div
           className="w-full max-w-xl bg-gradient-to-br from-sky-950 to-blue-850 rounded-2xl p-8 md:p-10 border border-gray-700 mx-auto shadow-lg"
-          variants={containerVariants as any}
+          // @ts-ignore - Framer Motion variant type issue
+          variants={containerVariants}
           initial="hidden"
           animate={control1}
         >
           <motion.h1
             className="text-2xl font-extrabold text-center mb-8 bg-gradient-to-r from-cyan-400 to-blue-600 bg-clip-text text-transparent"
-            variants={headingvariant as any}
+            // @ts-ignore - Framer Motion variant type issue
+            variants={headingvariant}
           >
             Loan Prediction
           </motion.h1>
@@ -589,22 +549,6 @@ const Predict: React.FC = () => {
           </div>
         </motion.div>
       )}
-
-      <div className='absolute flex flex-col  mt-[52rem] z-0 items-end justify-end'  >
-        <AnimatePresence>
-          {note && (
-            <motion.div
-            variants={noteprops} initial="hidden" animate={control3}
-              className="w-full md:w-96 bg-gradient-to-br from-yellow-300 to-yellow-600 rounded-2xl shadow-md p-6 border-gray-700 overflow-y-auto "
-            >
-              <motion.h2 className="text-lg font-bold text-black mb-2 text-center" variants={noteparaprops}>Note:</motion.h2>
-              <motion.p className="text-sm font-medium text-black text-center leading-relaxed" variants={noteparaprops}>
-                We respect your privacy and None of your data is stored internally or shared to your bank. It's completely stateless and transparent!
-              </motion.p>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
 
       {/* Calculator Modal */}
       <AnimatePresence>

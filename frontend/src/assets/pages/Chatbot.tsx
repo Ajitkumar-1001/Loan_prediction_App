@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { FaChevronCircleRight, FaRobot, FaUser, FaUpload, FaFile, FaTrash, FaCog } from 'react-icons/fa';
 import { useRole } from '../../../context/RoleContext';
+import { securePost, secureGet, secureDelete, secureFileUpload } from '../../utils/api';
 
 interface ChatMsg {
     sender: 'user' | 'bot';
@@ -103,12 +104,6 @@ const Chatbot: React.FC = () => {
         return () => clearInterval(intervalId);
     }, []);
 
-    const getApiUrl = (endpoint: string) => {
-        return window.location.hostname === 'localhost'
-            ? `http://localhost:8000${endpoint}`
-            : endpoint;
-    };
-
     // Auto-resize textarea
     useEffect(() => {
         const textarea = textareaRef.current;
@@ -148,22 +143,10 @@ const Chatbot: React.FC = () => {
         setIsLoading(true);
 
         try {
-            const response = await fetch(getApiUrl('/api/chatbot/chat'), {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    message: userMessage.msg,
-                    session_id: 'default'
-                })
+            const data = await securePost('/api/chatbot/chat', {
+                message: userMessage.msg,
+                session_id: 'default'
             });
-
-            if (!response.ok) {
-                throw new Error(`API error: ${response.status}`);
-            }
-
-            const data = await response.json();
 
             const botMessage: ChatMsg = {
                 sender: 'bot',
@@ -198,16 +181,8 @@ const Chatbot: React.FC = () => {
 
     const fetchDocuments = async () => {
         try {
-            const response = await fetch(getApiUrl('/api/chatbot/documents'), {
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('access_token')}`
-                }
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                setDocuments(data.documents || []);
-            }
+            const data = await secureGet('/api/chatbot/documents');
+            setDocuments(data.documents || []);
         } catch (error) {
             console.error('Error fetching documents:', error);
         }
@@ -227,29 +202,17 @@ const Chatbot: React.FC = () => {
         formData.append('file', selectedFile);
 
         try {
-            const response = await fetch(getApiUrl('/api/chatbot/upload-document'), {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('access_token')}`
-                },
-                body: formData
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                alert(data.message || 'Document uploaded successfully!');
-                setSelectedFile(null);
-                if (fileInputRef.current) {
-                    fileInputRef.current.value = '';
-                }
-                fetchDocuments();
-            } else {
-                const error = await response.json();
-                alert(error.detail || 'Failed to upload document');
+            const data = await secureFileUpload('/api/chatbot/upload-document', formData);
+            alert(data.message || 'Document uploaded successfully!');
+            setSelectedFile(null);
+            if (fileInputRef.current) {
+                fileInputRef.current.value = '';
             }
+            fetchDocuments();
         } catch (error) {
+            const err = error as Error;
             console.error('Error uploading document:', error);
-            alert('Error uploading document');
+            alert(err.message || 'Error uploading document');
         } finally {
             setUploadingFile(false);
         }
@@ -259,22 +222,13 @@ const Chatbot: React.FC = () => {
         if (!confirm('Are you sure you want to delete this document?')) return;
 
         try {
-            const response = await fetch(getApiUrl(`/api/chatbot/documents/${docId}`), {
-                method: 'DELETE',
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('access_token')}`
-                }
-            });
-
-            if (response.ok) {
-                alert('Document deleted successfully');
-                fetchDocuments();
-            } else {
-                alert('Failed to delete document');
-            }
+            await secureDelete(`/api/chatbot/documents/${docId}`);
+            alert('Document deleted successfully');
+            fetchDocuments();
         } catch (error) {
+            const err = error as Error;
             console.error('Error deleting document:', error);
-            alert('Error deleting document');
+            alert(err.message || 'Error deleting document');
         }
     };
 
