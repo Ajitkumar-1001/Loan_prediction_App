@@ -218,7 +218,7 @@ class VectorStoreManager:
 
     def get_retriever(self, k: int = 4):
         """
-        Get retriever for RAG chain
+        Get retriever for RAG chain with MMR for diversity
 
         Args:
             k: Number of documents to retrieve
@@ -227,8 +227,11 @@ class VectorStoreManager:
             Retriever object
         """
         return self.vector_store.as_retriever(
-            search_type="similarity",
-            search_kwargs={"k": k}
+            search_type="mmr",  # Maximum Marginal Relevance for diversity
+            search_kwargs={
+                "k": k,
+                "fetch_k": k * 3  # Fetch more candidates for better matching
+            }
         )
 
     def delete_collection(self):

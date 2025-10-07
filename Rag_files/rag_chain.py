@@ -84,30 +84,29 @@ class BankingRAGChain:
     def _create_rag_chain(self):
         """Create the RAG chain with retrieval and generation"""
 
-        # Define the prompt template (balanced: use context when available, general banking knowledge otherwise)
-        template = """You are an expert banking assistant with deep knowledge of loans, financial planning, credit scores, interest rates, and banking services.
+        # Define the prompt template (clear and direct)
+        template = """You are a helpful banking assistant.
 
-Knowledge Base Context:
+Retrieved Information:
 {context}
 
-Previous Conversation:
+Chat History:
 {chat_history}
 
-User Question: {question}
+Question: {question}
 
-Instructions:
-- First check if the Knowledge Base Context has relevant information about the question
-- If yes, use it to provide an accurate, detailed answer
-- If the context is not relevant or insufficient, use your general banking expertise to provide helpful advice
-- Provide clear, professional, and actionable responses
-- For specific loan policies, requirements, or rates mentioned in the Knowledge Base, cite them directly
-- Be conversational but informative
+Rules:
+1. If the Retrieved Information directly answers the question, use ONLY that information
+2. If the Retrieved Information is about a person/document, provide ONLY what's in that information
+3. If the Retrieved Information is NOT relevant to the question, say "I don't have specific information about that in my knowledge base" and then provide general banking advice
+4. DO NOT mix unrelated retrieved information with your answer
+5. Be direct and concise
 
-Your Answer:"""
+Answer:"""
 
         prompt = ChatPromptTemplate.from_template(template)
 
-        # Get retriever (k=3 for better context coverage)
+        # Get retriever (k=3 with MMR for better diversity and relevance)
         retriever = self.vsm.get_retriever(k=3)
 
         # Format documents function

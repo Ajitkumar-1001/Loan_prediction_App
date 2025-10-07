@@ -25,11 +25,11 @@ Pca_feature_parameters:
                   
 
 llm:
-      temperature : 0.6  # Balanced: natural and helpful responses
+      temperature : 0.7  # Higher for better instruction following
       model : "llama3.2"
-      num_predict: 500   # Allow complete, detailed answers
-      num_ctx: 4096      # Large context window for full history
-      top_k: 50          # More diverse sampling
-      top_p: 0.9         # Natural language flow
+      num_predict: 400   # Concise but complete answers
+      num_ctx: 4096      # Large context window
+      top_k: 40          # Focused sampling
+      top_p: 0.9         # Natural flow
 
 
