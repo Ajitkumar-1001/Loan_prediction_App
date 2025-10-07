@@ -22,7 +22,9 @@ from config.config import logger
 from authenticate import decode_access_token
 from database import SessionLocal
 from models.user import User
+from models.document import Document
 from sqlalchemy.orm import Session
+from redis_client import redis_client, CacheKeys, CacheTTL
 
 router = APIRouter(prefix="/chatbot", tags=["Chatbot"])
 security = HTTPBearer()
@@ -85,6 +87,7 @@ class ChatHistory(BaseModel):
 async def chat(chat_message: ChatMessage):
     """
     Send a message to the chatbot and get a response
+    Chat history is cached in Redis for session continuity
 
     Args:
         chat_message: User's message and session ID
@@ -95,11 +98,32 @@ async def chat(chat_message: ChatMessage):
     try:
         logger.info(f"Received chat message: {chat_message.message}")
 
+        # Store message in chat history (Redis)
+        history_key = CacheKeys.chat_history(chat_message.session_id)
+        user_msg = {
+            "role": "user",
+            "message": chat_message.message,
+            "timestamp": datetime.now().isoformat()
+        }
+        redis_client.rpush(history_key, user_msg)
+        redis_client.expire(history_key, CacheTTL.CHAT_HISTORY)
+
         # Get RAG chain
         chain = get_rag_chain()
 
         # Get response
         response = chain.ask(chat_message.message)
+
+        # Store bot response in history
+        bot_msg = {
+            "role": "bot",
+            "message": response,
+            "timestamp": datetime.now().isoformat()
+        }
+        redis_client.rpush(history_key, bot_msg)
+
+        # Keep only last 20 messages (10 exchanges)
+        redis_client.ltrim(history_key, -20, -1)
 
         return ChatResponse(
             response=response,
@@ -109,6 +133,19 @@ async def chat(chat_message: ChatMessage):
 
     except Exception as e:
         logger.error(f"Error processing chat message: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/history/{session_id}", response_model=ChatHistory)
+async def get_chat_history(session_id: str):
+    """Get chat history for a session from Redis cache"""
+    try:
+        history_key = CacheKeys.chat_history(session_id)
+        messages = redis_client.lrange(history_key, 0, -1)
+
+        return ChatHistory(messages=messages)
+    except Exception as e:
+        logger.error(f"Error retrieving chat history: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 
@@ -122,6 +159,19 @@ async def clear_history():
         return {"message": "Chat history cleared successfully"}
     except Exception as e:
         logger.error(f"Error clearing history: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.delete("/history/{session_id}")
+async def clear_session_history(session_id: str):
+    """Clear chat history for specific session from Redis"""
+    try:
+        history_key = CacheKeys.chat_history(session_id)
+        redis_client.delete(history_key)
+        logger.info(f"Session history cleared: {session_id}")
+        return {"message": f"Session {session_id} history cleared successfully"}
+    except Exception as e:
+        logger.error(f"Error clearing session history: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 
@@ -305,15 +355,12 @@ def require_admin(user: User = Depends(get_current_user)):
     return user
 
 
-# Document metadata storage (in-memory for now, can be moved to database)
-documents_metadata = []
-
-
 # Document upload endpoint
 @router.post("/upload-document")
 async def upload_document(
     file: UploadFile = File(...),
-    user: User = Depends(require_admin)
+    user: User = Depends(require_admin),
+    db: Session = Depends(get_db)
 ):
     """
     Upload a document to the knowledge base (Admin only)
@@ -368,25 +415,32 @@ async def upload_document(
         
         # Add to vector store
         vsm.add_documents(chunks)
-        
-        # Store metadata
-        doc_metadata = {
-            "id": file_id,
-            "filename": file.filename,
-            "uploaded_at": datetime.now().isoformat(),
-            "size": file_size,
-            "type": file_extension,
-            "uploaded_by": user.email,
-            "chunks_count": len(chunks),
-            "file_path": str(file_path)
-        }
-        documents_metadata.append(doc_metadata)
-        
+
+        # Store metadata in database
+        document = Document(
+            id=file_id,
+            filename=file.filename,
+            file_path=str(file_path),
+            file_type=file_extension,
+            file_size=file_size,
+            chunks_count=len(chunks),
+            uploaded_by=user.email,
+            uploaded_at=datetime.now(),
+            status="active"
+        )
+
+        db.add(document)
+        db.commit()
+        db.refresh(document)
+
+        # Invalidate documents list cache
+        redis_client.invalidate_cache("documents:*")
+
         logger.info(f"Document uploaded: {file.filename} by {user.email}")
-        
+
         return {
             "message": "Document uploaded and processed successfully",
-            "document": doc_metadata
+            "document": document.to_dict()
         }
         
     except Exception as e:
@@ -399,10 +453,28 @@ async def upload_document(
 
 # List documents endpoint
 @router.get("/documents")
-async def list_documents(user: User = Depends(require_admin)):
-    """Get list of uploaded documents (Admin only)"""
+async def list_documents(
+    user: User = Depends(require_admin),
+    db: Session = Depends(get_db)
+):
+    """Get list of uploaded documents (Admin only) - Redis cached"""
     try:
-        return {"documents": documents_metadata}
+        # Try to get from cache
+        cache_key = CacheKeys.documents_list()
+        cached = redis_client.get(cache_key)
+
+        if cached is not None:
+            logger.debug("Documents list retrieved from cache")
+            return {"documents": cached, "from_cache": True}
+
+        # Cache miss - query database
+        documents = db.query(Document).filter(Document.status == "active").all()
+        doc_list = [doc.to_dict() for doc in documents]
+
+        # Cache the result
+        redis_client.set(cache_key, doc_list, CacheTTL.DOCUMENTS_LIST)
+
+        return {"documents": doc_list, "from_cache": False}
     except Exception as e:
         logger.error(f"Error listing documents: {e}")
         raise HTTPException(status_code=500, detail=str(e))
@@ -412,34 +484,42 @@ async def list_documents(user: User = Depends(require_admin)):
 @router.delete("/documents/{document_id}")
 async def delete_document(
     document_id: str,
-    user: User = Depends(require_admin)
+    user: User = Depends(require_admin),
+    db: Session = Depends(get_db)
 ):
     """Delete a document from knowledge base (Admin only)"""
     try:
-        # Find document metadata
-        doc = next((d for d in documents_metadata if d['id'] == document_id), None)
-        
-        if not doc:
+        # Find document in database
+        document = db.query(Document).filter(
+            Document.id == document_id,
+            Document.status == "active"
+        ).first()
+
+        if not document:
             raise HTTPException(status_code=404, detail="Document not found")
-        
+
         # Delete physical file
-        file_path = Path(doc['file_path'])
+        file_path = Path(document.file_path)
         if file_path.exists():
             file_path.unlink()
-        
-        # Remove from metadata
-        documents_metadata.remove(doc)
-        
+
+        # Mark as deleted in database (soft delete)
+        document.status = "deleted"
+        db.commit()
+
+        # Invalidate cache
+        redis_client.invalidate_cache("documents:*")
+
         # Note: Vector store chunks remain (would need enhancement to remove specific chunks)
         # For now, they just won't be referenced
-        
-        logger.info(f"Document deleted: {doc['filename']} by {user.email}")
-        
+
+        logger.info(f"Document deleted: {document.filename} by {user.email}")
+
         return {
             "message": "Document deleted successfully",
             "document_id": document_id
         }
-        
+
     except HTTPException:
         raise
     except Exception as e:

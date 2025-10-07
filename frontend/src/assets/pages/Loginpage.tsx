@@ -18,7 +18,7 @@ interface Loginresult {
 
 const LoginPage: React.FC = () => {
   const [formdata, setFormData] = useState<Loginprops>({ email: "", password: "" });
-  const { setRole } = useRole();
+  const { setRole, setName, setEmail } = useRole();
   const [error, setError] = useState<string | null>(null);
   const [redirecting, setRedirecting] = useState(false);
   const [hasSubmitted, setHasSubmitted] = useState(false);
@@ -108,7 +108,9 @@ const LoginPage: React.FC = () => {
       }
 
       if (data.role == "user" || data.role == "admin") {
-        setRole(data.role );
+        setRole(data.role);
+        setName(data.first_name || null);
+        setEmail(formdata.email); // Store email for user-specific sessions
       } else {
         throw new Error("User role is missing in response.");
       }

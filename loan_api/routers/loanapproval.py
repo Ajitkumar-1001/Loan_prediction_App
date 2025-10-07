@@ -4,10 +4,11 @@ import google.generativeai as genai  # type: ignore
 import os
 from pathlib import Path
 from loan_api.schema.loan_approval import LoanApproval
-# from ..schema.riskscore import RiskScore 
+# from ..schema.riskscore import RiskScore
 from joblib import load
 import numpy as np
 from dotenv import load_dotenv
+from pydantic import BaseModel
 
 
 # Load environment variables
@@ -30,6 +31,16 @@ model = load(MODEL_PATH)
 
 # Define the router
 router = APIRouter(prefix="/Loan", tags=["LoanApproval"])
+
+
+# Pydantic models for calculator endpoints
+class DebtToIncomeRequest(BaseModel):
+    monthlyDebtPayments: float
+    monthlyIncome: float
+
+
+class DebtToIncomeResponse(BaseModel):
+    totalDebtToIncomeRatio: float  # Value between 0 and 1
 
 
 @router.post("/predict-loan")
@@ -97,7 +108,31 @@ async def predict(loandet: LoanApproval):  #predict_riskscore:bool = Default[Fal
         raise HTTPException(status_code=500, detail=f"Prediction or LLM failed: {str(e)}")
 
 
+@router.post("/calculate-debt-to-income", response_model=DebtToIncomeResponse)
+async def calculate_debt_to_income(data: DebtToIncomeRequest):
+    """
+    Calculate Total Debt to Income Ratio
 
-    
+    Formula: Total Monthly Debt Payments / Gross Monthly Income
 
-        
+    Returns value between 0 and 1 (e.g., 0.35 represents 35%)
+    """
+    try:
+        # Validate inputs
+        if data.monthlyIncome <= 0:
+            raise HTTPException(status_code=400, detail="Monthly income must be greater than 0")
+
+        if data.monthlyDebtPayments < 0:
+            raise HTTPException(status_code=400, detail="Monthly debt payments cannot be negative")
+
+        # Calculate ratio (returns value between 0 and 1)
+        ratio = data.monthlyDebtPayments / data.monthlyIncome
+
+        return DebtToIncomeResponse(
+            totalDebtToIncomeRatio=round(ratio, 4)  # Round to 4 decimal places
+        )
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Calculation failed: {str(e)}")

@@ -16,10 +16,15 @@ services:
     environment:
       - GOOGLE_API_KEY=${GEMINI_API_KEY}
       - OLLAMA_HOST=http://ollama:11434
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_DB=0
     env_file:
       - .env
     depends_on:
       ollama:
+        condition: service_healthy
+      redis:
         condition: service_healthy
     networks:
       - app-network
@@ -61,11 +66,28 @@ services:
     networks:
       - app-network
 
+  redis:
+    image: redis:7-alpine
+    container_name: smartloanpred-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - app-network
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
   reverse-proxy:
     image: nginx:stable
     ports:
       - "80:80"
- 
+
     depends_on:
       - backend
       - frontend
@@ -82,3 +104,4 @@ volumes:
   backend-logs:
   ollama-data:
   chroma-db:
+  redis-data:

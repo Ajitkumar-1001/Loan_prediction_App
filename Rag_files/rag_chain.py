@@ -53,10 +53,21 @@ class BankingRAGChain:
         # Initialize LLM (using Ollama for local llama3.2)
         # Support both local and Docker environments
         ollama_host = os.getenv("OLLAMA_HOST", "http://localhost:11434")
+
+        # Load performance optimizations from config
+        num_predict = config.get("llm", {}).get("num_predict", 256)
+        num_ctx = config.get("llm", {}).get("num_ctx", 2048)
+        top_k = config.get("llm", {}).get("top_k", 40)
+        top_p = config.get("llm", {}).get("top_p", 0.9)
+
         self.llm = Ollama(
             model=self.model_name,
             temperature=self.temperature,
-            base_url=ollama_host
+            base_url=ollama_host,
+            num_predict=num_predict,  # Limit response length for speed
+            num_ctx=num_ctx,          # Context window
+            top_k=top_k,              # Faster sampling
+            top_p=top_p               # Nucleus sampling
         )
 
         # Initialize conversation memory
@@ -73,25 +84,31 @@ class BankingRAGChain:
     def _create_rag_chain(self):
         """Create the RAG chain with retrieval and generation"""
 
-        # Define the prompt template
-        template = """ You are a helpful banking assistant with expertise in loans, financial planning, and banking services.
-Use the following context from our banking knowledge base to answer the user's question.
-If you don't know the answer based on the context, say so and provide general banking advice if appropriate.
+        # Define the prompt template (balanced: use context when available, general banking knowledge otherwise)
+        template = """You are an expert banking assistant with deep knowledge of loans, financial planning, credit scores, interest rates, and banking services.
 
-Context from knowledge base:
+Knowledge Base Context:
 {context}
 
-Chat History:
+Previous Conversation:
 {chat_history}
 
 User Question: {question}
 
-Helpful Answer:"""
+Instructions:
+- First check if the Knowledge Base Context has relevant information about the question
+- If yes, use it to provide an accurate, detailed answer
+- If the context is not relevant or insufficient, use your general banking expertise to provide helpful advice
+- Provide clear, professional, and actionable responses
+- For specific loan policies, requirements, or rates mentioned in the Knowledge Base, cite them directly
+- Be conversational but informative
+
+Your Answer:"""
 
         prompt = ChatPromptTemplate.from_template(template)
 
-        # Get retriever
-        retriever = self.vsm.get_retriever(k=4)
+        # Get retriever (k=3 for better context coverage)
+        retriever = self.vsm.get_retriever(k=3)
 
         # Format documents function
         def format_docs(docs: List[Document]) -> str:
@@ -123,12 +140,12 @@ Helpful Answer:"""
                 return "No previous conversation."
 
             formatted = []
-            for msg in messages[-6:]:  # Last 3 exchanges
+            for msg in messages[-2:]:  # Last 1 exchange only (faster)
                 if hasattr(msg, 'type'):
-                    role = "User" if msg.type == "human" else "Assistant"
-                    formatted.append(f"{role}: {msg.content}")
+                    role = "U" if msg.type == "human" else "A"
+                    formatted.append(f"{role}: {msg.content[:100]}")  # Truncate to 100 chars
 
-            return "\n".join(formatted) if formatted else "No previous conversation."
+            return "\n".join(formatted) if formatted else "None"
         except Exception as e:
             logger.error(f"Error getting chat history: {e}")
             return "No previous conversation."
@@ -145,6 +162,22 @@ Helpful Answer:"""
         """
         try:
             logger.info(f"Processing question: {question}")
+
+            # Check vector store document count
+            try:
+                doc_count = self.vsm.vector_store._collection.count()
+                logger.info(f"Vector store contains {doc_count} documents")
+            except Exception as e:
+                logger.warning(f"Could not get document count: {e}")
+
+            # Test retrieval
+            try:
+                test_docs = self.vsm.similarity_search(question, k=2)
+                logger.info(f"Retrieved {len(test_docs)} documents for query")
+                if test_docs:
+                    logger.info(f"First doc preview: {test_docs[0].page_content[:200]}")
+            except Exception as e:
+                logger.warning(f"Retrieval test failed: {e}")
 
             # Get answer from chain
             answer = self.chain.invoke(question)

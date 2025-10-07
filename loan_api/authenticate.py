@@ -9,6 +9,13 @@ import sys
 
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 
+# Import Redis client for token caching
+try:
+    from redis_client import redis_client, CacheKeys, CacheTTL
+    REDIS_AVAILABLE = True
+except ImportError:
+    REDIS_AVAILABLE = False
+
 
 env_path = Path(__file__).resolve().parent / ".env"
 load_dotenv(dotenv_path=env_path)
@@ -38,12 +45,26 @@ def create_access_token(data: dict, expires_delta: timedelta = None) -> str:
     return encoded_jwt
 
 
-# ✅ Decode JWT token
+# ✅ Decode JWT token with Redis caching
 def decode_access_token(token: str) -> str:
-    """Decode JWT token and return email"""
+    """Decode JWT token and return email (with Redis caching)"""
+    # Try to get from cache first
+    if REDIS_AVAILABLE and redis_client.is_available():
+        cache_key = CacheKeys.auth_token(token)
+        cached_email = redis_client.get(cache_key)
+        if cached_email:
+            return cached_email
+
+    # Cache miss or Redis unavailable - decode token
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         email: str = payload.get("sub")
+
+        # Cache the result
+        if REDIS_AVAILABLE and redis_client.is_available() and email:
+            cache_key = CacheKeys.auth_token(token)
+            redis_client.set(cache_key, email, CacheTTL.AUTH_TOKEN)
+
         return email
     except jwt.JWTError:
         return None

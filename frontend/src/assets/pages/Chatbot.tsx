@@ -18,7 +18,7 @@ interface Document {
 }
 
 const Chatbot: React.FC = () => {
-    const { role } = useRole();
+    const { role, email } = useRole();
     const [input, setInput] = useState<string>("");
     const [msgStack, setMsgStack] = useState<ChatMsg[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -26,12 +26,80 @@ const Chatbot: React.FC = () => {
     const [documents, setDocuments] = useState<Document[]>([]);
     const [uploadingFile, setUploadingFile] = useState<boolean>(false);
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const [sessionId, setSessionId] = useState<string>("");
 
     const textareaRef = useRef<HTMLTextAreaElement>(null);
     const chatContainerRef = useRef<HTMLDivElement>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const isAdmin = role === 'admin';
+
+    // Generate or retrieve USER-SPECIFIC session ID
+    useEffect(() => {
+        if (!email) return; // Wait for email to be available
+
+        // Create user-specific session key
+        const sessionKey = `chatbot_session_${email}`;
+        let sid = localStorage.getItem(sessionKey);
+
+        if (!sid) {
+            // Generate new session ID with user email
+            sid = `${email}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+            localStorage.setItem(sessionKey, sid);
+        }
+
+        setSessionId(sid);
+    }, [email]);
+
+    // Load chat history from localStorage and backend on mount
+    useEffect(() => {
+        if (!sessionId || !email) return;
+
+        // First, load from localStorage for instant display
+        const savedMessages = localStorage.getItem(`chat_history_${sessionId}`);
+        if (savedMessages) {
+            try {
+                const parsed = JSON.parse(savedMessages);
+                setMsgStack(parsed.map((msg: any) => ({
+                    ...msg,
+                    timestamp: new Date(msg.timestamp)
+                })));
+            } catch (error) {
+                console.error('Error loading chat history from localStorage:', error);
+            }
+        }
+
+        // Then fetch from backend Redis cache (more reliable)
+        fetchChatHistory();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [sessionId, email]);
+
+    // Save chat history to localStorage whenever it changes
+    useEffect(() => {
+        if (sessionId && msgStack.length > 0) {
+            localStorage.setItem(`chat_history_${sessionId}`, JSON.stringify(msgStack));
+        }
+    }, [msgStack, sessionId]);
+
+    const fetchChatHistory = async () => {
+        if (!sessionId) return;
+
+        try {
+            const data = await secureGet(`/api/chatbot/history/${sessionId}`);
+            if (data.messages && data.messages.length > 0) {
+                const messages: ChatMsg[] = data.messages.map((msg: any) => ({
+                    sender: msg.role === 'user' ? 'user' : 'bot',
+                    msg: msg.message,
+                    timestamp: new Date(msg.timestamp)
+                }));
+                setMsgStack(messages);
+                // Update localStorage with backend data
+                localStorage.setItem(`chat_history_${sessionId}`, JSON.stringify(messages));
+            }
+        } catch (error) {
+            console.error('Error fetching chat history from backend:', error);
+        }
+    };
 
     // Auto-resize textarea
     useEffect(() => {
@@ -75,7 +143,7 @@ const Chatbot: React.FC = () => {
         try {
             const data = await securePost('/api/chatbot/chat', {
                 message: userMessage.msg,
-                session_id: 'default'
+                session_id: sessionId
             });
 
             const botMessage: ChatMsg = {

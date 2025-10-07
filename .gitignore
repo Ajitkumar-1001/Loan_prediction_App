@@ -40,7 +40,10 @@ start.sh
 verify_setup.sh
 SECURITY.md
 SECURITY_UPDATES.md
-
+RAG_DATABASE_SETUP.md
+REDIS_CACHING.md
+REDIS_SETUP.md
+NETWORK_ACCESS_FIX.md
 Rag_files/init_ollama.sh
 Rag_files/__pycache__/
 Rag_files/chroma_db/

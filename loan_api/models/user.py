@@ -1,7 +1,8 @@
 from sqlalchemy import Column, Integer, String
-from database import Base #ignoretype : any 
+from sqlalchemy.orm import relationship
+from database import Base #ignoretype : any
 
-class User(Base): 
+class User(Base):
 
     __tablename__ = "users"
 
@@ -12,6 +13,9 @@ class User(Base):
     email = Column(String,unique=True,nullable=False)
     password = Column(String, nullable=False)
     role = Column(String,default="user")
+
+    # Relationship to uploaded documents
+    uploaded_documents = relationship("Document", back_populates="uploader")
 
 
 

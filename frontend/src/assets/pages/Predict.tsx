@@ -189,15 +189,47 @@ const Predict: React.FC = () => {
 
   const calculateDebtRatio = async () => {
     try {
-      const data = await securePost('/api/Loan/calculate-debt-ratio', {
-        totalMonthlyDebt: parseFloat(calculatorData.totalMonthlyDebt),
-        grossMonthlyIncome: parseFloat(calculatorData.grossMonthlyIncome),
+      // Validate inputs
+      const monthlyDebt = parseFloat(calculatorData.totalMonthlyDebt);
+      const monthlyIncome = parseFloat(calculatorData.grossMonthlyIncome);
+
+      if (isNaN(monthlyDebt) || isNaN(monthlyIncome)) {
+        alert("Please enter valid numbers for both fields");
+        return;
+      }
+
+      if (monthlyIncome <= 0) {
+        alert("Monthly income must be greater than 0");
+        return;
+      }
+
+      if (monthlyDebt < 0) {
+        alert("Monthly debt cannot be negative");
+        return;
+      }
+
+      // Call backend API
+      const data = await securePost('/api/Loan/calculate-debt-to-income', {
+        monthlyDebtPayments: monthlyDebt,
+        monthlyIncome: monthlyIncome,
       });
-      setFormData(prev => ({ ...prev, TotalDebtToIncomeRatio: data.debtRatio }));
+
+      // Update form field with calculated ratio
+      setFormData(prev => ({
+        ...prev,
+        TotalDebtToIncomeRatio: data.totalDebtToIncomeRatio
+      }));
+
+      // Close modal
       setShowCalculatorModal(false);
+
+      // Show success message
+      const percentage = (data.totalDebtToIncomeRatio * 100).toFixed(2);
+      alert(`Debt-to-Income Ratio calculated: ${percentage}%\nValue: ${data.totalDebtToIncomeRatio}`);
+
     } catch (err) {
       const error = err as Error;
-      alert(error.message || "Failed to calculate debt ratio");
+      alert(error.message || "Failed to calculate debt-to-income ratio");
     }
   };
 

@@ -9,6 +9,7 @@ from routers.Users import rout
 from routers.chatbot import router as chatbot_router
 from database import engine
 from models.user import Base
+from models.document import Document  # Import to register with Base
 
 
 app = FastAPI()

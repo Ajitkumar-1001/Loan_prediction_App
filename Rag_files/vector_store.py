@@ -26,7 +26,7 @@ class VectorStoreManager:
 
     def __init__(
         self,
-        persist_directory: str = "./Rag_files/chroma_db",
+        persist_directory: str = None,
         collection_name: str = "banking_docs",
         embedding_model: str = "sentence-transformers/all-MiniLM-L6-v2"
     ):
@@ -34,19 +34,32 @@ class VectorStoreManager:
         Initialize Vector Store Manager
 
         Args:
-            persist_directory: Directory to persist ChromaDB
+            persist_directory: Directory to persist ChromaDB (None for auto-detection)
             collection_name: Name of the collection
             embedding_model: HuggingFace embedding model name
         """
+        # Auto-detect persist directory based on environment
+        if persist_directory is None:
+            # Check if running in Docker (working_dir is /app/loan_api)
+            if Path("/app/Rag_files/chroma_db").exists() or Path("/app").exists():
+                persist_directory = "/app/Rag_files/chroma_db"
+            else:
+                # Local development
+                persist_directory = str(Path(__file__).parent / "chroma_db")
+
         self.persist_directory = persist_directory
         self.collection_name = collection_name
 
-        # Initialize embeddings
+        # Initialize embeddings with caching for faster retrieval
         logger.info(f"Loading embedding model: {embedding_model}")
         self.embeddings = HuggingFaceEmbeddings(
             model_name=embedding_model,
             model_kwargs={'device': 'cpu'},
-            encode_kwargs={'normalize_embeddings': True}
+            encode_kwargs={
+                'normalize_embeddings': True,
+                'batch_size': 32  # Process in batches for speed
+            },
+            cache_folder="/tmp/huggingface_cache"  # Cache embeddings
         )
 
         # Create persist directory if it doesn't exist
@@ -59,20 +72,34 @@ class VectorStoreManager:
     def _load_or_create_vectorstore(self):
         """Load existing vector store or create new one"""
         try:
-            if Path(self.persist_directory).exists():
-                logger.info(f"Loading existing vector store from {self.persist_directory}")
-                self.vector_store = Chroma(
-                    persist_directory=self.persist_directory,
-                    embedding_function=self.embeddings,
-                    collection_name=self.collection_name
+            import chromadb
+            from chromadb.config import Settings
+
+            # Create ChromaDB persistent client
+            logger.info(f"Initializing ChromaDB client at {self.persist_directory}")
+            chroma_client = chromadb.PersistentClient(
+                path=self.persist_directory,
+                settings=Settings(
+                    anonymized_telemetry=False,
+                    allow_reset=True
                 )
-            else:
-                logger.info("Creating new vector store")
-                self.vector_store = Chroma(
-                    persist_directory=self.persist_directory,
-                    embedding_function=self.embeddings,
-                    collection_name=self.collection_name
-                )
+            )
+
+            # Initialize vector store with persistent client
+            logger.info(f"Loading collection: {self.collection_name}")
+            self.vector_store = Chroma(
+                client=chroma_client,
+                collection_name=self.collection_name,
+                embedding_function=self.embeddings
+            )
+
+            # Log document count
+            try:
+                count = self.vector_store._collection.count()
+                logger.info(f"Vector store loaded with {count} documents")
+            except:
+                logger.info("Vector store initialized (new collection)")
+
         except Exception as e:
             logger.error(f"Error loading/creating vector store: {e}")
             raise
@@ -143,7 +170,7 @@ class VectorStoreManager:
 
     def add_documents(self, documents: List[Document]) -> None:
         """
-        Add documents to vector store
+        Add documents to vector store (auto-persisted with ChromaDB 0.5+)
 
         Args:
             documents: List of documents to add
@@ -151,7 +178,10 @@ class VectorStoreManager:
         try:
             logger.info(f"Adding {len(documents)} documents to vector store")
             self.vector_store.add_documents(documents)
-            logger.info("Documents added successfully")
+
+            # Verify documents were added
+            count = self.vector_store._collection.count()
+            logger.info(f"Documents added successfully. Total count: {count}")
         except Exception as e:
             logger.error(f"Error adding documents: {e}")
             raise

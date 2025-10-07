@@ -34,7 +34,7 @@ const Signup: React.FC = () => {
   });
 
   const [error, setError] = useState<string>("");
-  const { setRole } = useRole();
+  const { setRole, setName, setEmail } = useRole();
   const [hasSubmitted, setHasSubmitted] = useState<boolean>(false);
   const [redirecting, setRedirecting] = useState<boolean>(false);
   const navigator = useNavigate();
@@ -124,6 +124,8 @@ const Signup: React.FC = () => {
 
       if (data.role == "user" || data.role == "admin") {
         setRole(data.role);
+        setName(formData.firstname || null);
+        setEmail(formData.email); // Store email for user-specific sessions
       } else {
         throw new Error("User role is missing in response.");
       }
