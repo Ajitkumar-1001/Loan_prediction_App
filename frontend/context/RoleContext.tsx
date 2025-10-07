@@ -15,6 +15,7 @@ import React, {
     role: Roles;
     firstname : Name;
     email: string | null;
+    loginTimestamp: number;
     setRole: (role: Roles) => void;
     setName : (name:Name)=> void;
     setEmail: (email: string | null) => void;
@@ -31,6 +32,7 @@ import React, {
     const [role, setRoleState] = useState<Roles>("guest");
     const [firstname, setFirstName] = useState<Name>(null);
     const [email, setEmailState] = useState<string | null>(null);
+    const [loginTimestamp, setLoginTimestamp] = useState<number>(Date.now());
 
     useEffect(() => {
       const storedRole = localStorage.getItem("user_role") as Roles | null;
@@ -59,12 +61,20 @@ import React, {
       setEmailState(newEmail);
       if (newEmail) {
         localStorage.setItem("user_email", newEmail);
+        // Update login timestamp to trigger fresh session creation
+        setLoginTimestamp(Date.now());
       } else {
         localStorage.removeItem("user_email");
       }
     };
 
     const logout = () => {
+      // Clear user-specific chat sessions BEFORE clearing email
+      if (email) {
+        const userSessionKey = `chatbot_session_${email}`;
+        localStorage.removeItem(userSessionKey);
+      }
+
       setRoleState("guest");
       setFirstName(null);
       setEmailState(null);
@@ -72,14 +82,17 @@ import React, {
       localStorage.removeItem("access_token");
       localStorage.removeItem("firstname");
       localStorage.removeItem("user_email");
-      // Clear chat session on logout
-      localStorage.removeItem("chatbot_session_id");
-      const chatHistoryKeys = Object.keys(localStorage).filter(key => key.startsWith("chat_history_"));
-      chatHistoryKeys.forEach(key => localStorage.removeItem(key));
+
+      // Clear all chat-related data
+      localStorage.removeItem("chatbot_session_id"); // Old global key
+      const chatKeys = Object.keys(localStorage).filter(key =>
+        key.startsWith("chat_history_") || key.startsWith("chatbot_session_")
+      );
+      chatKeys.forEach(key => localStorage.removeItem(key));
     };
 
     return (
-      <RoleContext.Provider value={{  role, firstname, email, setRole, setName, setEmail, logout }}>
+      <RoleContext.Provider value={{  role, firstname, email, loginTimestamp, setRole, setName, setEmail, logout }}>
         {children}
       </RoleContext.Provider>
     );

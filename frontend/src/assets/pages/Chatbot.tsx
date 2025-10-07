@@ -18,7 +18,7 @@ interface Document {
 }
 
 const Chatbot: React.FC = () => {
-    const { role, email } = useRole();
+    const { role, email, loginTimestamp } = useRole();
     const [input, setInput] = useState<string>("");
     const [msgStack, setMsgStack] = useState<ChatMsg[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -34,22 +34,23 @@ const Chatbot: React.FC = () => {
 
     const isAdmin = role === 'admin';
 
-    // Generate or retrieve USER-SPECIFIC session ID
+    // Generate session ID based on login timestamp (fresh on each login)
     useEffect(() => {
         if (!email) return; // Wait for email to be available
 
-        // Create user-specific session key
-        const sessionKey = `chatbot_session_${email}`;
-        let sid = localStorage.getItem(sessionKey);
+        // Create session ID using login timestamp
+        // This ensures a NEW session on each login, but same session during navigation
+        const sid = `${email}_${loginTimestamp}_${Math.random().toString(36).substr(2, 9)}`;
 
-        if (!sid) {
-            // Generate new session ID with user email
-            sid = `${email}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-            localStorage.setItem(sessionKey, sid);
-        }
+        // Store for reference (will be cleared on logout)
+        const sessionKey = `chatbot_session_${email}`;
+        localStorage.setItem(sessionKey, sid);
 
         setSessionId(sid);
-    }, [email]);
+        // Clear old messages when session changes
+        setMsgStack([]);
+
+    }, [email, loginTimestamp]); // Re-run when email OR loginTimestamp changes
 
     // Load chat history from localStorage and backend on mount
     useEffect(() => {
