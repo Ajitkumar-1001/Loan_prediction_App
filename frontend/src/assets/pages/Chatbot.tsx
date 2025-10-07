@@ -52,33 +52,57 @@ const Chatbot: React.FC = () => {
 
     }, [email, loginTimestamp]); // Re-run when email OR loginTimestamp changes
 
-    // Load chat history from localStorage and backend on mount
+    // Load chat history from localStorage with 3-minute expiry check
     useEffect(() => {
         if (!sessionId || !email) return;
 
-        // First, load from localStorage for instant display
+        const CACHE_DURATION = 3 * 60 * 1000; // 3 minutes in milliseconds
+
+        // Check cache timestamp
+        const cacheTimestampKey = `chat_cache_timestamp_${sessionId}`;
+        const cachedTimestamp = localStorage.getItem(cacheTimestampKey);
+        const now = Date.now();
+
+        // Clear expired cache
+        if (cachedTimestamp) {
+            const age = now - parseInt(cachedTimestamp);
+            if (age > CACHE_DURATION) {
+                console.log('Cache expired (>3 minutes), clearing...');
+                localStorage.removeItem(`chat_history_${sessionId}`);
+                localStorage.removeItem(cacheTimestampKey);
+            }
+        }
+
+        // Load from localStorage if not expired
         const savedMessages = localStorage.getItem(`chat_history_${sessionId}`);
-        if (savedMessages) {
+        if (savedMessages && cachedTimestamp) {
             try {
                 const parsed = JSON.parse(savedMessages);
-                setMsgStack(parsed.map((msg: any) => ({
-                    ...msg,
-                    timestamp: new Date(msg.timestamp)
-                })));
+                const age = now - parseInt(cachedTimestamp);
+
+                if (age <= CACHE_DURATION) {
+                    console.log(`Loading cached messages (age: ${Math.round(age/1000)}s)`);
+                    setMsgStack(parsed.map((msg: any) => ({
+                        ...msg,
+                        timestamp: new Date(msg.timestamp)
+                    })));
+                }
             } catch (error) {
                 console.error('Error loading chat history from localStorage:', error);
             }
         }
 
-        // Then fetch from backend Redis cache (more reliable)
+        // Then fetch from backend Redis cache (more reliable, 30min TTL)
         fetchChatHistory();
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [sessionId, email]);
 
-    // Save chat history to localStorage whenever it changes
+    // Save chat history to localStorage with timestamp whenever it changes
     useEffect(() => {
         if (sessionId && msgStack.length > 0) {
             localStorage.setItem(`chat_history_${sessionId}`, JSON.stringify(msgStack));
+            // Update cache timestamp for 3-minute expiry tracking
+            localStorage.setItem(`chat_cache_timestamp_${sessionId}`, Date.now().toString());
         }
     }, [msgStack, sessionId]);
 

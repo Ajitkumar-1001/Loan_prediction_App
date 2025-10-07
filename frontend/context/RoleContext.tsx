@@ -83,10 +83,12 @@ import React, {
       localStorage.removeItem("firstname");
       localStorage.removeItem("user_email");
 
-      // Clear all chat-related data
+      // Clear all chat-related data including cache timestamps
       localStorage.removeItem("chatbot_session_id"); // Old global key
       const chatKeys = Object.keys(localStorage).filter(key =>
-        key.startsWith("chat_history_") || key.startsWith("chatbot_session_")
+        key.startsWith("chat_history_") ||
+        key.startsWith("chatbot_session_") ||
+        key.startsWith("chat_cache_timestamp_")
       );
       chatKeys.forEach(key => localStorage.removeItem(key));
     };
