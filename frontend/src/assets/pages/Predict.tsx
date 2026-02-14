@@ -18,6 +18,10 @@ interface LoanPredictionResult {
   prediction: string;
   message?: string;
   llm_response?: string;
+  riskScoreUsed?: number;
+  loanScore?: number;
+  approvalProbability?: number;
+  riskScoreSource?: string;
 }
 
 const Predict: React.FC = () => {
@@ -539,6 +543,20 @@ const Predict: React.FC = () => {
               animate="visible"
             >
               <h2 className="text-3xl font-bold mb-4">Loan Status: {predictionResult.prediction}</h2>
+              {typeof predictionResult.loanScore === 'number' && (
+                <p className="text-lg text-gray-100">Loan Score: {predictionResult.loanScore.toFixed(2)} / 100</p>
+              )}
+              {typeof predictionResult.riskScoreUsed === 'number' && (
+                <p className="text-lg text-gray-100">
+                  Risk Score: {predictionResult.riskScoreUsed.toFixed(2)}
+                  {predictionResult.riskScoreSource ? ` (${predictionResult.riskScoreSource})` : ''}
+                </p>
+              )}
+              {typeof predictionResult.approvalProbability === 'number' && (
+                <p className="text-sm text-gray-200">
+                  Approval Probability: {(predictionResult.approvalProbability * 100).toFixed(2)}%
+                </p>
+              )}
               {predictionResult.message && (
                 <p className="text-lg text-gray-200">{predictionResult.message}</p>
               )}

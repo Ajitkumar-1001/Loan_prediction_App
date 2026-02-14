@@ -96,6 +96,7 @@ import os
 import yaml
 from pathlib import Path
 import sys
+from collections import Counter
 
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 
@@ -133,6 +134,41 @@ def _densify(x):
     return x.toarray() if hasattr(x, "toarray") else x
 
 
+def _resolve_smote_strategy(
+    y_train,
+    sampling_strategy: float | dict | str,
+    rejected_label=0,
+):
+    """
+    Default behavior balances the rejected class ("No"/0) to the majority class size.
+    Falls back to standard SMOTE strategy when rejected label is not available.
+    """
+    if sampling_strategy != "rejected_to_majority":
+        return sampling_strategy
+
+    y_values = np.asarray(y_train).ravel().tolist()
+    counts = Counter(y_values)
+    if not counts:
+        raise ValueError("Cannot apply SMOTE: training labels are empty.")
+
+    if rejected_label not in counts:
+        for candidate in ("No", "no", False):
+            if candidate in counts:
+                rejected_label = candidate
+                break
+
+    if rejected_label not in counts:
+        # fallback to minority class if explicit rejected label is absent
+        rejected_label = min(counts, key=counts.get)
+
+    majority_count = max(counts.values())
+    rejected_count = counts[rejected_label]
+    if rejected_count >= majority_count:
+        return None
+
+    return {rejected_label: majority_count}
+
+
 def log_model_with_mlflow(
     name: str,
     model,
@@ -143,9 +179,10 @@ def log_model_with_mlflow(
     y_test,
     *,
     use_smote: bool = True,
-    sampling_strategy: float = 1.0,  # 1.0 => pos == neg (50/50)
+    sampling_strategy: float | dict | str = "rejected_to_majority",
     smote_k: int = 5,
     threshold: float | None = None,  # decision cutoff; None => model default
+    rejected_label=0,
 ):
     """
     Train and log a model with optional SMOTE. SMOTE & densify are applied ONLY on training inside the pipeline.
@@ -174,17 +211,27 @@ def log_model_with_mlflow(
             # ensure dense for SMOTE (remove if your OHE uses sparse_output=False)
             ("to_dense", FunctionTransformer(_densify, accept_sparse=True)),
         ]
+
+        smote_strategy_to_use = _resolve_smote_strategy(
+            y_train=y_train,
+            sampling_strategy=sampling_strategy,
+            rejected_label=rejected_label,
+        )
+
         if use_smote:
-            steps.append(
-                (
-                    "smote",
-                    SMOTE(
-                        sampling_strategy=sampling_strategy,
-                        random_state=42,
-                        k_neighbors=smote_k,
-                    ),
+            if smote_strategy_to_use is None:
+                logger.info("SMOTE skipped: rejected class is already not a minority class.")
+            else:
+                steps.append(
+                    (
+                        "smote",
+                        SMOTE(
+                            sampling_strategy=smote_strategy_to_use,
+                            random_state=42,
+                            k_neighbors=smote_k,
+                        ),
+                    )
                 )
-            )
         steps.append(("classifier", model))
 
         pipeline = ImbPipeline(steps=steps)
@@ -220,8 +267,9 @@ def log_model_with_mlflow(
         mlflow.log_param("model_name", name)
         mlflow.log_param("use_smote", use_smote)
         if use_smote:
-            mlflow.log_param("sampling_strategy", sampling_strategy)
+            mlflow.log_param("sampling_strategy", str(smote_strategy_to_use))
             mlflow.log_param("smote_k_neighbors", smote_k)
+            mlflow.log_param("rejected_label", rejected_label)
         if threshold is not None:
             mlflow.log_param("decision_threshold", threshold)
 

@@ -92,8 +92,10 @@ const Chatbot: React.FC = () => {
             }
         }
 
-        // Then fetch from backend Redis cache (more reliable, 30min TTL)
-        fetchChatHistory();
+        // Fetch from backend Redis cache only if localStorage cache is empty or expired
+        if (!savedMessages || !cachedTimestamp || (now - parseInt(cachedTimestamp)) > CACHE_DURATION) {
+            fetchChatHistory();
+        }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [sessionId, email]);
 
@@ -118,8 +120,9 @@ const Chatbot: React.FC = () => {
                     timestamp: new Date(msg.timestamp)
                 }));
                 setMsgStack(messages);
-                // Update localStorage with backend data
+                // Update localStorage with backend data AND reset timestamp
                 localStorage.setItem(`chat_history_${sessionId}`, JSON.stringify(messages));
+                localStorage.setItem(`chat_cache_timestamp_${sessionId}`, Date.now().toString());
             }
         } catch (error) {
             console.error('Error fetching chat history from backend:', error);
